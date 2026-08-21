@@ -1,0 +1,145 @@
+name: iOS · Workshop Pearl simulator and archive gate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: welding-wallet-ios-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: "3.44.8"
+  BUNDLE_ID: com.goodusestudios.weldinggaswallet
+
+jobs:
+  build-and-test:
+    runs-on: macos-26
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+      - name: Pin and report Apple toolchain
+        run: xcodebuild -version
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Generate pinned iOS host
+        shell: bash
+        run: |
+          set -euo pipefail
+          flutter create "$RUNNER_TEMP/weldinggaswallet_host" \
+            --platforms=ios --org com.goodusestudios --project-name weldinggaswallet
+          cp -R "$RUNNER_TEMP/weldinggaswallet_host/ios" ./ios
+          python3 tool/configure_hosts.py ios
+          grep -F 'import UserNotifications' ios/Runner/AppDelegate.swift
+          grep -F 'UNUserNotificationCenter.current().delegate = self' ios/Runner/AppDelegate.swift
+          ! /usr/libexec/PlistBuddy -c 'Print :ITSAppUsesNonExemptEncryption' ios/Runner/Info.plist >/dev/null 2>&1
+          ! rg -n 'basic_utils|pointycastle|CryptoUtils|SHA1withRSA' lib pubspec.yaml
+          flutter pub get
+          dart run flutter_launcher_icons -f flutter_launcher_icons.yaml
+
+      # Bootstrap only: the first reviewed run formats source and exports it as
+      # evidence. The follow-up commit restores the check-only formatter gate.
+      - name: Format source and run static and localization gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          dart format lib test integration_test
+          flutter analyze --fatal-infos
+          python3 -m py_compile tool/*.py
+          python3 -m unittest discover -s tool -p 'test_*.py'
+          test "$(find assets/l10n -maxdepth 1 -name 'app_*.arb' | wc -l | tr -d ' ')" = "30"
+          ! rg -n "preview entitlement|fake billing|hard.?coded USD|FirebaseAnalytics|Appsflyer|Adjust" lib pubspec.yaml
+
+      - name: Unit and widget tests
+        run: flutter test --coverage --test-randomize-ordering-seed=random
+
+      - name: Select an available iPhone simulator
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess, sys
+          payload = json.loads(subprocess.check_output(
+              ["xcrun", "simctl", "list", "devices", "available", "--json"], text=True))
+          candidates = []
+          for runtime, devices in payload.get("devices", {}).items():
+              if "iOS" not in runtime:
+                  continue
+              version = tuple(int(v) for v in re.findall(r"\d+", runtime))
+              for device in devices:
+                  if device.get("isAvailable") and device.get("name", "").startswith("iPhone"):
+                      candidates.append((version, device["name"], device["udid"]))
+          if not candidates:
+              sys.exit("No available iPhone simulator")
+          version, name, udid = max(candidates)
+          print(f"Using {name} {version}: {udid}")
+          with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as out:
+              out.write(f"SIMULATOR_UDID={udid}\n")
+          PY
+
+      - name: End-to-end simulator test
+        run: |
+          test -s integration_test/app_end_to_end_test.dart
+          flutter test integration_test/app_end_to_end_test.dart -d "$SIMULATOR_UDID"
+          mkdir -p artifacts
+          xcrun simctl io "$SIMULATOR_UDID" screenshot artifacts/ios-e2e-final.png
+          test -s artifacts/ios-e2e-final.png
+
+      - name: Compile unsigned release app
+        run: >-
+          flutter build ios --release --no-codesign
+          --build-name=1.0.0 --build-number=${{ github.run_number }}
+
+      - name: Inspect compiled privacy, identity and icon evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP=build/ios/iphoneos/Runner.app
+          INFO="$APP/Info.plist"
+          test -d "$APP" && plutil -lint "$INFO"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$INFO")" = "$BUNDLE_ID"
+          test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$INFO")" = "Welding Gas Wallet"
+          find "$APP" -name 'PrivacyInfo.xcprivacy' -print | tee privacy-manifests.txt
+          test -s privacy-manifests.txt
+          ICON="$(find ios/Runner/Assets.xcassets/AppIcon.appiconset -name '*1024*.png' -print -quit)"
+          test -n "$ICON"
+          test "$(sips -g pixelWidth "$ICON" | awk '/pixelWidth/{print $2}')" = "1024"
+          test "$(sips -g hasAlpha "$ICON" | awk '/hasAlpha/{print $2}')" = "no"
+
+      - name: Package private CI evidence
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          flutter pub deps --json > artifacts/flutter-dependencies.json || true
+          cp pubspec.lock artifacts/pubspec.lock 2>/dev/null || true
+          cp privacy-manifests.txt artifacts/ 2>/dev/null || true
+          ditto -c -k --sequesterRsrc --keepParent build/ios/iphoneos/Runner.app \
+            artifacts/Welding-Gas-Wallet-iOS-unsigned-${GITHUB_RUN_NUMBER}.zip 2>/dev/null || true
+          tar -czf artifacts/formatted-source.tar.gz lib test integration_test
+          shasum -a 256 artifacts/*.zip | tee artifacts/SHA256SUMS.txt || true
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: Welding-Gas-Wallet-iOS-CI-${{ github.run_number }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: Welding-Gas-Wallet-iOS-Coverage-${{ github.run_number }}
+          path: coverage/lcov.info
+          if-no-files-found: ignore
+          retention-days: 14
