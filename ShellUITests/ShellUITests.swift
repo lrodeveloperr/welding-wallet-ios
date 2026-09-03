@@ -125,6 +125,7 @@ final class WeldingGasWalletUITests: XCTestCase {
             "-shell.legal.acceptedVersion", onboardingComplete ? "1" : "",
         ]
         if screenshotData { app.launchArguments += ["-welding.screenshotData", "YES"] }
+        if screenshotData && !onboardingComplete { app.launchArguments += ["-welding.screenshotOnboarding", "YES"] }
         app.launch()
         return app
     }

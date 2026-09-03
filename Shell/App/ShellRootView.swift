@@ -4,8 +4,10 @@ struct ShellRootView: View {
     private let featureProvider: any FeatureCanvasProviding
 #if DEBUG
     private let screenshotMode = ProcessInfo.processInfo.arguments.contains("-welding.screenshotData")
+    private let screenshotOnboarding = ProcessInfo.processInfo.arguments.contains("-welding.screenshotOnboarding")
 #else
     private let screenshotMode = false
+    private let screenshotOnboarding = false
 #endif
     @State private var model: ShellModel
     @State private var legalConsent: LegalConsentStore
@@ -22,13 +24,15 @@ struct ShellRootView: View {
 
     var body: some View {
         Group {
-            if let startupMessage = model.startupMessage {
+            if screenshotOnboarding {
+                OnboardingView(profile: ShellConfiguration.onboarding, isReconsent: false, onAccept: {})
+            } else if let startupMessage = model.startupMessage {
                 ContentUnavailableView {
                     Label("startup.error.title", systemImage: "exclamationmark.triangle")
                 } description: {
                     Text(startupMessage)
                 }
-            } else if legalConsent.requiresPresentation {
+            } else if !screenshotMode && legalConsent.requiresPresentation {
                 OnboardingView(
                     profile: ShellConfiguration.onboarding,
                     isReconsent: legalConsent.isReconsent,
