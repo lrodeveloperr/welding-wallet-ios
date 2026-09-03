@@ -258,6 +258,7 @@
 "Data deletion" = "Data deletion";
 "Safety notice" = "Safety notice";
 "Opens the current published document" = "Opens the current published document";
+"legal.documentLanguage" = "Opens the current published document (English)";
 "Delete all data" = "Delete all data";
 "Erase this wallet from this device" = "Erase this wallet from this device";
 "Welding Gas Wallet · Cylinder records stay on this device" = "Welding Gas Wallet · Cylinder records stay on this device";

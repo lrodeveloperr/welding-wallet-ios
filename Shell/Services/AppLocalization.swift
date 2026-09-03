@@ -1,6 +1,8 @@
 import Foundation
 
 enum AppLocalization {
+    private static let presetGases: Set<String> = ["Argon", "C25 Mix", "Oxygen", "Acetylene", "Nitrogen", "CO₂", "Helium"]
+
     static func string(_ key: String, locale: Locale, _ arguments: CVarArg...) -> String {
         let identifier = locale.identifier.replacingOccurrences(of: "_", with: "-")
         let language = identifier.lowercased().hasPrefix("es") ? "es-419" : "en"
@@ -21,6 +23,14 @@ enum AppLocalization {
 
     static func double(from text: String, locale: Locale) -> Double? {
         decimal(from: text, locale: locale).map { NSDecimalNumber(decimal: $0).doubleValue }
+    }
+
+    static func gas(_ canonicalValue: String, locale: Locale) -> String {
+        presetGases.contains(canonicalValue) ? string(canonicalValue, locale: locale) : canonicalValue
+    }
+
+    static func supplier(_ storedValue: String, locale: Locale) -> String {
+        storedValue == "Not set" ? string("common.notSet", locale: locale) : storedValue
     }
 
     static func number(_ value: Decimal, locale: Locale, minimumFractionDigits: Int = 0, maximumFractionDigits: Int = 2) -> String {

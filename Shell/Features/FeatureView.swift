@@ -53,9 +53,9 @@ struct CylinderHome: View {
             let statusMatches = filter == .all || cylinder.status.rawValue == filter.rawValue
             let supplier = store.supplierName(cylinder.supplierID)
             let haystack = [
-                cylinder.gas,
+                AppLocalization.gas(cylinder.gas, locale: locale),
                 cylinder.capacityLabel(locale: locale),
-                supplier,
+                AppLocalization.supplier(supplier, locale: locale),
                 AppLocalization.string(cylinder.relationship.localizationKey, locale: locale),
                 AppLocalization.string(cylinder.status.localizationKey, locale: locale),
                 cylinder.serial,
@@ -94,7 +94,7 @@ struct CylinderHome: View {
             .sheet(isPresented: $showingAdd) { NavigationStack { CylinderForm(store: store, mode: .new) } }
             .safeAreaInset(edge: .bottom) {
                 if let deleted = store.lastDeleted {
-                    HStack { Text(AppLocalization.string("cylinder.deleted %@", locale: locale, deleted.cylinder.gas)); Spacer(); Button("Undo") { store.undoDelete() } }
+                    HStack { Text(AppLocalization.string("cylinder.deleted %@", locale: locale, AppLocalization.gas(deleted.cylinder.gas, locale: locale))); Spacer(); Button("Undo") { store.undoDelete() } }
                         .padding().background(.regularMaterial).clipShape(RoundedRectangle(cornerRadius: 14)).padding(.horizontal)
                 }
             }
@@ -154,13 +154,13 @@ private struct CylinderCard: View {
                 Text(String((store.activeCylinders.firstIndex(where: { $0.id == cylinder.id }) ?? 0) + 1)).font(.headline).foregroundStyle(.tint).frame(width: 38, height: 44).background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
                 NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled) } label: {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text(cylinder.gas).font(.title3.bold()).foregroundStyle(.primary)
+                        Text(AppLocalization.gas(cylinder.gas, locale: locale)).font(.title3.bold()).foregroundStyle(.primary)
                         Text(cylinder.capacityLabel(locale: locale)).foregroundStyle(.primary)
-                        Text("\(store.supplierName(cylinder.supplierID)) · \(AppLocalization.string(cylinder.relationship.localizationKey, locale: locale))").font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
+                        Text("\(AppLocalization.supplier(store.supplierName(cylinder.supplierID), locale: locale)) · \(AppLocalization.string(cylinder.relationship.localizationKey, locale: locale))").font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
                     }.frame(maxWidth: .infinity, alignment: .leading)
                 }.buttonStyle(.plain)
                 StatusBadge(status: cylinder.status)
-                Button(action: toggle) { Image(systemName: expanded ? "chevron.up" : "chevron.forward") }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44).accessibilityLabel(Text(AppLocalization.string("cylinder.changeStatus %@", locale: locale, cylinder.gas))).accessibilityIdentifier("wallet.status.\(cylinder.id.uuidString)")
+                Button(action: toggle) { Image(systemName: expanded ? "chevron.up" : "chevron.forward") }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44).accessibilityLabel(Text(AppLocalization.string("cylinder.changeStatus %@", locale: locale, AppLocalization.gas(cylinder.gas, locale: locale)))).accessibilityIdentifier("wallet.status.\(cylinder.id.uuidString)")
             }.padding(14)
             if expanded {
                 Divider()
@@ -202,12 +202,12 @@ struct CylinderDetail: View {
                 ScrollView {
                     VStack(spacing: 16) {
                         VStack(alignment: .leading, spacing: 8) {
-                            Text(cylinder.gas.uppercased()).font(.caption.bold()).foregroundStyle(.tint)
+                            Text(AppLocalization.gas(cylinder.gas, locale: locale).uppercased(with: locale)).font(.caption.bold()).foregroundStyle(.tint)
                             Text(cylinder.capacityLabel(locale: locale)).font(.largeTitle.bold())
                             StatusBadge(status: cylinder.status)
                         }.frame(maxWidth: .infinity, alignment: .leading).padding(20).background(Color.blue.opacity(0.06), in: RoundedRectangle(cornerRadius: 18))
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                            Fact(titleKey: "Supplier", value: store.supplierName(cylinder.supplierID)); Fact(titleKey: "Relationship", value: AppLocalization.string(cylinder.relationship.localizationKey, locale: locale)); Fact(titleKey: "Serial", value: cylinder.serial.isEmpty ? AppLocalization.string("common.notSet", locale: locale) : cylinder.serial); Fact(titleKey: "Acquired", value: cylinder.acquiredAt.formatted(.dateTime.locale(locale).day().month(.abbreviated).year()))
+                            Fact(titleKey: "Supplier", value: AppLocalization.supplier(store.supplierName(cylinder.supplierID), locale: locale)); Fact(titleKey: "Relationship", value: AppLocalization.string(cylinder.relationship.localizationKey, locale: locale)); Fact(titleKey: "Serial", value: cylinder.serial.isEmpty ? AppLocalization.string("common.notSet", locale: locale) : cylinder.serial); Fact(titleKey: "Acquired", value: cylinder.acquiredAt.formatted(.dateTime.locale(locale).day().month(.abbreviated).year()))
                         }
                         HStack { Button("Refill") { sheet = .service(.refill) }.buttonStyle(.borderedProminent); Button("Exchange") { sheet = .service(.exchange) }.buttonStyle(.bordered); Button("Add cost") { sheet = .service(.cost) }.buttonStyle(.bordered) }
                         Button { sheet = .reminder } label: { Label(cylinder.reminderAt.map { AppLocalization.string("reminder.label %@", locale: locale, $0.formatted(.dateTime.locale(locale).day().month(.abbreviated).hour().minute())) } ?? AppLocalization.string("Add reminder", locale: locale), systemImage: "bell") }.buttonStyle(.bordered).frame(maxWidth: .infinity)
@@ -225,7 +225,7 @@ struct CylinderDetail: View {
                     Button("Cancel", role: .cancel) { confirmLifecycle = nil }
                 }
             } else { ContentUnavailableView("Cylinder not found", systemImage: "questionmark.square") }
-        }.navigationTitle(cylinder?.gas ?? AppLocalization.string("Cylinder", locale: locale)).navigationBarTitleDisplayMode(.inline).accessibilityIdentifier("screen.cylinderDetail")
+        }.navigationTitle(cylinder.map { AppLocalization.gas($0.gas, locale: locale) } ?? AppLocalization.string("Cylinder", locale: locale)).navigationBarTitleDisplayMode(.inline).accessibilityIdentifier("screen.cylinderDetail")
     }
 
     @ViewBuilder private func detailSheet(_ sheet: DetailSheet, cylinder: CylinderRecord) -> some View {
@@ -266,8 +266,8 @@ private struct CylinderForm: View {
                     ForEach(store.activeCylinders) { cylinder in
                         Button { copy(cylinder) } label: {
                             VStack(alignment: .leading) {
-                                Text(cylinder.gas)
-                                Text("\(cylinder.capacityLabel(locale: locale)) · \(store.supplierName(cylinder.supplierID))").font(.caption).foregroundStyle(.secondary)
+                                Text(AppLocalization.gas(cylinder.gas, locale: locale))
+                                Text("\(cylinder.capacityLabel(locale: locale)) · \(AppLocalization.supplier(store.supplierName(cylinder.supplierID), locale: locale))").font(.caption).foregroundStyle(.secondary)
                             }
                         }
                     }
@@ -405,7 +405,7 @@ enum LocalReminderScheduler {
         let center = UNUserNotificationCenter.current(); center.removePendingNotificationRequests(withIdentifiers: ["cylinder-\(cylinder.id.uuidString)"])
         guard let date else { return }
         let granted = try? await center.requestAuthorization(options: [.alert, .sound]); guard granted == true else { return }
-        let content = UNMutableNotificationContent(); content.title = AppLocalization.string("notification.check %@", locale: locale, cylinder.gas); content.body = AppLocalization.string("notification.review", locale: locale); content.sound = .default
+        let content = UNMutableNotificationContent(); content.title = AppLocalization.string("notification.check %@", locale: locale, AppLocalization.gas(cylinder.gas, locale: locale)); content.body = AppLocalization.string("notification.review", locale: locale); content.sound = .default
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         try? await center.add(UNNotificationRequest(identifier: "cylinder-\(cylinder.id.uuidString)", content: content, trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false)))
     }
@@ -423,12 +423,12 @@ private struct Metric: View { let titleKey: LocalizedStringKey; let value: Strin
 private struct ActivityRow: View {
     let store: WalletStore; let item: ActivityRecord
     @Environment(\.locale) private var locale
-    private var cylinderGas: String { store.cylinders.first { $0.id == item.cylinderID }?.gas ?? item.title }
+    private var cylinderGas: String { store.cylinders.first { $0.id == item.cylinderID }.map { AppLocalization.gas($0.gas, locale: locale) } ?? item.title }
     private var localizedTitle: String { AppLocalization.string("activity.title.\(item.kind.rawValue) %@", locale: locale, cylinderGas) }
     private var localizedDetail: String {
         if item.detail == "History retained" { return AppLocalization.string("activity.historyRetained", locale: locale) }
         if item.detail.hasPrefix("Replacement ") { return AppLocalization.string("activity.replacement %@", locale: locale, String(item.detail.dropFirst("Replacement ".count))) }
-        return item.detail
+        return AppLocalization.supplier(item.detail, locale: locale)
     }
     var body: some View { HStack(spacing: 12) { Image(systemName: item.kind == .refill ? "arrow.clockwise" : item.kind == .status ? "checkmark.circle" : "doc.text").foregroundStyle(.tint).frame(width: 34, height: 34).background(Color.blue.opacity(0.08), in: Circle()); VStack(alignment: .leading, spacing: 3) { Text(localizedTitle).font(.subheadline.weight(.semibold)); Text(localizedDetail).font(.caption).foregroundStyle(.secondary) }; Spacer(); VStack(alignment: .trailing) { if let minor = item.amountMinor, let code = item.currencyCode { Text("\(store.currencySign(for: code))\(AppLocalization.number(Decimal(minor) / 100, locale: locale))").font(.caption.bold()) }; Text(item.occurredAt.formatted(.dateTime.locale(locale).day().month(.abbreviated).year())).font(.caption2).foregroundStyle(.secondary) } }.padding(12).background(.background, in: RoundedRectangle(cornerRadius: 13)).overlay(RoundedRectangle(cornerRadius: 13).stroke(.separator)) }
 }
@@ -477,7 +477,7 @@ struct SupplierHome: View {
 private struct SupplierDetail: View {
     @Bindable var store: WalletStore; let supplier: SupplierRecord; let isEntitled: Bool
     @Environment(\.locale) private var locale
-    var body: some View { List { Section { HStack { Text(supplier.name.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined().uppercased()).font(.title2.bold()).foregroundStyle(.tint).frame(width: 60, height: 60).background(Color.blue.opacity(0.08), in: Circle()); VStack(alignment: .leading) { Text(supplier.name).font(.title2.bold()); let count = store.activeCylinders.filter { $0.supplierID == supplier.id }.count; Text(AppLocalization.string(count == 1 ? "cylinders.current.one" : "cylinders.current.other", locale: locale, count)).foregroundStyle(.secondary) } } }; if !supplier.phone.isEmpty || !supplier.notes.isEmpty { Section { if !supplier.phone.isEmpty { LabeledContent("Phone", value: supplier.phone) }; if !supplier.notes.isEmpty { LabeledContent("Notes", value: supplier.notes) } } }; Section("Cylinders") { let linked = store.cylinders.filter { $0.supplierID == supplier.id }; if linked.isEmpty { Text("No linked cylinders").foregroundStyle(.secondary) } else { ForEach(linked) { cylinder in NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled) } label: { VStack(alignment: .leading) { Text(cylinder.gas); Text("\(cylinder.capacityLabel(locale: locale)) · \(AppLocalization.string(cylinder.lifecycle.localizationKey, locale: locale))").font(.caption).foregroundStyle(.secondary) } } } } } }.navigationTitle(supplier.name).navigationBarTitleDisplayMode(.inline) }
+    var body: some View { List { Section { HStack { Text(supplier.name.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined().uppercased()).font(.title2.bold()).foregroundStyle(.tint).frame(width: 60, height: 60).background(Color.blue.opacity(0.08), in: Circle()); VStack(alignment: .leading) { Text(supplier.name).font(.title2.bold()); let count = store.activeCylinders.filter { $0.supplierID == supplier.id }.count; Text(AppLocalization.string(count == 1 ? "cylinders.current.one" : "cylinders.current.other", locale: locale, count)).foregroundStyle(.secondary) } } }; if !supplier.phone.isEmpty || !supplier.notes.isEmpty { Section { if !supplier.phone.isEmpty { LabeledContent("Phone", value: supplier.phone) }; if !supplier.notes.isEmpty { LabeledContent("Notes", value: supplier.notes) } } }; Section("Cylinders") { let linked = store.cylinders.filter { $0.supplierID == supplier.id }; if linked.isEmpty { Text("No linked cylinders").foregroundStyle(.secondary) } else { ForEach(linked) { cylinder in NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled) } label: { VStack(alignment: .leading) { Text(AppLocalization.gas(cylinder.gas, locale: locale)); Text("\(cylinder.capacityLabel(locale: locale)) · \(AppLocalization.string(cylinder.lifecycle.localizationKey, locale: locale))").font(.caption).foregroundStyle(.secondary) } } } } } }.navigationTitle(supplier.name).navigationBarTitleDisplayMode(.inline) }
 }
 
 private struct SupplierForm: View { @Bindable var store: WalletStore; let onSave: (SupplierRecord) -> Void; @Environment(\.dismiss) private var dismiss; @State private var name = ""; @State private var phone = ""; @State private var notes = ""; @State private var errorKey = ""; var body: some View { Form { if !errorKey.isEmpty { Text(LocalizedStringKey(errorKey)).foregroundStyle(.red) }; Section { TextField("Supplier name", text: $name); TextField("Phone (optional)", text: $phone).keyboardType(.phonePad); TextField("Notes (optional)", text: $notes) } }.navigationTitle("Add supplier").navigationBarTitleDisplayMode(.inline).toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save") { if let supplier = store.addSupplier(name: name, phone: phone, notes: notes) { onSave(supplier); dismiss() } else { errorKey = name.trimmed.isEmpty ? "error.supplierName" : "error.supplierDuplicate" } }.disabled(name.trimmed.isEmpty) } } } }

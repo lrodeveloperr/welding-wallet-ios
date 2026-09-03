@@ -63,7 +63,7 @@ struct SettingsView: View {
 
     private func legalButton(_ document: LegalDocument, title: String, symbol: String) -> some View {
         Button { legalDocument = document } label: {
-            SettingsLabel(LocalizedStringKey(title), subtitle: "Opens the current published document", symbol: symbol)
+            SettingsLabel(LocalizedStringKey(title), subtitle: "legal.documentLanguage", symbol: symbol)
         }
         .accessibilityIdentifier("shell.settings.legal.\(document.rawValue)")
     }

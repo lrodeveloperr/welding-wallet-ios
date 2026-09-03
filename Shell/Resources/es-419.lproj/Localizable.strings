@@ -258,6 +258,7 @@
 "Data deletion" = "Eliminación de datos";
 "Safety notice" = "Aviso de seguridad";
 "Opens the current published document" = "Abre el documento publicado vigente";
+"legal.documentLanguage" = "Abre el documento vigente (disponible en inglés)";
 "Delete all data" = "Eliminar todos los datos";
 "Erase this wallet from this device" = "Borra este inventario del dispositivo";
 "Welding Gas Wallet · Cylinder records stay on this device" = "Welding Gas Wallet · Los registros permanecen en este dispositivo";
