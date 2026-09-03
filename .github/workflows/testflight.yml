@@ -1,8 +1,6 @@
 name: TestFlight — explicit upload only
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       confirmation:
@@ -30,11 +28,11 @@ env:
   SCHEME: WeldingGasWallet
   ARCHIVE_PATH: ${{ github.workspace }}/build/WeldingGasWallet.xcarchive
   EXPORT_PATH: ${{ github.workspace }}/build/export
-  SCREENSHOT_BUILD: true
+  SCREENSHOT_BUILD: ${{ inputs.screenshot_build }}
 
 jobs:
   upload:
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    if: github.event_name == 'workflow_dispatch'
     runs-on: macos-26
     timeout-minutes: 90
     steps:
