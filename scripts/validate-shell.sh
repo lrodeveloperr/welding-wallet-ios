@@ -44,6 +44,7 @@ require_text Shell/Resources/Info-Ads.plist 'ITSAppUsesNonExemptEncryption'
 require_text .github/workflows/testflight.yml 'UPLOAD WELDING WALLET PRODUCTION TEST'
 require_text .github/workflows/testflight.yml 'ca-app-pub-3940256099942544/2435281174'
 require_text .github/workflows/testflight.yml 'Run unit tests before upload'
+require_text .github/workflows/testflight.yml 'ENABLE_TESTABILITY=YES'
 require_text .github/workflows/testflight.yml 'date -u +%y%m%d%H%M'
 require_text Shell/Features/SettingsView.swift 'activeCylinderLimit: model.access.isEntitled ? nil : 3'
 
