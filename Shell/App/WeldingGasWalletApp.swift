@@ -18,7 +18,7 @@ struct WeldingGasWalletApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ShellRootView(featureProvider: WeldingWalletFeatureProvider(store: wallet))
+            ShellRootView(featureProvider: WeldingWalletFeatureProvider(store: wallet), wallet: wallet)
                 .environment(wallet)
                 .tint(ShellConfiguration.tint)
                 .preferredColorScheme(.light)

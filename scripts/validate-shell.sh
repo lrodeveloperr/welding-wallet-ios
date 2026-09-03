@@ -12,7 +12,7 @@ require_file() { [[ -f "$1" ]] || fail "Missing $1"; }
 require_text() { grep -Fq "$2" "$1" || fail "$1 must contain: $2"; }
 reject_tree_text() { ! rg -n "$1" "$2" || fail "Forbidden implementation detected: $1"; }
 
-for path in project.yml README.md Shell/App/WeldingGasWalletApp.swift Shell/App/ShellConfiguration.swift Shell/App/ShellRootView.swift Shell/Features/FeatureView.swift Shell/Features/WalletStore.swift Shell/Features/SettingsView.swift Shell/Services/PurchaseService.swift Shell/Services/AdConsentService.swift Shell/Services/AdaptiveAdBanner.swift Shell/Resources/Info-Ads.plist Shell/Resources/PrivacyInfo.xcprivacy; do
+for path in project.yml README.md Shell/App/WeldingGasWalletApp.swift Shell/App/ShellConfiguration.swift Shell/App/ShellRootView.swift Shell/Features/FeatureView.swift Shell/Features/WalletStore.swift Shell/Features/SettingsView.swift Shell/Services/PurchaseService.swift Shell/Services/AdConsentService.swift Shell/Services/AdaptiveAdBanner.swift Shell/Resources/Info-Ads.plist Shell/Resources/PrivacyInfo.xcprivacy Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/Contents.json Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/CylinderTabIcon.svg; do
   require_file "$path"
 done
 
@@ -24,6 +24,9 @@ require_text Shell/App/ShellConfiguration.swift 'mode: .adsWithSubscription'
 require_text Shell/App/ShellConfiguration.swift 'com.gooduse.weldinggaswallet.pro.monthly'
 require_text Shell/App/ShellConfiguration.swift 'BackupConfiguration(enabled: true)'
 require_text Shell/App/ShellRootView.swift 'Color.clear.frame(height: 60)'
+require_text Shell/App/ShellRootView.swift 'Label("Cylinders", image: "CylinderTabIcon")'
+require_text Shell/App/ShellRootView.swift 'SettingsView(model: model, wallet: wallet)'
+require_text Shell/App/ShellRootView.swift '.environment(model)'
 require_text Shell/Features/FeatureView.swift 'activeCylinders.count >= 3'
 require_text Shell/Features/FeatureView.swift 'Duplicate cylinder'
 require_text Shell/Features/FeatureView.swift 'Search cylinders'

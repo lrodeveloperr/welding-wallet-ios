@@ -2,8 +2,8 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
-    @Environment(ShellModel.self) private var model
-    @Environment(WalletStore.self) private var wallet
+    let model: ShellModel
+    let wallet: WalletStore
     @Environment(\.dismiss) private var dismiss
     @State private var showDelete = false
     @State private var deletePhrase = ""

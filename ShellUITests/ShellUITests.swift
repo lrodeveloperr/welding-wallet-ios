@@ -25,6 +25,19 @@ final class WeldingGasWalletUITests: XCTestCase {
         XCTAssertTrue(app.buttons["shell.paywall.restore"].exists)
     }
 
+    func testCylindersTabHasVisibleIcon() {
+        let app = launch()
+        let tab = app.tabBars.buttons["Cylinders"]
+        XCTAssertTrue(tab.waitForExistence(timeout: 8))
+        XCTAssertGreaterThan(tab.descendants(matching: .image).count, 0)
+    }
+
+    func testSettingsOpensWithoutTerminatingApp() {
+        let app = launch()
+        openSettings(app)
+        XCTAssertEqual(app.state, .runningForeground)
+    }
+
     func testPrimaryControlsMeetMinimumHitTarget() {
         let app = launch(onboardingComplete: false, screenshotData: false)
         let control = app.buttons["shell.onboarding.accept"]

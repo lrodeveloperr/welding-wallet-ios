@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ShellRootView: View {
     private let featureProvider: any FeatureCanvasProviding
+    private let wallet: WalletStore
 #if SCREENSHOT_BUILD
     private let screenshotMode = true
     private let screenshotOnboarding = false
@@ -17,10 +18,12 @@ struct ShellRootView: View {
 
     init(
         featureProvider: any FeatureCanvasProviding,
+        wallet: WalletStore,
         model: ShellModel = ShellModel(),
         legalConsent: LegalConsentStore = LegalConsentStore()
     ) {
         self.featureProvider = featureProvider
+        self.wallet = wallet
         _model = State(initialValue: model)
         _legalConsent = State(initialValue: legalConsent)
     }
@@ -49,15 +52,24 @@ struct ShellRootView: View {
         .environment(model.language)
         .environment(\.locale, model.language.locale)
         .sheet(isPresented: $model.settingsPresented) {
-            NavigationStack { SettingsView() }
+            NavigationStack { SettingsView(model: model, wallet: wallet) }
+                .environment(model)
+                .environment(model.language)
+                .environment(\.locale, model.language.locale)
         }
 #if DEBUG
         .sheet(isPresented: $model.labPresented) {
             NavigationStack { ShellLabView(onResetOnboarding: legalConsent.resetForTesting) }
+                .environment(model)
+                .environment(model.language)
+                .environment(\.locale, model.language.locale)
         }
 #endif
         .sheet(isPresented: $model.paywallPresented) {
             NavigationStack { PaywallView() }
+                .environment(model)
+                .environment(model.language)
+                .environment(\.locale, model.language.locale)
         }
         .task {
             await model.start()
@@ -93,8 +105,7 @@ struct ShellRootView: View {
                     .tag(destination.id)
                     .tabItem {
                         if destination.id == "cylinders" {
-                            CylinderSymbol().frame(width: 20, height: 24)
-                            Text("Cylinders")
+                            Label("Cylinders", image: "CylinderTabIcon")
                         } else {
                             Label(destination.id.capitalized, systemImage: destination.symbol)
                         }
