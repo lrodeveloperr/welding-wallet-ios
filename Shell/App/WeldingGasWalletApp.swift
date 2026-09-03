@@ -7,7 +7,8 @@ struct WeldingGasWalletApp: App {
     init() {
 #if DEBUG
         let screenshotMode = ProcessInfo.processInfo.arguments.contains("-welding.screenshotData")
-        _wallet = State(initialValue: screenshotMode ? WalletStore.screenshotYear() : WalletStore())
+        let screenshotOpenSlot = ProcessInfo.processInfo.arguments.contains("-welding.screenshotOpenSlot")
+        _wallet = State(initialValue: screenshotMode ? WalletStore.screenshotYear(openSlot: screenshotOpenSlot) : WalletStore())
 #else
         _wallet = State(initialValue: WalletStore())
 #endif
