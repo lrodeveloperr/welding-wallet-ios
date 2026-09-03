@@ -4,47 +4,26 @@ struct ShellRootView: View {
     @Environment(\.scenePhase) private var scenePhase
     private let featureProvider: any FeatureCanvasProviding
     private let wallet: WalletStore
-#if SCREENSHOT_BUILD
-    private let screenshotMode = true
-    private let screenshotOnboarding = false
-#elseif DEBUG
-    private let screenshotMode = ProcessInfo.processInfo.arguments.contains("-welding.screenshotData")
-    private let screenshotOnboarding = ProcessInfo.processInfo.arguments.contains("-welding.screenshotOnboarding")
-#else
-    private let screenshotMode = false
-    private let screenshotOnboarding = false
-#endif
     @State private var model: ShellModel
-    @State private var legalConsent: LegalConsentStore
 
     init(
         featureProvider: any FeatureCanvasProviding,
         wallet: WalletStore,
-        model: ShellModel = ShellModel(),
-        legalConsent: LegalConsentStore = LegalConsentStore()
+        model: ShellModel = ShellModel()
     ) {
         self.featureProvider = featureProvider
         self.wallet = wallet
         _model = State(initialValue: model)
-        _legalConsent = State(initialValue: legalConsent)
     }
 
     var body: some View {
         Group {
-            if screenshotOnboarding {
-                OnboardingView(profile: ShellConfiguration.onboarding, isReconsent: false, onAccept: {})
-            } else if let startupMessage = model.startupMessage {
+            if let startupMessage = model.startupMessage {
                 ContentUnavailableView {
                     Label("startup.error.title", systemImage: "exclamationmark.triangle")
                 } description: {
                     Text(startupMessage)
                 }
-            } else if !screenshotMode && legalConsent.requiresPresentation {
-                OnboardingView(
-                    profile: ShellConfiguration.onboarding,
-                    isReconsent: legalConsent.isReconsent,
-                    onAccept: legalConsent.acceptCurrentLegalVersion
-                )
             } else {
                 shell
             }
@@ -60,7 +39,7 @@ struct ShellRootView: View {
         }
 #if DEBUG
         .sheet(isPresented: $model.labPresented) {
-            NavigationStack { ShellLabView(onResetOnboarding: legalConsent.resetForTesting) }
+            NavigationStack { ShellLabView() }
                 .environment(model)
                 .environment(model.language)
                 .environment(\.locale, model.language.locale)

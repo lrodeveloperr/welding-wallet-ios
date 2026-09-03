@@ -7,14 +7,15 @@ final class WeldingGasWalletUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    func testLegalOnboardingHasOneExplicitGate() {
-        let app = launch(onboardingComplete: false, screenshotData: false)
-        let acceptance = app.buttons["shell.onboarding.accept"]
-        let primary = app.buttons["shell.onboarding.primary"]
-        XCTAssertTrue(acceptance.waitForExistence(timeout: 8))
-        XCTAssertFalse(primary.isEnabled)
-        acceptance.tap()
-        XCTAssertTrue(primary.isEnabled)
+    func testFreshInstallLaunchesDirectlyToCylinderWallet() {
+        let app = launch(screenshotData: false)
+        XCTAssertTrue(app.navigationBars["Cylinders"].waitForExistence(timeout: 8))
+        XCTAssertFalse(app.buttons["shell.onboarding.accept"].exists)
+        XCTAssertFalse(app.buttons["shell.onboarding.primary"].exists)
+        app.buttons["shell.settings"].tap()
+        XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.buttons["Privacy policy"].exists)
+        XCTAssertTrue(app.buttons["Terms of use"].exists)
     }
 
     func testPaywallExposesPurchaseAndRestoreControls() {
@@ -51,17 +52,14 @@ final class WeldingGasWalletUITests: XCTestCase {
     }
 
     func testPrimaryControlsMeetMinimumHitTarget() {
-        let app = launch(onboardingComplete: false, screenshotData: false)
-        let control = app.buttons["shell.onboarding.accept"]
+        let app = launch(screenshotData: false)
+        let control = app.buttons["shell.settings"]
         XCTAssertTrue(control.waitForExistence(timeout: 8))
         XCTAssertGreaterThanOrEqual(control.frame.height, 44)
         XCTAssertGreaterThanOrEqual(control.frame.width, 44)
     }
 
     func testCaptureAllScreens() throws {
-        try scenario(1, "Onboarding", onboardingComplete: false) { app in
-            XCTAssertTrue(app.buttons["shell.onboarding.primary"].waitForExistence(timeout: 8))
-        }
         try scenario(2, "Cylinders-Home") { app in waitForHome(app) }
         try scenario(3, "Cylinder-Status-Controls") { app in
             waitForHome(app)
@@ -141,16 +139,13 @@ final class WeldingGasWalletUITests: XCTestCase {
         }
     }
 
-    private func launch(onboardingComplete: Bool = true, screenshotData: Bool = true, openSlot: Bool = false) -> XCUIApplication {
+    private func launch(screenshotData: Bool = true, openSlot: Bool = false) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments += [
             "-AppleLanguages", "(en)",
             "-AppleLocale", "en_CA",
-            "-shell.onboarding.complete", onboardingComplete ? "YES" : "NO",
-            "-shell.legal.acceptedVersion", onboardingComplete ? "1" : "",
         ]
         if screenshotData { app.launchArguments += ["-welding.screenshotData", "YES"] }
-        if screenshotData && !onboardingComplete { app.launchArguments += ["-welding.screenshotOnboarding", "YES"] }
         if openSlot { app.launchArguments += ["-welding.screenshotOpenSlot", "YES"] }
         app.launch()
         return app
@@ -159,11 +154,10 @@ final class WeldingGasWalletUITests: XCTestCase {
     private func scenario(
         _ number: Int,
         _ label: String,
-        onboardingComplete: Bool = true,
         openSlot: Bool = false,
         navigation: (XCUIApplication) -> Void
     ) throws {
-        let app = launch(onboardingComplete: onboardingComplete, openSlot: openSlot)
+        let app = launch(openSlot: openSlot)
         navigation(app)
         RunLoop.current.run(until: Date().addingTimeInterval(0.45))
         try saveScreenshot(number: number, label: label)

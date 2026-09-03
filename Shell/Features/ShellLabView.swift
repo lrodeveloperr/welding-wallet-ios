@@ -4,7 +4,6 @@ import SwiftUI
 struct ShellLabView: View {
     @Environment(ShellModel.self) private var model
     @Environment(\.dismiss) private var dismiss
-    let onResetOnboarding: () -> Void
 
     var body: some View {
         @Bindable var model = model
@@ -26,12 +25,6 @@ struct ShellLabView: View {
                 LabeledContent("Compact", value: "Tab bar")
                 LabeledContent("Regular", value: "Sidebar-adaptable tabs")
                 LabeledContent("Detail", value: "Split at 700 pt")
-            }
-            Section {
-                Button("Reset onboarding", systemImage: "arrow.counterclockwise") {
-                    onResetOnboarding()
-                    dismiss()
-                }
             }
         }
         .navigationTitle("Shell Lab")

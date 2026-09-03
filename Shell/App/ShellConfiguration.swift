@@ -12,8 +12,6 @@ enum ShellConfiguration {
         deletionURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/deletion/")!,
         safetyURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/disclaimer/")!
     )
-    static let onboarding: OnboardingProfile = .legalOnly
-
     /// Free users keep the complete wallet with a three-active-cylinder limit.
     /// A verified monthly subscription unlocks unlimited active cylinders.
     /// App Store Connect owns the US$1.99 monthly price configuration;

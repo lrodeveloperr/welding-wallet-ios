@@ -16,6 +16,7 @@ This is the authoritative native iOS application. It derives from `lrodeveloperr
 - Display currency signs in the interface. Persist ISO currency codes only in the data layer; never silently convert or combine currencies.
 - Preserve delete confirmation, 15-second Undo, Return/Archive, activity history, reminders, suppliers, search/filters, and the data-entry friction reductions.
 - Privacy Policy and Terms are maintained externally. Do not invent policy copy.
+- Launch directly into the cylinder wallet. Do not require a privacy-policy or terms acceptance screen; keep those documents available in Settings and on the subscription page.
 
 ## Localization release gate
 
