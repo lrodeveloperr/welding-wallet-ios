@@ -20,7 +20,7 @@ targets:
           - Resources/Info-Ads.plist
     settings:
       base:
-        PRODUCT_NAME: Welding Gas Wallet
+        PRODUCT_NAME: WeldingGasWallet
         PRODUCT_BUNDLE_IDENTIFIER: com.goodusestudios.weldinggaswallet
         INFOPLIST_FILE: Shell/Resources/Info-Ads.plist
         MARKETING_VERSION: 1.0
