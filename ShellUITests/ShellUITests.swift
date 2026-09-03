@@ -35,7 +35,7 @@ final class WeldingGasWalletUITests: XCTestCase {
 
     func testCaptureAllScreens() throws {
         try scenario(1, "Onboarding", onboardingComplete: false) { app in
-            XCTAssertTrue(app.buttons["shell.onboarding.accept"].waitForExistence(timeout: 8))
+            XCTAssertTrue(app.buttons["shell.onboarding.primary"].waitForExistence(timeout: 8))
         }
         try scenario(2, "Cylinders-Home") { app in waitForHome(app) }
         try scenario(3, "Cylinder-Status-Controls") { app in
@@ -144,15 +144,11 @@ final class WeldingGasWalletUITests: XCTestCase {
     }
 
     private func saveScreenshot(number: Int, label: String) throws {
-        guard let directory = ProcessInfo.processInfo.environment["SCREENSHOT_OUTPUT_DIR"], !directory.isEmpty else {
-            XCTFail("SCREENSHOT_OUTPUT_DIR is missing")
-            return
-        }
-        let fileManager = FileManager.default
-        try fileManager.createDirectory(atPath: directory, withIntermediateDirectories: true)
         let name = String(format: "%02d-%@.png", number, label)
-        let url = URL(fileURLWithPath: directory).appendingPathComponent(name)
-        try XCUIScreen.main.screenshot().pngRepresentation.write(to: url, options: .atomic)
+        let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
     }
 
     private func waitForHome(_ app: XCUIApplication) {
