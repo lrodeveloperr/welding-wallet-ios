@@ -2,6 +2,11 @@ import SwiftUI
 
 struct ShellRootView: View {
     private let featureProvider: any FeatureCanvasProviding
+#if DEBUG
+    private let screenshotMode = ProcessInfo.processInfo.arguments.contains("-welding.screenshotData")
+#else
+    private let screenshotMode = false
+#endif
     @State private var model: ShellModel
     @State private var legalConsent: LegalConsentStore
 
@@ -49,13 +54,13 @@ struct ShellRootView: View {
         }
         .task {
             await model.start()
-            if !legalConsent.requiresPresentation { await model.prepareAdvertisingIfNeeded() }
+            if !screenshotMode && !legalConsent.requiresPresentation { await model.prepareAdvertisingIfNeeded() }
         }
         .onChange(of: legalConsent.requiresPresentation) { _, requiresPresentation in
-            if !requiresPresentation { Task { await model.prepareAdvertisingIfNeeded() } }
+            if !screenshotMode && !requiresPresentation { Task { await model.prepareAdvertisingIfNeeded() } }
         }
         .onChange(of: model.access.shouldShowAd) { _, shouldShowAd in
-            if shouldShowAd && !legalConsent.requiresPresentation {
+            if !screenshotMode && shouldShowAd && !legalConsent.requiresPresentation {
                 Task { await model.prepareAdvertisingIfNeeded() }
             }
         }
@@ -98,7 +103,9 @@ struct ShellRootView: View {
     private var adBanner: some View {
         if model.shouldRenderAd {
             Group {
-                if model.ads.canRequestAds {
+                if screenshotMode {
+                    Color.clear.frame(height: 60).accessibilityHidden(true)
+                } else if model.ads.canRequestAds {
                     AdaptiveAdBanner(adUnitID: ShellConfiguration.advertising.bannerUnitID)
                         .accessibilityLabel(Text("advertisement"))
                 } else {

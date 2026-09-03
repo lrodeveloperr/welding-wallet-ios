@@ -11,7 +11,7 @@ struct SettingsView: View {
     var body: some View {
         List {
             if !model.access.purchases.isEntitled {
-                Section { NavigationLink { PaywallView() } label: { SettingsLabel("Upgrade", subtitle: "Remove ads and cylinder limit", symbol: "sparkles") } }
+                Section { NavigationLink { PaywallView() } label: { SettingsLabel("Upgrade", subtitle: "Remove ads and cylinder limit", symbol: "sparkles") }.accessibilityIdentifier("shell.settings.upgrade") }
             }
             Section {
                 NavigationLink { LanguageView() } label: { SettingsLabel("Language", subtitle: "Choose the app language", symbol: "globe") }

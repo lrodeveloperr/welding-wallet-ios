@@ -317,6 +317,64 @@ final class WalletStore {
         if store.cylinders.count > 2 { store.setStatus(.away, for: store.cylinders[2].id) }
         return store
     }
+
+#if DEBUG
+    /// Deterministic, screenshot-only fixture spanning September 2025 through
+    /// August 2026. It is activated exclusively by the UI-test launch flag and
+    /// never enters a normal user's on-device wallet.
+    static func screenshotYear() -> WalletStore {
+        let store = WalletStore(
+            fileURL: FileManager.default.temporaryDirectory.appending(path: "welding-wallet-screenshots-\(UUID().uuidString).json"),
+            loadExisting: false
+        )
+        let calendar = Calendar(identifier: .gregorian)
+        func date(_ year: Int, _ month: Int, _ day: Int, hour: Int = 9) -> Date {
+            calendar.date(from: DateComponents(timeZone: TimeZone(secondsFromGMT: 0), year: year, month: month, day: day, hour: hour))!
+        }
+
+        let lindeID = UUID(uuidString: "10000000-0000-0000-0000-000000000001")!
+        let airLiquideID = UUID(uuidString: "10000000-0000-0000-0000-000000000002")!
+        let localID = UUID(uuidString: "10000000-0000-0000-0000-000000000003")!
+        let argonID = UUID(uuidString: "20000000-0000-0000-0000-000000000001")!
+        let c25ID = UUID(uuidString: "20000000-0000-0000-0000-000000000002")!
+        let oxygenID = UUID(uuidString: "20000000-0000-0000-0000-000000000003")!
+        let acetyleneID = UUID(uuidString: "20000000-0000-0000-0000-000000000004")!
+
+        store.suppliers = [
+            SupplierRecord(id: lindeID, name: "Linde Canada", phone: "905-555-0142", notes: "Argon and C25 exchanges"),
+            SupplierRecord(id: airLiquideID, name: "Air Liquide", phone: "905-555-0186", notes: "Oxygen refills"),
+            SupplierRecord(id: localID, name: "Brampton Welding Supply", phone: "905-555-0118", notes: "Backup supplier"),
+        ]
+        store.cylinders = [
+            CylinderRecord(id: argonID, gas: "Argon", capacityValue: 80, capacityUnit: "ft3", supplierID: lindeID, relationship: .owned, serial: "AR-8084", status: .ready, acquiredAt: date(2025, 9, 3), reminderAt: date(2026, 9, 17), notes: "TIG bench"),
+            CylinderRecord(id: c25ID, gas: "C25 Mix", capacityValue: 125, capacityUnit: "ft3", supplierID: lindeID, relationship: .rental, serial: "C25-4419", status: .low, acquiredAt: date(2025, 10, 6), notes: "MIG cart"),
+            CylinderRecord(id: oxygenID, gas: "Oxygen", capacityValue: 40, capacityUnit: "ft3", supplierID: airLiquideID, relationship: .owned, serial: "OX-2037", status: .away, acquiredAt: date(2026, 1, 12), notes: "With mobile repair kit"),
+            CylinderRecord(id: acetyleneID, gas: "Acetylene", capacityValue: 75, capacityUnit: "ft3", supplierID: localID, relationship: .deposit, serial: "AC-7315", status: .empty, lifecycle: .archived, acquiredAt: date(2025, 9, 18), notes: "Returned after torch upgrade"),
+        ]
+        store.activity = [
+            ActivityRecord(cylinderID: c25ID, kind: .status, occurredAt: date(2026, 8, 28), title: "C25 Mix marked Low", detail: "Linde Canada · 125 ft³"),
+            ActivityRecord(cylinderID: oxygenID, kind: .status, occurredAt: date(2026, 8, 12), title: "Oxygen marked Away", detail: "Mobile repair job"),
+            ActivityRecord(cylinderID: argonID, kind: .refill, occurredAt: date(2026, 6, 29), title: "Argon refill", detail: "Linde Canada", amountMinor: 6375, currencyCode: "CAD"),
+            ActivityRecord(cylinderID: acetyleneID, kind: .archived, occurredAt: date(2026, 6, 3), title: "Acetylene archived", detail: "History retained"),
+            ActivityRecord(cylinderID: c25ID, kind: .exchange, occurredAt: date(2026, 5, 17), title: "C25 Mix exchange", detail: "Replacement C25-6721", amountMinor: 7950, currencyCode: "CAD"),
+            ActivityRecord(cylinderID: c25ID, kind: .status, occurredAt: date(2026, 4, 18), title: "C25 Mix marked Low", detail: "Linde Canada · 125 ft³"),
+            ActivityRecord(cylinderID: oxygenID, kind: .refill, occurredAt: date(2026, 3, 2), title: "Oxygen refill", detail: "Air Liquide", amountMinor: 4400, currencyCode: "CAD"),
+            ActivityRecord(cylinderID: argonID, kind: .refill, occurredAt: date(2026, 2, 21), title: "Argon refill", detail: "Linde Canada", amountMinor: 6110, currencyCode: "CAD"),
+            ActivityRecord(cylinderID: oxygenID, kind: .created, occurredAt: date(2026, 1, 12), title: "Oxygen added", detail: "Air Liquide · 40 ft³"),
+            ActivityRecord(cylinderID: c25ID, kind: .exchange, occurredAt: date(2025, 12, 5), title: "C25 Mix exchange", detail: "Replacement C25-4419", amountMinor: 7425, currencyCode: "CAD"),
+            ActivityRecord(cylinderID: c25ID, kind: .status, occurredAt: date(2025, 12, 2), title: "C25 Mix marked Empty", detail: "Linde Canada · 125 ft³"),
+            ActivityRecord(cylinderID: argonID, kind: .refill, occurredAt: date(2025, 11, 14), title: "Argon refill", detail: "Linde Canada", amountMinor: 5840, currencyCode: "CAD"),
+            ActivityRecord(cylinderID: c25ID, kind: .cost, occurredAt: date(2025, 10, 6), title: "C25 Mix cost", detail: "Rental deposit", amountMinor: 12000, currencyCode: "CAD"),
+            ActivityRecord(cylinderID: c25ID, kind: .created, occurredAt: date(2025, 10, 6), title: "C25 Mix added", detail: "Linde Canada · 125 ft³"),
+            ActivityRecord(cylinderID: acetyleneID, kind: .created, occurredAt: date(2025, 9, 18), title: "Acetylene added", detail: "Brampton Welding Supply · 75 ft³"),
+            ActivityRecord(cylinderID: argonID, kind: .created, occurredAt: date(2025, 9, 3), title: "Argon added", detail: "Linde Canada · 80 ft³"),
+        ]
+        store.currencyOverride = "CAD"
+        store.defaults = CylinderDefaults(supplierID: lindeID, relationship: .owned, capacityUnit: "ft3")
+        store.save()
+        return store
+    }
+#endif
 }
 
 enum WalletError: LocalizedError {

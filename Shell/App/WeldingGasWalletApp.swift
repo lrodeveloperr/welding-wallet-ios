@@ -5,7 +5,12 @@ struct WeldingGasWalletApp: App {
     @State private var wallet: WalletStore
 
     init() {
+#if DEBUG
+        let screenshotMode = ProcessInfo.processInfo.arguments.contains("-welding.screenshotData")
+        _wallet = State(initialValue: screenshotMode ? WalletStore.screenshotYear() : WalletStore())
+#else
         _wallet = State(initialValue: WalletStore())
+#endif
     }
 
     var body: some Scene {

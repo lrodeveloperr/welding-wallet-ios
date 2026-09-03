@@ -1,0 +1,51 @@
+name: iOS screenshot capture
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - name: Select Xcode and install XcodeGen
+        run: |
+          if [[ -d /Applications/Xcode_26.6.app ]]; then sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer; fi
+          command -v xcodegen >/dev/null || brew install xcodegen
+          xcodebuild -version
+      - name: Validate and generate project
+        run: |
+          scripts/validate-shell.sh --app
+          xcodegen generate
+      - name: Select simulator
+        run: |
+          DEVICE_ID="$(xcrun simctl list devices available -j | ruby -rjson -e '
+            devices = JSON.parse(STDIN.read).fetch("devices").values.flatten
+            preferred = ["iPhone 17 Pro Max", "iPhone 17 Pro", "iPhone 16 Pro Max", "iPhone 16 Pro"]
+            phone = preferred.lazy.map { |name| devices.find { |d| d["isAvailable"] && d["name"] == name } }.find(&:itself)
+            phone ||= devices.find { |d| d["isAvailable"] && d["name"].start_with?("iPhone") }
+            abort "No available iPhone simulator" unless phone
+            puts phone.fetch("udid")
+          ')"
+          echo "DEVICE_ID=$DEVICE_ID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
+          xcrun simctl bootstatus "$DEVICE_ID" -b
+      - name: Capture every app screen
+        env:
+          SCREENSHOT_OUTPUT_DIR: ${{ github.workspace }}/screenshots
+        run: |
+          mkdir -p "$SCREENSHOT_OUTPUT_DIR"
+          xcodebuild -project WeldingGasWallet.xcodeproj -scheme WeldingGasWallet -configuration Debug -destination "platform=iOS Simulator,id=$DEVICE_ID" CODE_SIGNING_ALLOWED=NO -only-testing:WeldingGasWalletUITests/WeldingGasWalletUITests/testCaptureAllScreens test
+          test "$(find "$SCREENSHOT_OUTPUT_DIR" -type f -name '*.png' | wc -l | tr -d ' ')" = "24"
+          ditto -c -k --sequesterRsrc --keepParent "$SCREENSHOT_OUTPUT_DIR" WeldingGasWallet-iPhone-All-Screens.zip
+      - name: Upload numbered screenshots
+        uses: actions/upload-artifact@v6
+        with:
+          name: WeldingGasWallet-iPhone-All-Screens
+          path: WeldingGasWallet-iPhone-All-Screens.zip
+          if-no-files-found: error
+          retention-days: 14

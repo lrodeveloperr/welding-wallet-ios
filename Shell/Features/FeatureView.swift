@@ -77,6 +77,7 @@ struct CylinderHome: View {
                 Button { addTapped() } label: { Image(systemName: "plus").font(.title2.bold()).frame(width: 58, height: 58) }
                     .buttonStyle(.borderedProminent).buttonBorderShape(.circle).padding(20)
                     .accessibilityLabel("Add cylinder")
+                    .accessibilityIdentifier("wallet.addCylinder")
             }
             .sheet(isPresented: $showingAdd) { NavigationStack { CylinderForm(store: store, mode: .new) } }
             .safeAreaInset(edge: .bottom) {
@@ -141,7 +142,7 @@ private struct CylinderCard: View {
                     }.frame(maxWidth: .infinity, alignment: .leading)
                 }.buttonStyle(.plain)
                 StatusBadge(status: cylinder.status)
-                Button(action: toggle) { Image(systemName: expanded ? "chevron.up" : "chevron.right") }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44)
+                Button(action: toggle) { Image(systemName: expanded ? "chevron.up" : "chevron.right") }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44).accessibilityLabel("Change \(cylinder.gas) status").accessibilityIdentifier("wallet.status.\(cylinder.id.uuidString)")
             }.padding(14)
             if expanded {
                 Divider()
@@ -205,7 +206,7 @@ struct CylinderDetail: View {
                     Button("Cancel", role: .cancel) { confirmLifecycle = nil }
                 }
             } else { ContentUnavailableView("Cylinder not found", systemImage: "questionmark.square") }
-        }.navigationTitle(cylinder?.gas ?? "Cylinder").navigationBarTitleDisplayMode(.inline)
+        }.navigationTitle(cylinder?.gas ?? "Cylinder").navigationBarTitleDisplayMode(.inline).accessibilityIdentifier("screen.cylinderDetail")
     }
 
     @ViewBuilder private func detailSheet(_ sheet: DetailSheet, cylinder: CylinderRecord) -> some View {
@@ -405,7 +406,7 @@ struct SupplierHome: View {
                     }
                 }.frame(maxWidth: 980).padding(16).frame(maxWidth: .infinity)
             }
-            .overlay(alignment: .bottomTrailing) { Button { showingAdd = true } label: { Image(systemName: "plus").font(.title2.bold()).frame(width: 58, height: 58) }.buttonStyle(.borderedProminent).buttonBorderShape(.circle).padding(20) }
+            .overlay(alignment: .bottomTrailing) { Button { showingAdd = true } label: { Image(systemName: "plus").font(.title2.bold()).frame(width: 58, height: 58) }.buttonStyle(.borderedProminent).buttonBorderShape(.circle).padding(20).accessibilityLabel("Add supplier").accessibilityIdentifier("wallet.addSupplier") }
             .sheet(isPresented: $showingAdd) { NavigationStack { SupplierForm(store: store) { _ in } } }
         }
     }
