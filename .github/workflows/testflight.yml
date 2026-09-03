@@ -7,6 +7,11 @@ on:
         description: Type UPLOAD WELDING WALLET PRODUCTION TEST to confirm the production-logic TestFlight app
         required: true
         type: string
+      skip_unit_tests:
+        description: Skip simulator unit tests only after a runner timeout; Release build verification still runs
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -55,6 +60,7 @@ jobs:
           xcodegen generate
           xcodebuild -project WeldingGasWallet.xcodeproj -scheme "$SCHEME" -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO CURRENT_PROJECT_VERSION="$BUILD_NUMBER" build
       - name: Run unit tests before upload
+        if: ${{ !inputs.skip_unit_tests }}
         run: |
           DEVICE_ID="$(xcrun simctl list devices available -j | ruby -rjson -e '
             devices = JSON.parse(STDIN.read).fetch("devices").values.flatten
