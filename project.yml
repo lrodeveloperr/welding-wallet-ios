@@ -1,0 +1,73 @@
+name: WeldingGasWallet
+options:
+  bundleIdPrefix: com.goodusestudios
+  deploymentTarget:
+    iOS: "18.0"
+  xcodeVersion: "16.0"
+  createIntermediateGroups: true
+packages:
+  GoogleMobileAds:
+    url: https://github.com/googleads/swift-package-manager-google-mobile-ads.git
+    from: 13.0.0
+targets:
+  WeldingGasWallet:
+    type: application
+    platform: iOS
+    sources:
+      - path: Shell
+        excludes:
+          - Resources/Info.plist
+          - Resources/Info-Ads.plist
+    settings:
+      base:
+        PRODUCT_NAME: Welding Gas Wallet
+        PRODUCT_BUNDLE_IDENTIFIER: com.goodusestudios.weldinggaswallet
+        INFOPLIST_FILE: Shell/Resources/Info-Ads.plist
+        MARKETING_VERSION: 1.0
+        CURRENT_PROJECT_VERSION: 1
+        SWIFT_VERSION: 6.0
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ADS_ENABLED"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Automatic
+        TARGETED_DEVICE_FAMILY: "1,2"
+      configs:
+        Debug:
+          WELDING_IOS_ADMOB_APP_ID: ca-app-pub-3940256099942544~1458002511
+          WELDING_IOS_ADMOB_BANNER_ID: ca-app-pub-3940256099942544/2435281174
+        Release:
+          WELDING_IOS_ADMOB_APP_ID: MISSING_PRODUCTION_ADMOB_APP_ID
+          WELDING_IOS_ADMOB_BANNER_ID: MISSING_PRODUCTION_ADMOB_BANNER_ID
+    dependencies:
+      - package: GoogleMobileAds
+        product: GoogleMobileAds
+  WeldingGasWalletTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ShellTests
+    dependencies:
+      - target: WeldingGasWallet
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+  WeldingGasWalletUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - ShellUITests
+    dependencies:
+      - target: WeldingGasWallet
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  WeldingGasWallet:
+    build:
+      targets:
+        WeldingGasWallet: all
+        WeldingGasWalletTests: [test]
+        WeldingGasWalletUITests: [test]
+    test:
+      targets:
+        - WeldingGasWalletTests
+        - WeldingGasWalletUITests

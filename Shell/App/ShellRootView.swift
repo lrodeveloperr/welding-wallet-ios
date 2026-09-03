@@ -1,0 +1,130 @@
+import SwiftUI
+
+struct ShellRootView: View {
+    private let featureProvider: any FeatureCanvasProviding
+    @State private var model: ShellModel
+    @State private var legalConsent: LegalConsentStore
+
+    init(
+        featureProvider: any FeatureCanvasProviding,
+        model: ShellModel = ShellModel(),
+        legalConsent: LegalConsentStore = LegalConsentStore()
+    ) {
+        self.featureProvider = featureProvider
+        _model = State(initialValue: model)
+        _legalConsent = State(initialValue: legalConsent)
+    }
+
+    var body: some View {
+        Group {
+            if let startupMessage = model.startupMessage {
+                ContentUnavailableView {
+                    Label("startup.error.title", systemImage: "exclamationmark.triangle")
+                } description: {
+                    Text(startupMessage)
+                }
+            } else if legalConsent.requiresPresentation {
+                OnboardingView(
+                    profile: ShellConfiguration.onboarding,
+                    isReconsent: legalConsent.isReconsent,
+                    onAccept: legalConsent.acceptCurrentLegalVersion
+                )
+            } else {
+                shell
+            }
+        }
+        .environment(model)
+        .environment(model.language)
+        .environment(\.locale, model.language.locale)
+        .sheet(isPresented: $model.settingsPresented) {
+            NavigationStack { SettingsView() }
+        }
+#if DEBUG
+        .sheet(isPresented: $model.labPresented) {
+            NavigationStack { ShellLabView(onResetOnboarding: legalConsent.resetForTesting) }
+        }
+#endif
+        .sheet(isPresented: $model.paywallPresented) {
+            NavigationStack { PaywallView() }
+        }
+        .task {
+            await model.start()
+            if !legalConsent.requiresPresentation { await model.prepareAdvertisingIfNeeded() }
+        }
+        .onChange(of: legalConsent.requiresPresentation) { _, requiresPresentation in
+            if !requiresPresentation { Task { await model.prepareAdvertisingIfNeeded() } }
+        }
+        .onChange(of: model.access.shouldShowAd) { _, shouldShowAd in
+            if shouldShowAd && !legalConsent.requiresPresentation {
+                Task { await model.prepareAdvertisingIfNeeded() }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var shell: some View {
+        if ShellConfiguration.destinations.count == 1, let destination = ShellConfiguration.destinations.first {
+            NavigationStack {
+                FeatureCanvasHost(destination: destination, provider: featureProvider)
+                    .navigationTitle(destination.id == "cylinders" ? "Cylinders" : destination.id.capitalized)
+                    .shellSettingsToolbar()
+            }
+            .safeAreaInset(edge: .bottom) { adBanner }
+        } else {
+            TabView(selection: $model.selectedDestination) {
+                ForEach(ShellConfiguration.destinations) { destination in
+                    NavigationStack {
+                        FeatureCanvasHost(destination: destination, provider: featureProvider)
+                            .navigationTitle(destination.id == "cylinders" ? "Cylinders" : destination.id.capitalized)
+                            .shellSettingsToolbar()
+                    }
+                    .tag(destination.id)
+                    .tabItem {
+                        if destination.id == "cylinders" {
+                            CylinderSymbol().frame(width: 20, height: 24)
+                            Text("Cylinders")
+                        } else {
+                            Label(destination.id.capitalized, systemImage: destination.symbol)
+                        }
+                    }
+                }
+            }
+            .tabViewStyle(.sidebarAdaptable)
+            .safeAreaInset(edge: .bottom, spacing: 0) { adBanner }
+        }
+    }
+
+    @ViewBuilder
+    private var adBanner: some View {
+        if model.shouldRenderAd {
+            Group {
+                if model.ads.canRequestAds {
+                    AdaptiveAdBanner(adUnitID: ShellConfiguration.advertising.bannerUnitID)
+                        .accessibilityLabel(Text("advertisement"))
+                } else {
+                    Color.clear.frame(height: 60).accessibilityHidden(true)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .background(.bar)
+        }
+    }
+}
+
+private extension View {
+    func shellSettingsToolbar() -> some View { modifier(ShellSettingsToolbar()) }
+}
+
+private struct ShellSettingsToolbar: ViewModifier {
+    @Environment(ShellModel.self) private var model
+
+    func body(content: Content) -> some View {
+        content.toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("settings", systemImage: "gearshape") { model.settingsPresented = true }
+                    .labelStyle(.iconOnly)
+                    .accessibilityIdentifier("shell.settings")
+            }
+        }
+    }
+}
