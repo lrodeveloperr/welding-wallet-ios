@@ -15,7 +15,7 @@ struct SettingsView: View {
 
     var body: some View {
         List {
-            if !model.access.isEntitled && model.access.purchases.subscriptionCondition != .billingRetry {
+            if shouldShowUpgrade {
                 Section {
                     Button { showPaywall = true } label: {
                         SettingsLabel("Upgrade", verbatimSubtitle: upgradeSubtitle, symbol: "sparkles")
@@ -23,11 +23,19 @@ struct SettingsView: View {
                     .accessibilityIdentifier("shell.settings.upgrade")
                 }
             }
-            if ShellConfiguration.monetization.includesSubscription {
+            if let subscriptionPresentation {
                 Section {
-                    SettingsLabel("subscription.status", verbatimSubtitle: subscriptionStatus, symbol: "checkmark.seal")
-                    Button { showingManageSubscriptions = true } label: {
-                        SettingsLabel("subscription.manage", subtitle: "subscription.manage.subtitle", symbol: "person.crop.circle.badge.checkmark")
+                    SettingsLabel(
+                        "subscription.status",
+                        verbatimSubtitle: subscriptionStatus,
+                        symbol: subscriptionPresentation.symbol
+                    )
+                    if subscriptionPresentation.showsManagement {
+                        Button { showingManageSubscriptions = true } label: {
+                            SettingsLabel("subscription.manage", subtitle: "subscription.manage.subtitle", symbol: "person.crop.circle.badge.checkmark")
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityIdentifier("shell.settings.subscription.manage")
                     }
                 }
             }
@@ -47,7 +55,8 @@ struct SettingsView: View {
             Section { Button(role: .destructive) { showDelete = true } label: { SettingsLabel("Delete all data", subtitle: "Erase this wallet from this device", symbol: "trash") } }
             Section { Text("Welding Gas Wallet · Cylinder records stay on this device").font(.footnote).foregroundStyle(.secondary) }
         }
-        .navigationTitle("Settings").navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(AppLocalization.string("settings", locale: locale))
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
         .sheet(isPresented: $showPaywall) {
             NavigationStack { PaywallView(showsDoneButton: true) }
@@ -67,6 +76,21 @@ struct SettingsView: View {
 
     private var deletionPhraseMatches: Bool {
         deletePhrase.trimmingCharacters(in: .whitespacesAndNewlines).localizedCaseInsensitiveCompare(AppLocalization.string("delete.confirmationWord", locale: locale)) == .orderedSame
+    }
+
+    private var shouldShowUpgrade: Bool {
+        guard !model.access.isEntitled else { return false }
+        switch model.access.purchases.subscriptionCondition {
+        case .checking, .billingRetry, .subscribed, .gracePeriod, .offlineCached:
+            return false
+        case .notApplicable, .expired, .revoked:
+            return true
+        }
+    }
+
+    private var subscriptionPresentation: SubscriptionSettingsPresentation? {
+        guard ShellConfiguration.monetization.includesSubscription else { return nil }
+        return SubscriptionSettingsPresentation.resolve(model.access.purchases.subscriptionCondition)
     }
 
     private var upgradeSubtitle: String {
@@ -124,14 +148,35 @@ struct SettingsView: View {
         Button { legalDocument = document } label: {
             SettingsLabel(LocalizedStringKey(title), subtitle: "legal.documentLanguage", symbol: symbol)
         }
+        .buttonStyle(.plain)
         .accessibilityIdentifier("shell.settings.legal.\(document.rawValue)")
+    }
+}
+
+struct SubscriptionSettingsPresentation: Equatable {
+    let showsManagement: Bool
+    let symbol: String
+
+    static func resolve(_ condition: SubscriptionCondition) -> Self? {
+        switch condition {
+        case .notApplicable, .expired, .revoked:
+            return nil
+        case .checking:
+            return Self(showsManagement: false, symbol: "hourglass")
+        case .subscribed:
+            return Self(showsManagement: true, symbol: "checkmark.seal.fill")
+        case .gracePeriod, .billingRetry:
+            return Self(showsManagement: true, symbol: "exclamationmark.triangle.fill")
+        case .offlineCached:
+            return Self(showsManagement: true, symbol: "checkmark.seal")
+        }
     }
 }
 
 private struct SettingsLabel: View {
     let title: LocalizedStringKey; let subtitle: LocalizedStringKey?; let verbatimSubtitle: String?; let symbol: String
     init(_ title: LocalizedStringKey, subtitle: LocalizedStringKey? = nil, verbatimSubtitle: String? = nil, symbol: String) { self.title = title; self.subtitle = subtitle; self.verbatimSubtitle = verbatimSubtitle; self.symbol = symbol }
-    var body: some View { Label { VStack(alignment: .leading, spacing: 2) { Text(title).foregroundStyle(.primary); if let subtitle { Text(subtitle).font(.caption).foregroundStyle(.secondary) }; if let verbatimSubtitle { Text(verbatimSubtitle).font(.caption).foregroundStyle(.secondary) } } } icon: { Image(systemName: symbol).foregroundStyle(.tint).frame(width: 28) } }
+    var body: some View { Label { VStack(alignment: .leading, spacing: 2) { Text(title).foregroundStyle(Color.primary); if let subtitle { Text(subtitle).font(.caption).foregroundStyle(Color.secondary) }; if let verbatimSubtitle { Text(verbatimSubtitle).font(.caption).foregroundStyle(Color.secondary) } } } icon: { Image(systemName: symbol).foregroundStyle(.tint).frame(width: 28) } }
 }
 
 private struct LanguageView: View {

@@ -90,7 +90,6 @@
 "privacyPolicy" = "Privacy Policy";
 "termsOfUse" = "Terms of Use";
 "language.help" = "The selection changes the app locale immediately and persists across launches.";
-"settings.footer" = "Version information and app-specific notices belong here.";
 "development" = "Development";
 "shellLab" = "Shell Lab";
 "shellLab.subtitle" = "Exercise reusable states";

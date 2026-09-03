@@ -90,7 +90,6 @@
 "privacyPolicy" = "Política de privacidad";
 "termsOfUse" = "Condiciones de uso";
 "language.help" = "La selección cambia el idioma inmediatamente y se conserva entre sesiones.";
-"settings.footer" = "Aquí van la versión y los avisos específicos de la aplicación.";
 "development" = "Desarrollo";
 "shellLab" = "Laboratorio del shell";
 "shellLab.subtitle" = "Prueba los estados reutilizables";

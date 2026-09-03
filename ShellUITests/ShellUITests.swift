@@ -27,14 +27,13 @@ final class WeldingGasWalletUITests: XCTestCase {
         XCTAssertTrue(app.buttons["shell.paywall.restore"].exists)
     }
 
-    func testBannerSlotStaysAboveVisibleTabBar() {
+    func testAdFreeAppHasNoBannerSlot() {
         let app = launch(screenshotData: false)
         XCTAssertTrue(app.navigationBars["Cylinders"].waitForExistence(timeout: 8))
         let tabBar = app.tabBars.firstMatch
         let adSlot = app.descendants(matching: .any)["shell.ad.slot"]
         XCTAssertTrue(tabBar.waitForExistence(timeout: 8))
-        XCTAssertTrue(adSlot.waitForExistence(timeout: 8))
-        XCTAssertLessThanOrEqual(adSlot.frame.maxY, tabBar.frame.minY + 1)
+        XCTAssertFalse(adSlot.exists)
         XCTAssertLessThanOrEqual(tabBar.frame.maxY, app.windows.firstMatch.frame.maxY)
     }
 
