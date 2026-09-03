@@ -86,7 +86,7 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertEqual(Set(ShellConfiguration.destinations.map(\.id)).count, ShellConfiguration.destinations.count)
         XCTAssertFalse(ShellConfiguration.supportedLanguages.contains { $0.id == "system" })
         XCTAssertTrue(ShellConfiguration.supportedLanguages.contains { $0.id == "en" })
-        XCTAssertEqual(ShellConfiguration.supportedLanguages.count, 30)
+        XCTAssertEqual(ShellConfiguration.supportedLanguages.map(\.id), ["en", "es-419"])
     }
 
     func testEveryPublishedLegalDestinationIsSecureAndProductSpecific() {

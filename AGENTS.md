@@ -13,6 +13,17 @@ This is the authoritative native iOS application. It derives from `lrodeveloperr
 - Preserve delete confirmation, 15-second Undo, Return/Archive, activity history, reminders, suppliers, search/filters, and the data-entry friction reductions.
 - Privacy Policy and Terms are maintained externally. Do not invent policy copy.
 
+## Localization release gate
+
+- A language may appear in `supportedLanguages` only when its product-specific catalog exists and has exact key parity with English. A shared shell vocabulary or fallback English is not a translated app.
+- Keep persisted enum/raw values stable, but never present raw values directly. Map statuses, relationships, lifecycle states, activity kinds and preset gases to localized display keys.
+- Use locale-aware parsing and formatting for decimal input, money, quantities, dates and plurals. Never assemble sentences with English singular/plural branches.
+- Review welding terminology for the target region, not only the language. Latin American Spanish uses `cilindro`, `recarga`, `proveedor` and `fuera del taller` in this app.
+- Validate Dynamic Type/text expansion and bidirectional layout before enabling a locale. RTL locales require an explicit RTL QA pass.
+- Notification copy, accessibility labels, validation errors, empty states, purchase copy and legal-link labels are part of the catalog.
+- Published legal documents must be available and appropriate for every enabled locale, or the app must clearly disclose the document language. Never imply translated legal coverage that does not exist.
+- Run `bash scripts/validate-shell.sh --app`; localization parity is a release-blocking check.
+
 ## Source map
 
 - Product model and persistence: `Shell/Features/WalletStore.swift`

@@ -33,7 +33,7 @@ require_text Shell/Features/FeatureView.swift 'Search cylinders'
 require_text Shell/Features/WalletStore.swift 'func currencySign(for code: String)'
 require_text Shell/Features/WalletStore.swift 'func deleteAllData()'
 require_text Shell/Features/WalletStore.swift 'try? await Task.sleep(for: .seconds(15))'
-require_text Shell/Features/SettingsView.swift 'Type DELETE'
+require_text Shell/Features/SettingsView.swift 'delete.confirmationWord'
 require_text Shell/Features/SettingsView.swift 'wallet.currencySign(for:'
 require_text Shell/Services/AdConsentService.swift 'ConsentForm.loadAndPresentIfRequired'
 require_text Shell/Services/AdaptiveAdBanner.swift '.frame(height: adSize.size.height)'
@@ -44,8 +44,13 @@ for url in privacy terms support deletion disclaimer; do
 done
 
 language_count="$(sed -n '/static let supportedLanguages:/,/^    ]/p' Shell/App/ShellConfiguration.swift | grep -c '\.init(id:')"
-[[ "$language_count" == "30" ]] || fail "Expected 30 language choices; found $language_count"
+[[ "$language_count" == "2" ]] || fail "Expected only the two completed language choices; found $language_count"
 ! grep -Fq '.init(id: "system"' Shell/App/ShellConfiguration.swift || fail 'Language selector must not contain Follow system'
+
+for locale in en es-419; do
+  require_file "Shell/Resources/$locale.lproj/Localizable.strings"
+done
+python3 scripts/validate-localizations.py
 
 for workflow in .github/workflows/*.yml; do
   require_text "$workflow" 'workflow_dispatch:'

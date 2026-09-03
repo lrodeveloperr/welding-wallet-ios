@@ -6,18 +6,34 @@ import SwiftUI
 enum CylinderStatus: String, Codable, CaseIterable, Identifiable {
     case ready = "Ready", low = "Low", empty = "Empty", away = "Away"
     var id: String { rawValue }
+    var localizationKey: String { "status.\(rawValue.lowercased())" }
     var symbol: String {
         switch self { case .ready: "checkmark.circle"; case .low: "exclamationmark.triangle"; case .empty: "xmark.circle"; case .away: "truck.box" }
     }
 }
 
-enum CylinderLifecycle: String, Codable { case active, returned, archived }
+enum CylinderLifecycle: String, Codable {
+    case active, returned, archived
+    var localizationKey: String { "lifecycle.\(rawValue)" }
+}
 enum Relationship: String, Codable, CaseIterable, Identifiable {
     case owned = "Owned", rental = "Rental", leased = "Leased", deposit = "Deposit", notSet = "Not set"
     var id: String { rawValue }
+    var localizationKey: String {
+        switch self {
+        case .owned: "relationship.owned"
+        case .rental: "relationship.rental"
+        case .leased: "relationship.leased"
+        case .deposit: "relationship.deposit"
+        case .notSet: "common.notSet"
+        }
+    }
 }
 
-enum ActivityKind: String, Codable, CaseIterable { case created, status, refill, exchange, cost, returned, archived }
+enum ActivityKind: String, Codable, CaseIterable {
+    case created, status, refill, exchange, cost, returned, archived
+    var localizationKey: String { "activity.kind.\(rawValue)" }
+}
 
 struct CylinderRecord: Identifiable, Codable, Hashable {
     var id: UUID = UUID()
@@ -36,6 +52,10 @@ struct CylinderRecord: Identifiable, Codable, Hashable {
     var capacityLabel: String {
         let value = capacityValue.rounded() == capacityValue ? String(Int(capacityValue)) : String(format: "%.1f", capacityValue)
         return "\(value) \(capacityUnit.replacingOccurrences(of: "3", with: "³"))"
+    }
+
+    func capacityLabel(locale: Locale) -> String {
+        "\(AppLocalization.number(capacityValue, locale: locale)) \(capacityUnit.replacingOccurrences(of: "3", with: "³"))"
     }
 }
 

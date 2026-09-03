@@ -5,6 +5,7 @@ struct SettingsView: View {
     let model: ShellModel
     let wallet: WalletStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
     @State private var showDelete = false
     @State private var showPaywall = false
     @State private var deletePhrase = ""
@@ -22,7 +23,7 @@ struct SettingsView: View {
             }
             Section {
                 NavigationLink { LanguageView() } label: { SettingsLabel("Language", subtitle: "Choose the app language", symbol: "globe") }
-                NavigationLink { CurrencyView(wallet: wallet) } label: { SettingsLabel("Currency", subtitle: "\(wallet.currencySign(for: wallet.defaultCurrency)) · \(wallet.currencyOverride == nil ? "Automatic" : "Selected")", symbol: "dollarsign.circle") }
+                NavigationLink { CurrencyView(wallet: wallet) } label: { SettingsLabel("Currency", verbatimSubtitle: "\(wallet.currencySign(for: wallet.defaultCurrency)) · \(AppLocalization.string(wallet.currencyOverride == nil ? "Automatic" : "Selected", locale: locale))", symbol: "dollarsign.circle") }
                 NavigationLink { BackupView(wallet: wallet) } label: { SettingsLabel("Backup", subtitle: "Optional native file backup", symbol: "externaldrive.badge.icloud") }
                 NavigationLink { HelpView() } label: { SettingsLabel("Help", subtitle: "Simple numbered guide", symbol: "questionmark.circle") }
                 if model.access.configuration.includesAdvertising && model.ads.isPrivacyOptionsRequired {
@@ -50,24 +51,28 @@ struct SettingsView: View {
                 .ignoresSafeArea()
         }
         .alert("Delete all data?", isPresented: $showDelete) {
-            TextField("Type DELETE", text: $deletePhrase).textInputAutocapitalization(.characters)
-            Button("Delete all data", role: .destructive) { if deletePhrase.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() == "DELETE" { wallet.deleteAllData(); dismiss() }; deletePhrase = "" }.disabled(deletePhrase.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() != "DELETE")
+            TextField("delete.typeWord", text: $deletePhrase).textInputAutocapitalization(.characters)
+            Button("Delete all data", role: .destructive) { if deletionPhraseMatches { wallet.deleteAllData(); dismiss() }; deletePhrase = "" }.disabled(!deletionPhraseMatches)
             Button("Cancel", role: .cancel) { deletePhrase = "" }
         } message: { Text("This removes cylinders, suppliers, costs, activity, reminders and preferences. Purchases and separately saved backup files are not deleted.") }
     }
 
+    private var deletionPhraseMatches: Bool {
+        deletePhrase.trimmingCharacters(in: .whitespacesAndNewlines).localizedCaseInsensitiveCompare(AppLocalization.string("delete.confirmationWord", locale: locale)) == .orderedSame
+    }
+
     private func legalButton(_ document: LegalDocument, title: String, symbol: String) -> some View {
         Button { legalDocument = document } label: {
-            SettingsLabel(title, subtitle: "Opens the current published document", symbol: symbol)
+            SettingsLabel(LocalizedStringKey(title), subtitle: "Opens the current published document", symbol: symbol)
         }
         .accessibilityIdentifier("shell.settings.legal.\(document.rawValue)")
     }
 }
 
 private struct SettingsLabel: View {
-    let title: String; let subtitle: String?; let symbol: String
-    init(_ title: String, subtitle: String? = nil, symbol: String) { self.title = title; self.subtitle = subtitle; self.symbol = symbol }
-    var body: some View { Label { VStack(alignment: .leading, spacing: 2) { Text(title).foregroundStyle(.primary); if let subtitle { Text(subtitle).font(.caption).foregroundStyle(.secondary) } } } icon: { Image(systemName: symbol).foregroundStyle(.tint).frame(width: 28) } }
+    let title: LocalizedStringKey; let subtitle: LocalizedStringKey?; let verbatimSubtitle: String?; let symbol: String
+    init(_ title: LocalizedStringKey, subtitle: LocalizedStringKey? = nil, verbatimSubtitle: String? = nil, symbol: String) { self.title = title; self.subtitle = subtitle; self.verbatimSubtitle = verbatimSubtitle; self.symbol = symbol }
+    var body: some View { Label { VStack(alignment: .leading, spacing: 2) { Text(title).foregroundStyle(.primary); if let subtitle { Text(subtitle).font(.caption).foregroundStyle(.secondary) }; if let verbatimSubtitle { Text(verbatimSubtitle).font(.caption).foregroundStyle(.secondary) } } } icon: { Image(systemName: symbol).foregroundStyle(.tint).frame(width: 28) } }
 }
 
 private struct LanguageView: View {
@@ -81,18 +86,20 @@ private struct LanguageView: View {
 
 private struct CurrencyView: View {
     @Bindable var wallet: WalletStore
+    @Environment(\.locale) private var locale
     @State private var query = ""
-    private var codes: [String] { Locale.Currency.isoCurrencies.map(\.identifier).filter { query.isEmpty || $0.localizedCaseInsensitiveContains(query) || (Locale.current.localizedString(forCurrencyCode: $0) ?? "").localizedCaseInsensitiveContains(query) }.sorted() }
+    private var codes: [String] { Locale.Currency.isoCurrencies.map(\.identifier).filter { query.isEmpty || $0.localizedCaseInsensitiveContains(query) || (locale.localizedString(forCurrencyCode: $0) ?? "").localizedCaseInsensitiveContains(query) }.sorted() }
     var body: some View {
         List {
             Section { Button { wallet.setCurrency(nil) } label: { HStack { Text(wallet.currencySign(for: wallet.automaticCurrency)).frame(width: 34); VStack(alignment: .leading) { Text("Automatic"); Text("Device region").font(.caption).foregroundStyle(.secondary) }; Spacer(); if wallet.currencyOverride == nil { Image(systemName: "checkmark.circle.fill") } } } }
-            Section { ForEach(codes, id: \.self) { code in Button { wallet.setCurrency(code) } label: { HStack { Text(wallet.currencySign(for: code)).frame(width: 34); Text(Locale.current.localizedString(forCurrencyCode: code) ?? "Currency").foregroundStyle(.primary); Spacer(); if wallet.currencyOverride == code { Image(systemName: "checkmark.circle.fill") } } } } }
+            Section { ForEach(codes, id: \.self) { code in Button { wallet.setCurrency(code) } label: { HStack { Text(wallet.currencySign(for: code)).frame(width: 34); Text(locale.localizedString(forCurrencyCode: code) ?? code).foregroundStyle(.primary); Spacer(); if wallet.currencyOverride == code { Image(systemName: "checkmark.circle.fill") } } } } }
         }.searchable(text: $query, prompt: "Search currencies").navigationTitle("Currency").navigationBarTitleDisplayMode(.inline)
     }
 }
 
 private struct BackupView: View {
     @Bindable var wallet: WalletStore
+    @Environment(\.locale) private var locale
     @State private var exporting = false; @State private var importing = false; @State private var document = WalletBackupDocument(); @State private var message = ""
     var body: some View {
         List {
@@ -102,14 +109,14 @@ private struct BackupView: View {
             Section { Label("Backup files never include purchase entitlement.", systemImage: "lock") }
         }
         .navigationTitle("Backup").navigationBarTitleDisplayMode(.inline)
-        .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "welding-wallet-backup-\(Self.dateStamp)") { result in message = result.isSuccess ? "Backup file created" : "Backup was not saved" }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in do { let url = try result.get(); guard url.startAccessingSecurityScopedResource() else { throw CocoaError(.fileReadNoPermission) }; defer { url.stopAccessingSecurityScopedResource() }; try wallet.restore(from: Data(contentsOf: url)); message = "Backup restored" } catch { message = error.localizedDescription } }
+        .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "welding-wallet-backup-\(Self.dateStamp)") { result in message = AppLocalization.string(result.isSuccess ? "backup.fileCreated" : "backup.notSaved", locale: locale) }
+        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in do { let url = try result.get(); guard url.startAccessingSecurityScopedResource() else { throw CocoaError(.fileReadNoPermission) }; defer { url.stopAccessingSecurityScopedResource() }; try wallet.restore(from: Data(contentsOf: url)); message = AppLocalization.string("backup.restored", locale: locale) } catch { message = error.localizedDescription } }
     }
     private static var dateStamp: String { String(ISO8601DateFormatter().string(from: .now).prefix(10)) }
 }
 
 private struct HelpView: View {
-    let steps = ["Add a cylinder with only its gas and capacity.", "Copy an existing cylinder when the details are similar.", "Tap a status whenever it changes.", "Record a refill or exchange; today and your currency are already selected.", "Return or archive a cylinder when it leaves your active inventory.", "Create a backup file before moving to a new phone."]
+    let steps: [LocalizedStringKey] = ["Add a cylinder with only its gas and capacity.", "Copy an existing cylinder when the details are similar.", "Tap a status whenever it changes.", "Record a refill or exchange; today and your currency are already selected.", "Return or archive a cylinder when it leaves your active inventory.", "Create a backup file before moving to a new phone."]
     var body: some View { List { ForEach(Array(steps.enumerated()), id: \.offset) { index, step in HStack(alignment: .top, spacing: 14) { Text("\(index + 1)").font(.headline).foregroundStyle(.tint).frame(width: 32, height: 32).background(Color.blue.opacity(0.08), in: Circle()); Text(step) } }; Section { Text("If you make a mistake, edit the cylinder or use Delete cylinder and Undo.").foregroundStyle(.secondary) } }.navigationTitle("Help").navigationBarTitleDisplayMode(.inline) }
 }
 
