@@ -1,12 +1,134 @@
-YªçŠx-®éÜj×¢ëiºÚ+Š§j[h‘éÜ¢éíÛM·N‹Z–‹­¦ëeŠw¬Õ¥µÁ½ÉĞMİ¥™ÑU$()•¹Õ´M¡•±±½¹™¥ÕÉ…Ñ¥½¸ì(€€€ÍÑ…Ñ¥Œ±•Ğ…ÁÁ9…µ”€ô€‰]•±‘¥¹œ…Ì]…±±•Ğˆ(€€€ÍÑ…Ñ¥Œ±•ĞÑ¥¹Ğ€ô½±½È¡É•è€ÈÌ€¼€ÈÔÔ°É••¸è€àà€¼€ÈÔÔ°‰±Õ”è€ÄàÌ€¼€ÈÔÔ¤(€€€ÍÑ…Ñ¥Œ±•ĞÍÕÁÁ½ÉÑµ…¥°€ô€‰±É½‘•Ù•±½Á•ÉÉµ…¥°¹½´ˆ(€€€ÍÑ…Ñ¥Œ±•Ğ±•…°€ô1•…±½¹™¥ÕÉ…Ñ¥½¸ (€€€€€€€Ù•ÉÍ¥½¸è€ˆÄˆ°(€€€€€€€ÁÉ¥Ù…åUI0èUI0¡ÍÑÉ¥¹œè€‰¡ÑÑÁÌè¼½±É½‘•Ù•±½Á•ÉÈ¹¥Ñ¡Õˆ¹¥¼½ÁÉ¥Ù…äµÁ½±¥ä½İ•±‘¥¹œµ…Ìµİ…±±•Ğ½ÁÉ¥Ù…ä¼ˆ¤„°(€€€€€€€Ñ•ÉµÍUI0èUI0¡ÍÑÉ¥¹œè€‰¡ÑÑÁÌè¼½±É½‘•Ù•±½Á•ÉÈ¹¥Ñ¡Õˆ¹¥¼½ÁÉ¥Ù…äµÁ½±¥ä½İ•±‘¥¹œµ…Ìµİ…±±•Ğ½Ñ•ÉµÌ¼ˆ¤„°(€€€€€€€ÍÕÁÁ½ÉÑUI0èUI0¡ÍÑÉ¥¹œè€‰¡ÑÑÁÌè¼½±É½‘•Ù•±½Á•ÉÈ¹¥Ñ¡Õˆ¹¥¼½ÁÉ¥Ù…äµÁ½±¥ä½İ•±‘¥¹œµ…Ìµİ…±±•Ğ½ÍÕÁÁ½ÉĞ¼ˆ¤„°(€€€€€€€‘•±•Ñ¥½¹UI0èUI0¡ÍÑÉ¥¹œè€‰¡ÑÑÁÌè¼½±É½‘•Ù•±½Á•ÉÈ¹¥Ñ¡Õˆ¹¥¼½ÁÉ¥Ù…äµÁ½±¥ä½İ•±‘¥¹œµ…Ìµİ…±±•Ğ½‘•±•Ñ¥½¸¼ˆ¤„°(€€€€€€€Í…™•ÑåUI0èUI0¡ÍÑÉ¥¹œè€‰¡ÑÑÁÌè¼½±É½‘•Ù•±½Á•ÉÈ¹¥Ñ¡Õˆ¹¥¼½ÁÉ¥Ù…äµÁ½±¥ä½İ•±‘¥¹œµ…Ìµİ…±±•Ğ½‘¥Í±…¥µ•È¼ˆ¤„(€€€€¤(€€€€¼¼¼É•”ÕÍ•ÉÌ­••ÀÑ¡”½µÁ±•Ñ”İ…±±•Ğİ¥Ñ „Ñ¡É•”µ…Ñ¥Ù”µå±¥¹‘•È±¥µ¥Ğ¸(€€€€¼¼¼Ù•É¥™¥•µ½¹Ñ¡±äÍÕ‰ÍÉ¥ÁÑ¥½¸Õ¹±½­ÌÕ¹±¥µ¥Ñ•…Ñ¥Ù”å±¥¹‘•ÉÌ¸(€€€€¼¼¼ÁÀMÑ½É”½¹¹•Ğ½İ¹ÌÑ¡”ULÄ¸ääµ½¹Ñ¡±äÁÉ¥”½¹™¥ÕÉ…Ñ¥½¸ì(€€€€¼¼¼ÕÍÑ½µ•Èµ™…¥¹œU$µÕÍĞÕÍ”MÑ½É•-¥ĞÌÍÑ½É•™É½¹Ğµ±½…±¥é•ÁÉ¥”¸(¥˜MI9M!=Q}	U%1(€€€ÍÑ…Ñ¥Œ±•Ğµ½¹•Ñ¥é…Ñ¥½¸€ô5½¹•Ñ¥é…Ñ¥½¹½¹™¥ÕÉ…Ñ¥½¸ (€€€€€€€µ½‘”è€¹™É•”°(€€€€€€€™É••MÕ•ÍÍ™Õ±Ñ¥½¹Ìè€¹µ…à°(€€€€€€€±¥™•Ñ¥µ•AÉ½‘ÕÑ%è€‰Õ¹ÕÍ•ˆ°(€€€€€€€ÍÕ‰ÍÉ¥ÁÑ¥½¹AÉ½‘ÕÑ%è€‰Õ¹ÕÍ•ˆ(€€€€¤(•±Í”(€€€ÍÑ…Ñ¥Œ±•Ğµ½¹•Ñ¥é…Ñ¥½¸€ô5½¹•Ñ¥é…Ñ¥½¹½¹™¥ÕÉ…Ñ¥½¸ (€€€€€€€µ½‘”è€¹™É••µ¥Õµ]¥Ñ¡MÕ‰ÍÉ¥ÁÑ¥½¸°(€€€€€€€™É••MÕ•ÍÍ™Õ±Ñ¥½¹Ìè€¹µ…à°(€€€€€€€±¥™•Ñ¥µ•AÉ½‘ÕÑ%è€‰Õ¹ÕÍ•ˆ°(€€€€€€€ÍÕ‰ÍÉ¥ÁÑ¥½¹AÉ½‘ÕÑ%è€‰½´¹½½‘ÕÍ”¹İ•±‘¥¹…Íİ…±±•Ğ¹ÁÉ¼¹µ½¹Ñ¡±äˆ(€€€€¤(•¹‘¥˜(€€€ÍÑ…Ñ¥Œ±•Ğ‰…­ÕÀ€ô	…­ÕÁ½¹™¥ÕÉ…Ñ¥½¸¡•¹…‰±•èÑÉÕ”¤(€€€ÍÑ…Ñ¥Œ±•Ğµ¥É…Ñ¥½¹ÌèmM¡•±±5¥É…Ñ¥½¹t€ômt(€€€ÍÑ…Ñ¥Œ±•Ğ‘•ÍÑ¥¹…Ñ¥½¹ÌèmM¡•±±•ÍÑ¥¹…Ñ¥½¹t€ôl(€€€€€€€€¹¥¹¥Ğ¡¥è€‰å±¥¹‘•ÉÌˆ°Ñ¥Ñ±•-•äè€‰‘•ÍÑ¥¹…Ñ¥½¸¹å±¥¹‘•ÉÌˆ°Íåµ‰½°è€‰å±¥¹‘•Èˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰…Ñ¥Ù¥Ñäˆ°Ñ¥Ñ±•-•äè€‰‘•ÍÑ¥¹…Ñ¥½¸¹…Ñ¥Ù¥Ñäˆ°Íåµ‰½°è€‰±½¬ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰ÍÕÁÁ±¥•ÉÌˆ°Ñ¥Ñ±•-•äè€‰‘•ÍÑ¥¹…Ñ¥½¸¹ÍÕÁÁ±¥•ÉÌˆ°Íåµ‰½°è€‰Á•ÉÍ½¸¸Èˆ¤°(€€€t((€€€€¼¼¼Q¡”™¥ÉÍĞ±…Õ¹ É•Í½±Ù•ÌÑ¡”±½Í•ÍĞÍÕÁÁ½ÉÑ•‘•Ù¥”±…¹Õ…”¸M•ÑÑ¥¹Ì(€€€€¼¼¼¥¹Ñ•¹Ñ¥½¹…±±ä±¥ÍÑÌ½¹±ä•áÁ±¥¥Ğ¡½¥•ÏŠQÑ¡•É”¥Ì¹¼ƒŠq½±±½ÜÍåÍÑ•·ŠtÉ½Ü¸(€€€ÍÑ…Ñ¥Œ±•ĞÍÕÁÁ½ÉÑ•‘1…¹Õ…•ÌèmÁÁ1…¹Õ…•t€ôl(€€€€€€€€¹¥¹¥Ğ¡¥è€‰•¸ˆ°‘¥ÍÁ±…å9…µ”è€‰¹±¥Í ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰•Ì´ĞÄäˆ°‘¥ÍÁ±…å9…µ”è€‰ÍÁ‡Å½°€¡1…Ñ¥¹½…·¥É¥„¤ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰ÁĞˆ°‘¥ÍÁ±…å9…µ”è€‰A½ÉÑÕ×©Ì€¡	É…Í¥°¤ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰™Èˆ°‘¥ÍÁ±…å9…µ”è€‰É…»…¥Ìˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰‘”ˆ°‘¥ÍÁ±…å9…µ”è€‰•ÕÑÍ ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰¥Ğˆ°‘¥ÍÁ±…å9…µ”è€‰%Ñ…±¥…¹¼ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰¹°ˆ°‘¥ÍÁ±…å9…µ”è€‰9•‘•É±…¹‘Ìˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰Á°ˆ°‘¥ÍÁ±…å9…µ”è€‰A½±Í­¤ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰ÑÈˆ°‘¥ÍÁ±…å9…µ”è€‰SñÉ¯”ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰É¼ˆ°‘¥ÍÁ±…å9…µ”è€‰I½·‰»ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰Ìˆ°‘¥ÍÁ±…å9…µ”è€‹1—…Ñ¥¹„ˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰Õ¬ˆ°‘¥ÍÁ±…å9…µ”è€‹BBëFBÃF_B÷FF3BëBÀˆ¤°(€€€€€€€€¹¥¹¥Ğ¡¥è€‰ÉÔˆ°‘¥ÍÁ±…å9…µ”è€‹BƒFFFBëBãBäˆ¤°(€€€€€€€€¹¥¹¥Ğ¡§mí¢G§²ÚîÆ­yÒF—7Æ”æÖS¢.zèKÙ>KŠŞihr"’À¢æ–æ—B†–C¢&¦"ÂF—7Æ”æÖS¢.iz^iÊÎŠ©â"’À¢æ–æ—B†–C¢&¶ò"ÂF—7Æ”æÖS¢.ÙYÎ«ZŞÉkB"’À¢æ–æ—B†–C¢&†’"ÂF—7Æ”æÖS¢.
-K
-Kş
-J
-XŞ
-Jn
-X"’À¢æ–æ—B†–C¢'W""ÂF—7Æ”æÖS¢-Š}‹Šı˜‚"’À¢æ–æ—B†–C¢&&â"ÂF—7Æ”æÖS¢.
-jÎ
-kî
-h.
-k.
-kâ"’À¢æ–æ—B†–C¢'f’"ÂF—7Æ”æÖS¢%F«öærf¸wB"’À¢æ–æ—B†–C¢&–B"ÂF—7Æ”æÖS¢$&†6–æFöæW6–"’À¢æ–æ—B†–C¢'F‚"ÂF—7Æ”æÖS¢.˜N‰~Š""’À¢æ–æ—B†–C¢&f–Â"ÂF—7Æ”æÖS¢$f–Æ—–æò"’À¢æ–æ—B†–C¢&×2"ÂF—7Æ”æÖS¢$&†6ÖVÆ—R"’À¢æ–æ—B†–C¢&f’"ÂF—7Æ”æÖS¢%7VöÖ’"’À¢æ–æ—B†–C¢'7b"ÂF—7Æ”æÖS¢%7fVç6¶"’À¢æ–æ—B†–C¢&F"ÂF—7Æ”æÖS¢$Fç6²"’À¢æ–æ—B†–C¢&æ""ÂF—7Æ”æÖS¢$æ÷'6²&ö¶Ü:VÂ"’À¢æ–æ—B†–C¢&VÂ"ÂF—7Æ”æÖS¢,é\ë¼ë¼ë|ëÜëœë¬êÂ"’À¢æ–æ—B†–C¢&†R"ÂF—7Æ”æÖS¢-z-yzyz¢"’À¢Ğ§Ğ §7G'V7BÆVvÄ6öæf–wW&F–öã¢6VæF&ÆR°¢ÆWBfW'6–öã¢7G&–æp¢ÆWB&—f7•U$Ã¢U$À¢ÆWBFW&×5U$Ã¢U$À¢ÆWB7W÷'EU$Ã¢U$À¢ÆWBFVÆWF–öåU$Ã¢U$À¢ÆWB6fWG•U$Ã¢U$À§Ğ¦VçVÒöæ&ö&F–æu&öf–ÆS¢WVF&ÆRÂ6VæF&ÆR²66RÆVvÄöæÇ’Â6–ævÆU67&VVâÂwV–FVEF÷W"Ğ§7G'V7B&6·W6öæf–wW&F–öã¢6VæF&ÆR²ÆWBVæ&ÆVC¢&ööÂĞ §7G'V7BÖöæWF—¦F–öä6öæf–wW&F–öã¢6VæF&ÆR°¢ÆWBÖöFS¢ÖöæWF—¦F–öäÖöFP¢ÆWBg&VU7V66W76gVÄ7F–öç3¢–ç@¢ÆWBÆ–fWF–ÖU&öGV7D”C¢7G&–æp¢ÆWB7V'67&—F–öå&öGV7D”C¢7G&–æp¢f"&öGV7D”G3¢6WCÅ7G&–æsâ°¢7v—F6‚ÖöFR°¢66RæöæUF–ÖUVæÆö6²ÂçW6vT6v—F„öæUF–ÖUVæÆö6³¢¶Æ–fWF–ÖU&öGV7D”EĞ¢66Ræg&VVÖ—VÕv—F…7V'67&—F–öâÂç7V'67&—F–öâÂçW6vT6v—F…7V'67&—F–öã¢·7V'67&—F–öå&öGV7D”EĞ¢66Ræg&VS¢µĞ¢Ğ¢Ğ¢f"–æ6ÇVFW5W&6†6S¢&ööÂ²&öGV7D”G2æ—4V×G’Ğ¢f"–æ6ÇVFW57V'67&—F–öã¢&ööÂ°¢7v—F6‚ÖöFR°¢66Ræg&VVÖ—VÕv—F…7V'67&—F–öâÂç7V'67&—F–öâÂçW6vT6v—F…7V'67&—F–öã¢G'VP¢66Ræg&VRÂæöæUF–ÖUVæÆö6²ÂçW6vT6v—F„öæUF–ÖUVæÆö6³¢fÇ6P¢Ğ¢Ğ§Ğ §7G'V7B6†VÆÄFW7F–æF–öã¢†6†&ÆRÂ–FVçF–f–&ÆRÂ6VæF&ÆR²ÆWB–C¢7G&–æs²ÆWBF—FÆT¶W“¢7G&–æs²ÆWB7–Ö&öÃ¢7G&–ærĞ§7G'V7BÆæwVvS¢–FVçF–f–&ÆRÂ†6†&ÆRÂ6VæF&ÆR²ÆWB–C¢7G&–æs²ÆWBF—7Æ”æÖS¢7G&–ærĞ ¦VçVÒÖöæWF—¦F–öäÖöFS¢7G&–ærÂ66T—FW&&ÆRÂ–FVçF–f–&ÆRÂ6VæF&ÆR°¢66Rg&VRÂg&VVÖ—VÕv—F…7V'67&—F–öà¢66RöæUF–ÖUVæÆö6²Â7V'67&—F–öâÂW6vT6v—F„öæUF–ÖUVæÆö6²ÂW6vT6v—F…7V'67&—F–öà¢f"–C¢6VÆb²6VÆbĞ¢f"F—FÆS¢7G&–ær°¢7v—F6‚6VÆb°¢66Ræg&VS¢$g&VR ¢66Ræg&VVÖ—VÕv—F…7V'67&—F–öã¢$g&VRfVGW&RÆ–Ö—B²7V'67&—F–öâ ¢66RæöæUF–ÖUVæÆö6³¢$öæR×F–ÖRVæÆö6² ¢66Rç7V'67&—F–öã¢%7V'67&—F–öâ ¢66RçW6vT6v—F„öæUF–ÖUVæÆö6³¢%W6vR6²öæR×F–ÖRVæÆö6² ¢66RçW6vT6v—F…7V'67&—F–öã¢%W6vR6²7V'67&—F–öâ ¢Ğ¢Ğ§Ğ ¦VçVÒ6×ÆT6öçFVçE7FFS¢7G&–ærÂ66T—FW&&ÆRÂ–FVçF–f–&ÆRÂ6VæF&ÆR°¢66R÷VÆFVBÂV×G’ÂÆöF–ærÂW'&÷ ¢f"–C¢6VÆb²6VÆbĞ¢f"F—FÆS¢7G&–ær²&ufÇVRæ6—FÆ—¦VBĞ§Ğ 
+import SwiftUI
+
+enum ShellConfiguration {
+    static let appName = "Welding Gas Wallet"
+    static let tint = Color(red: 23 / 255, green: 88 / 255, blue: 183 / 255)
+    static let supportEmail = "lrodeveloperr@gmail.com"
+    static let legal = LegalConfiguration(
+        version: "1",
+        privacyURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/privacy/")!,
+        termsURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/terms/")!,
+        supportURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/support/")!,
+        deletionURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/deletion/")!,
+        safetyURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/disclaimer/")!
+    )
+    /// Free users keep the complete wallet with a three-active-cylinder limit.
+    /// A verified monthly subscription unlocks unlimited active cylinders.
+    /// App Store Connect owns the US$1.99 monthly price configuration;
+    /// customer-facing UI must use StoreKit's storefront-localized price.
+#if SCREENSHOT_BUILD
+    static let monetization = MonetizationConfiguration(
+        mode: .free,
+        freeSuccessfulActions: .max,
+        lifetimeProductID: "unused",
+        subscriptionProductID: "unused"
+    )
+#else
+    static let monetization = MonetizationConfiguration(
+        mode: .freemiumWithSubscription,
+        freeSuccessfulActions: .max,
+        lifetimeProductID: "unused",
+        subscriptionProductID: "com.gooduse.weldinggaswallet.pro.monthly"
+    )
+#endif
+    static let backup = BackupConfiguration(enabled: true)
+    static let migrations: [ShellMigration] = []
+    static let destinations: [ShellDestination] = [
+        .init(id: "cylinders", titleKey: "destination.cylinders", symbol: "cylinder"),
+        .init(id: "activity", titleKey: "destination.activity", symbol: "clock"),
+        .init(id: "suppliers", titleKey: "destination.suppliers", symbol: "person.2"),
+    ]
+
+    /// The first launch resolves the closest supported device language. Settings
+    /// intentionally lists only explicit choicesâ€”there is no â€œFollow systemâ€ row.
+    static let supportedLanguages: [AppLanguage] = [
+        .init(id: "en", displayName: "English"),
+        .init(id: "es-419", displayName: "EspaÃ±ol (LatinoamÃ©rica)"),
+        .init(id: "pt", displayName: "PortuguÃªs (Brasil)"),
+        .init(id: "fr", displayName: "FranÃ§ais"),
+        .init(id: "de", displayName: "Deutsch"),
+        .init(id: "it", displayName: "Italiano"),
+        .init(id: "nl", displayName: "Nederlands"),
+        .init(id: "pl", displayName: "Polski"),
+        .init(id: "tr", displayName: "TÃ¼rkÃ§e"),
+        .init(id: "ro", displayName: "RomÃ¢nÄƒ"),
+        .init(id: "cs", displayName: "ÄŒeÅ¡tina"),
+        .init(id: "uk", displayName: "Ğ£ĞºÑ€Ğ°Ñ—Ğ½ÑÑŒĞºĞ°"),
+        .init(id: "ru", displayName: "Ğ ÑƒÑÑĞºĞ¸Ğ¹"),
+        .init(id: "ar", displayName: "Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©"),
+        .init(id: "zh-Hans", displayName: "ç®€ä½“ä¸­æ–‡"),
+        .init(id: "ja", displayName: "æ—¥æœ¬èª"),
+        .init(id: "ko", displayName: "í•œêµ­ì–´"),
+        .init(id: "hi", displayName: "à¤¹à¤¿à¤¨à¥à¤¦à¥€"),
+        .init(id: "ur", displayName: "Ø§Ø±Ø¯Ùˆ"),
+        .init(id: "bn", displayName: "à¦¬à¦¾à¦‚à¦²à¦¾"),
+        .init(id: "vi", displayName: "Tiáº¿ng Viá»‡t"),
+        .init(id: "id", displayName: "Bahasa Indonesia"),
+        .init(id: "th", displayName: "à¹„à¸—à¸¢"),
+        .init(id: "fil", displayName: "Filipino"),
+        .init(id: "ms", displayName: "Bahasa Melayu"),
+        .init(id: "fi", displayName: "Suomi"),
+        .init(id: "sv", displayName: "Svenska"),
+        .init(id: "da", displayName: "Dansk"),
+        .init(id: "nb", displayName: "Norsk bokmÃ¥l"),
+        .init(id: "el", displayName: "Î•Î»Î»Î·Î½Î¹ÎºÎ¬"),
+        .init(id: "he", displayName: "×¢×‘×¨×™×ª"),
+    ]
+}
+
+struct LegalConfiguration: Sendable {
+    let version: String
+    let privacyURL: URL
+    let termsURL: URL
+    let supportURL: URL
+    let deletionURL: URL
+    let safetyURL: URL
+}
+enum OnboardingProfile: Equatable, Sendable { case legalOnly, singleScreen, guidedTour }
+struct BackupConfiguration: Sendable { let enabled: Bool }
+
+struct MonetizationConfiguration: Sendable {
+    let mode: MonetizationMode
+    let freeSuccessfulActions: Int
+    let lifetimeProductID: String
+    let subscriptionProductID: String
+    var productIDs: Set<String> {
+        switch mode {
+        case .oneTimeUnlock, .usageCapWithOneTimeUnlock: [lifetimeProductID]
+        case .freemiumWithSubscription, .subscription, .usageCapWithSubscription: [subscriptionProductID]
+        case .free: []
+        }
+    }
+    var includesPurchase: Bool { !productIDs.isEmpty }
+    var includesSubscription: Bool {
+        switch mode {
+        case .freemiumWithSubscription, .subscription, .usageCapWithSubscription: true
+        case .free, .oneTimeUnlock, .usageCapWithOneTimeUnlock: false
+        }
+    }
+}
+
+struct ShellDestination: Hashable, Identifiable, Sendable { let id: String; let titleKey: String; let symbol: String }
+struct AppLanguage: Identifiable, Hashable, Sendable { let id: String; let displayName: String }
+
+enum MonetizationMode: String, CaseIterable, Identifiable, Sendable {
+    case free, freemiumWithSubscription
+    case oneTimeUnlock, subscription, usageCapWithOneTimeUnlock, usageCapWithSubscription
+    var id: Self { self }
+    var title: String {
+        switch self {
+        case .free: "Free"
+        case .freemiumWithSubscription: "Free feature limit + subscription"
+        case .oneTimeUnlock: "One-time unlock"
+        case .subscription: "Subscription"
+        case .usageCapWithOneTimeUnlock: "Usage cap + one-time unlock"
+        case .usageCapWithSubscription: "Usage cap + subscription"
+        }
+    }
+}
+
+enum SampleContentState: String, CaseIterable, Identifiable, Sendable {
+    case populated, empty, loading, error
+    var id: Self { self }
+    var title: String { rawValue.capitalized }
+}

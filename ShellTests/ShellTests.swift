@@ -1,4 +1,200 @@
-YªçŠx-®éÜj×¢ëiºÚ+Š§j[h‘éÜ¢éíãİ7N‹Z–‹­¦ëeŠw¬Õ¥µÁ½ÉĞaQ•ÍĞ)Ñ•ÍÑ…‰±”¥µÁ½ÉĞ]•±‘¥¹…Í]…±±•Ğ()5…¥¹Ñ½È)™¥¹…°±…ÍÌ]•±‘¥¹…Í]…±±•ÑQ•ÍÑÌèaQ•ÍÑ…Í”ì(€€€™Õ¹ŒÑ•ÍÑ±±5½¹•Ñ¥é…Ñ¥½¹5½‘•ÍI•Í½±Ù••ÍÌ ¤ì(€€€€€€€™½Èµ½‘”¥¸m5½¹•Ñ¥é…Ñ¥½¹5½‘”¹™É•”°€¹™É••µ¥Õµ]¥Ñ¡MÕ‰ÍÉ¥ÁÑ¥½¹tì(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•è™…±Í”°¡•­¥¹œèÑÉÕ”°™É•”è™…±Í”¤°€¹…±±½İ•¤(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•è™…±Í”°¡•­¥¹œè™…±Í”°™É•”è™…±Í”¤°€¹…±±½İ•¤(€€€€€€€ô(€€€€€€€™½Èµ½‘”¥¸m5½¹•Ñ¥é…Ñ¥½¹5½‘”¹½¹•Q¥µ•U¹±½¬°€¹ÍÕ‰ÍÉ¥ÁÑ¥½¹tì(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•èÑÉÕ”°¡•­¥¹œè™…±Í”°™É•”è™…±Í”¤°€¹…±±½İ•¤(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•è™…±Í”°¡•­¥¹œèÑÉÕ”°™É•”è™…±Í”¤°€¹¡•­¥¹¹Ñ¥Ñ±•µ•¹Ğ¤(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•è™…±Í”°¡•­¥¹œè™…±Í”°™É•”è™…±Í”¤°€¹ÁÕÉ¡…Í•I•ÅÕ¥É•¤(€€€€€€€ô(€€€€€€€™½Èµ½‘”¥¸m5½¹•Ñ¥é…Ñ¥½¹5½‘”¹ÕÍ…•…Á]¥Ñ¡=¹•Q¥µ•U¹±½¬°€¹ÕÍ…•…Á]¥Ñ¡MÕ‰ÍÉ¥ÁÑ¥½¹tì(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•è™…±Í”°¡•­¥¹œèÑÉÕ”°™É•”èÑÉÕ”¤°€¹…±±½İ•¤(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•èÑÉÕ”°¡•­¥¹œè™…±Í”°™É•”è™…±Í”¤°€¹…±±½İ•¤(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•è™…±Í”°¡•­¥¹œèÑÉÕ”°™É•”è™…±Í”¤°€¹¡•­¥¹¹Ñ¥Ñ±•µ•¹Ğ¤(€€€€€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•Í½±Ù”¡µ½‘”°•¹Ñ¥Ñ±•è™…±Í”°¡•­¥¹œè™…±Í”°™É•”è™…±Í”¤°€¹ÕÍ…•1¥µ¥ÑI•…¡•¤(€€€€€€€ô(€€€ô((€€€™Õ¹ŒÑ•ÍÑMÕ•ÍÍ™Õ±UÍ…•%ÍA•ÉÍ¥ÍÑ•¹Ñ¹‘•‘ÕÁ±¥…Ñ• ¤ì(€€€€€€€±•Ğ‘•™…Õ±ÑÌ€ôµ…­••™…Õ±ÑÌ ¤(€€€€€€€±•ĞÍÑ½É”€ôUÍ•É•™…Õ±ÑÍUÍ…•MÑ½É”¡‘•™…Õ±ÑÌè‘•™…Õ±ÑÌ°­•äè€‰ÕÍ…”ˆ¤(€€€€€€€±•Ğ™¥ÉÍĞ€ôUÍ…•1•‘•È¡±¥µ¥Ğè€È°ÍÑ½É”èÍÑ½É”¤(€€€€€€€aQÍÍ•ÉÑÅÕ…°¡™¥ÉÍĞ¹É•½É‘MÕ•ÍÍ™Õ±Ñ¥½¸¡¥è€‰½Á•É…Ñ¥½¸´Äˆ¤°€¹É•½É‘•¡É•µ…¥¹¥¹œè€Ä¤¤(€€€€€€€aQÍÍ•ÉÑÅÕ…°¡™¥ÉÍĞ¹É•½É‘MÕ•ÍÍ™Õ±Ñ¥½¸¡¥è€‰½Á•É…Ñ¥½¸´Äˆ¤°€¹‘ÕÁ±¥…Ñ”¡É•µ…¥¹¥¹œè€Ä¤¤(€€€€€€€aQÍÍ•ÉÑÅÕ…°¡™¥ÉÍĞ¹É•½É‘MÕ•ÍÍ™Õ±Ñ¥½¸¡¥è€ˆ€€ˆ¤°€¹¥¹Ù…±¥‘%‘•¹Ñ¥™¥•È¤(€€€€€€€aQÍÍ•ÉÑÅÕ…°¡™¥ÉÍĞ¹É•½É‘MÕ•ÍÍ™Õ±Ñ¥½¸¡¥èMÑÉ¥¹œ¡É•Á•…Ñ¥¹œè€‰„ˆ°½Õ¹Ğè€ÄÈä¤¤°€¹¥¹Ù…±¥‘%‘•¹Ñ¥™¥•È¤(€€€€€€€±•ĞÉ•±…Õ¹¡•€ôUÍ…•1•‘•È¡±¥µ¥Ğè€È°ÍÑ½É”èÍÑ½É”¤(€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•±…Õ¹¡•¹ÍÕ•ÍÍ™Õ±Ñ¥½¹½Õ¹Ğ°€Ä¤(€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•±…Õ¹¡•¹É•½É‘MÕ•ÍÍ™Õ±Ñ¥½¸¡¥è€‰½Á•É…Ñ¥½¸´Èˆ¤°€¹É•½É‘•¡É•µ…¥¹¥¹œè€À¤¤(€€€€€€€aQÍÍ•ÉÑ…±Í”¡É•±…Õ¹¡•¹¡…ÍÉ••Ñ¥½¹I•µ…¥¹¥¹œ¤(€€€€€€€aQÍÍ•ÉÑÅÕ…°¡É•±…Õ¹¡•¹É•½É‘MÕ•ÍÍ™Õ±Ñ¥½¸¡¥è€‰½Á•É…Ñ¥½¸´Ìˆ¤°€¹±¥µ¥ÑI•…¡•¤(€€€ô((€€€™Õ¹ŒÑ•ÍÑ1•…±•ÁÑ…¹•%ÍY•ÉÍ¥½¹•‘¹‘½É•ÍI•½¹Í•¹Ğ ¤ì(€€€€€€€±•Ğ‘•™…Õ±ÑÌ€ôµ…­••™…Õ±ÑÌ ¤(€€€€€€€±•Ğ™¥ÉÍĞ€ô1•…±½¹Í•¹ÑMÑ½É”¡‘•™…Õ±ÑÌè‘•™…Õ±ÑÌ°É•ÅÕ¥É•‘Y•ÉÍ¥½¸è€ˆÈÀÈØ´Àäˆ¤(€€€€€€€aQÍÍ•ÉÑQÉÕ”¡™¥ÉÍĞ¹É•ÅÕ¥É•ÍAÉ•Í•¹Ñ…Ñ¥½¸¤(€€€€€€€aQÍÍ•ÉÑ…±Í”¡™¥ÉÍĞ¹¥ÍI•½¹Í•¹Ğ¤(€€€€€€€™¥ÉÍĞ¹…•ÁÑÕÉÉ•¹Ñ1•…±Y•ÉÍ¥½¸ ¤(€€€€€€€aQÍÍ•ÉÑ…±Í”¡™¥ÉÍĞ¹É•ÅÕ¥É•ÍAÉ•Í•¹Ñ…Ñ¥½¸¤(€€€€€€€aQÍÍ•ÉÑ…±Í”¡1•…±½¹Í•¹ÑMÑ½É”¡‘•™…Õ±ÑÌè‘•™…Õ±ÑÌ°É•ÅÕ¥É•‘Y•ÉÍ¥½¸è€ˆÈÀÈØ´Àäˆ¤¹É•ÅÕ¥É•ÍAÉ•Í•¹Ñ…Ñ¥½¸¤(€€€€€€€±•ĞÉ•Ù¥Í•€ô1•…±½¹Í•¹ÑMÑ½É”¡‘•™…Õ±ÑÌè‘•™…Õ±ÑÌ°É•ÅÕ¥É•‘Y•ÉÍ¥½¸è€ˆÈÀÈØ´ÄÀˆ¤(€€€€€€€aQÍÍ•ÉÑQÉÕ”¡É•Ù¥Í•¹É•ÅÕ¥É•ÍAÉ•Í•¹Ñ…Ñ¥½¸¤(€€€€€€€aQÍÍ•ËotŞÚ$z{-®éÜj×      XCTAssertFalse(store.update(editedLocked, isEntitled: false))
+import XCTest
+@testable import WeldingGasWallet
+
+@MainActor
+final class WeldingGasWalletTests: XCTestCase {
+    func testAllMonetizationModesResolveAccess() {
+        for mode in [MonetizationMode.free, .freemiumWithSubscription] {
+            XCTAssertEqual(resolve(mode, entitled: false, checking: true, free: false), .allowed)
+            XCTAssertEqual(resolve(mode, entitled: false, checking: false, free: false), .allowed)
+        }
+        for mode in [MonetizationMode.oneTimeUnlock, .subscription] {
+            XCTAssertEqual(resolve(mode, entitled: true, checking: false, free: false), .allowed)
+            XCTAssertEqual(resolve(mode, entitled: false, checking: true, free: false), .checkingEntitlement)
+            XCTAssertEqual(resolve(mode, entitled: false, checking: false, free: false), .purchaseRequired)
+        }
+        for mode in [MonetizationMode.usageCapWithOneTimeUnlock, .usageCapWithSubscription] {
+            XCTAssertEqual(resolve(mode, entitled: false, checking: true, free: true), .allowed)
+            XCTAssertEqual(resolve(mode, entitled: true, checking: false, free: false), .allowed)
+            XCTAssertEqual(resolve(mode, entitled: false, checking: true, free: false), .checkingEntitlement)
+            XCTAssertEqual(resolve(mode, entitled: false, checking: false, free: false), .usageLimitReached)
+        }
+    }
+
+    func testSuccessfulUsageIsPersistentAndDeduplicated() {
+        let defaults = makeDefaults()
+        let store = UserDefaultsUsageStore(defaults: defaults, key: "usage")
+        let first = UsageLedger(limit: 2, store: store)
+        XCTAssertEqual(first.recordSuccessfulAction(id: "operation-1"), .recorded(remaining: 1))
+        XCTAssertEqual(first.recordSuccessfulAction(id: "operation-1"), .duplicate(remaining: 1))
+        XCTAssertEqual(first.recordSuccessfulAction(id: "  "), .invalidIdentifier)
+        XCTAssertEqual(first.recordSuccessfulAction(id: String(repeating: "a", count: 129)), .invalidIdentifier)
+        let relaunched = UsageLedger(limit: 2, store: store)
+        XCTAssertEqual(relaunched.successfulActionCount, 1)
+        XCTAssertEqual(relaunched.recordSuccessfulAction(id: "operation-2"), .recorded(remaining: 0))
+        XCTAssertFalse(relaunched.hasFreeActionRemaining)
+        XCTAssertEqual(relaunched.recordSuccessfulAction(id: "operation-3"), .limitReached)
+    }
+
+    func testLegalAcceptanceIsVersionedAndForcesReconsent() {
+        let defaults = makeDefaults()
+        let first = LegalConsentStore(defaults: defaults, requiredVersion: "2026-09")
+        XCTAssertTrue(first.requiresPresentation)
+        XCTAssertFalse(first.isReconsent)
+        first.acceptCurrentLegalVersion()
+        XCTAssertFalse(first.requiresPresentation)
+        XCTAssertFalse(LegalConsentStore(defaults: defaults, requiredVersion: "2026-09").requiresPresentation)
+        let revised = LegalConsentStore(defaults: defaults, requiredVersion: "2026-10")
+        XCTAssertTrue(revised.requiresPresentation)
+        XCTAssertTrue(revised.isReconsent)
+    }
+
+    func testSubscriptionCacheExpiresButLifetimeCacheDoesNot() {
+        let now = Date(timeIntervalSince1970: 1_000)
+        let snapshot = EntitlementSnapshot(
+            entitledProductIDs: ["lifetime", "monthly"],
+            subscriptionExpiryByProductID: ["monthly": now.addingTimeInterval(60)],
+            verifiedAt: now
+        )
+        XCTAssertTrue(snapshot.isEntitled(to: ["monthly"], at: now))
+        XCTAssertFalse(snapshot.isEntitled(to: ["monthly"], at: now.addingTimeInterval(61)))
+        XCTAssertTrue(snapshot.isEntitled(to: ["lifetime"], at: now.addingTimeInterval(1_000_000)))
+        XCTAssertFalse(snapshot.isEntitled(to: ["unknown"], at: now))
+    }
+
+    func testSubscriptionCancellationKeepsAccessUntilPaidExpiration() {
+        let now = Date(timeIntervalSince1970: 1_000)
+        let expiration = now.addingTimeInterval(60)
+        let cancelledRenewal = SubscriptionCondition.subscribed(willAutoRenew: false, expirationDate: expiration)
+        XCTAssertTrue(SubscriptionAccessEvaluation.resolve(condition: cancelledRenewal, at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: cancelledRenewal, at: expiration).grantsAccess)
+    }
+
+    func testGracePeriodGrantsAccessButBillingRetryAndRevocationDoNot() {
+        let now = Date(timeIntervalSince1970: 1_000)
+        XCTAssertTrue(SubscriptionAccessEvaluation.resolve(condition: .gracePeriod(expirationDate: now.addingTimeInterval(60)), at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: .billingRetry, at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: .expired, at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: .revoked, at: now).grantsAccess)
+    }
+
+    func testSettingsOnlyOffersSubscriptionManagementForRelevantStoreStates() {
+        XCTAssertNil(SubscriptionSettingsPresentation.resolve(.notApplicable))
+        XCTAssertNil(SubscriptionSettingsPresentation.resolve(.expired))
+        XCTAssertNil(SubscriptionSettingsPresentation.resolve(.revoked))
+
+        let checking = SubscriptionSettingsPresentation.resolve(.checking)
+        XCTAssertEqual(checking?.showsManagement, false)
+        XCTAssertEqual(checking?.symbol, "hourglass")
+
+        let expiration = Date(timeIntervalSince1970: 2_000)
+        XCTAssertEqual(
+            SubscriptionSettingsPresentation.resolve(.subscribed(willAutoRenew: true, expirationDate: expiration))?.showsManagement,
+            true
+        )
+        XCTAssertEqual(
+            SubscriptionSettingsPresentation.resolve(.subscribed(willAutoRenew: false, expirationDate: expiration))?.showsManagement,
+            true
+        )
+        XCTAssertEqual(SubscriptionSettingsPresentation.resolve(.gracePeriod(expirationDate: expiration))?.showsManagement, true)
+        XCTAssertEqual(SubscriptionSettingsPresentation.resolve(.billingRetry)?.showsManagement, true)
+        XCTAssertEqual(SubscriptionSettingsPresentation.resolve(.offlineCached(expirationDate: expiration))?.showsManagement, true)
+    }
+
+    func testProductIdentifiersAreSelectedByProfile() {
+        XCTAssertEqual(configuration(.free).productIDs, [])
+        XCTAssertEqual(configuration(.freemiumWithSubscription).productIDs, ["monthly"])
+        XCTAssertEqual(configuration(.oneTimeUnlock).productIDs, ["lifetime"])
+        XCTAssertEqual(configuration(.subscription).productIDs, ["monthly"])
+        XCTAssertEqual(configuration(.usageCapWithOneTimeUnlock).productIDs, ["lifetime"])
+        XCTAssertEqual(configuration(.usageCapWithSubscription).productIDs, ["monthly"])
+    }
+
+    func testTemplateNavigationAndLanguagesAreBounded() {
+        XCTAssertFalse(ShellConfiguration.destinations.isEmpty)
+        XCTAssertLessThanOrEqual(ShellConfiguration.destinations.count, 5)
+        XCTAssertEqual(Set(ShellConfiguration.destinations.map(\.id)).count, ShellConfiguration.destinations.count)
+        XCTAssertFalse(ShellConfiguration.supportedLanguages.contains { $0.id == "system" })
+        XCTAssertTrue(ShellConfiguration.supportedLanguages.contains { $0.id == "en" })
+        XCTAssertEqual(ShellConfiguration.supportedLanguages.map(\.id), [
+            "en", "es-419", "pt", "fr", "de", "it", "nl", "pl", "tr", "ro",
+            "cs", "uk", "ru", "ar", "zh-Hans", "ja", "ko", "hi", "ur", "bn",
+            "vi", "id", "th", "fil", "ms", "fi", "sv", "da", "nb", "el", "he",
+        ])
+        XCTAssertEqual(LanguageController.closestSupported(to: "es-MX"), "es-419")
+        XCTAssertEqual(LanguageController.closestSupported(to: "zh-Hant"), "zh-Hans")
+        XCTAssertEqual(LanguageController.closestSupported(to: "fr-CA"), "fr")
+        XCTAssertEqual(LanguageController.closestSupported(to: "pt-BR"), "pt")
+        XCTAssertEqual(LanguageController.closestSupported(to: "ar-SA"), "ar")
+        XCTAssertEqual(LanguageController.closestSupported(to: "he-IL"), "he")
+        XCTAssertEqual(LanguageController.closestSupported(to: "xx-YY"), "en")
+        XCTAssertTrue(SupportedLocaleResolver.isRightToLeft("ar"))
+        XCTAssertFalse(SupportedLocaleResolver.isRightToLeft("en"))
+    }
+
+    func testStaleStoredLanguageFallsBackToSupportedLocale() {
+        let defaults = makeDefaults()
+        defaults.set("xx-YY", forKey: "wallet.language")
+        let controller = LanguageController(defaults: defaults, preferredLanguages: ["es-MX"])
+        XCTAssertEqual(controller.selection, "es-419")
+    }
+
+    func testEveryPublishedLegalDestinationIsSecureAndProductSpecific() {
+        let urls = [
+            ShellConfiguration.legal.privacyURL,
+            ShellConfiguration.legal.termsURL,
+            ShellConfiguration.legal.supportURL,
+            ShellConfiguration.legal.deletionURL,
+            ShellConfiguration.legal.safetyURL,
+        ]
+        XCTAssertEqual(Set(urls).count, urls.count)
+        for url in urls {
+            XCTAssertEqual(url.scheme, "https")
+            XCTAssertEqual(url.host, "lrodeveloperr.github.io")
+            XCTAssertTrue(url.path.hasPrefix("/privacy-policy/welding-gas-wallet/"))
+        }
+    }
+
+    func testSafeTemplateDefaultsAndSharedLocalizationContract() {
+        XCTAssertTrue(ShellConfiguration.backup.enabled)
+        XCTAssertEqual(LocalizationBaseline.localeIdentifiers.count, 31)
+        XCTAssertEqual(LocalizationBaseline.sharedKeys.count, 18)
+        XCTAssertEqual(ShellContract.currentVersion.split(separator: ".").count, 3)
+    }
+
+    func testFreeBackupRestorePreservesDataButLocksExcessCylinders() throws {
+        let source = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        for index in 1...4 {
+            XCTAssertNotNil(source.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "LIMIT-\(index)", isEntitled: true))
+        }
+        let target = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        try target.restore(from: source.exportData(), isEntitled: false)
+        XCTAssertEqual(target.activeCylinders.count, 4)
+        XCTAssertTrue(target.requiresFreeCylinderSelection(isEntitled: false))
+        XCTAssertTrue(target.activeCylinders.allSatisfy { !target.canManageCylinder($0.id, isEntitled: false) })
+    }
+
+    func testExpiredSubscriberChoosesThreeAndExcessMutationsStayLocked() {
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        for index in 1...5 {
+            XCTAssertNotNil(store.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "PRO-\(index)", isEntitled: true))
+        }
+        store.reconcileAccess(isEntitled: false)
+        XCTAssertTrue(store.requiresFreeCylinderSelection(isEntitled: false))
+
+        let managed = Set(store.activeCylinders.prefix(3).map(\.id))
+        XCTAssertTrue(store.selectFreeManagedCylinders(managed, isEntitled: false))
+        let locked = store.activeCylinders.first { !managed.contains($0.id) }!
+        XCTAssertFalse(store.canManageCylinder(locked.id, isEntitled: false))
+        XCTAssertFalse(store.setStatus(.low, for: locked.id, isEntitled: false))
+        XCTAssertFalse(store.setReminder(.now, for: locked.id, isEntitled: false))
+        XCTAssertFalse(store.recordService(for: locked.id, kind: .refill, amount: 10, currency: "USD", date: .now, isEntitled: false))
+        XCTAssertNil(store.duplicate(locked, isEntitled: false))
+        XCTAssertNil(store.addCylinder(gas: "Oxygen", capacity: 40, unit: "ft3", supplierID: nil, relationship: .owned, serial: "BLOCKED", isEntitled: false))
+
+        var editedLocked = locked
+        editedLocked.notes = "Must not save"
+        XCTAssertFalse(store.update(editedLocked, isEntitled: false))
 
         store.reconcileAccess(isEntitled: true)
         XCTAssertTrue(store.canManageCylinder(locked.id, isEntitled: true))

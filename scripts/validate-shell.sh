@@ -1,10 +1,95 @@
-YªçŠx-®éÜj×¢ëiºÚ+Š§j[h‘éÜ¢éíÛmzN‹Z–‹­¦ëeŠw¬ÔŒ„½ÕÍÈ½‰¥¸½•¹Ø‰…Í )Í•Ð€µ•Õ¼Á¥Á•™…¥°()µ½‘”ôˆ‘ìÄè´´µ…ÁÁôˆ)…Í”€ˆ‘µ½‘”ˆ¥¸(€€´µ…ÁÁð´µÉ•±•…Í”¤€ìì(€€¨¤•¡¼€‰UÍ…”è€Àl´µ…ÁÁð´µÉ•±•…Í•tˆ€ø˜Èì•á¥Ð€ØÐ€ìì)•Í…Œ()™…¥° ¤ì•¡¼€‰Y1%Q%=8%1è€¨ˆ€ø˜Èì•á¥Ð€Äìô)É•ÅÕ¥É•}™¥±” ¤ìml€µ˜€ˆÄˆutñð™…¥°€‰5¥ÍÍ¥¹œ€Äˆìô)É•ÅÕ¥É•}Ñ•áÐ ¤ìÉ•À€µÄ€ˆÈˆ€ˆÄˆñð™…¥°€ˆÄµÕÍÐ½¹Ñ…¥¸è€Èˆìô)É•©•Ñ}ÑÉ••}Ñ•áÐ ¤ì€„Éœ€µ¸€ˆÄˆ€ˆÈˆñð™…¥°€‰½É‰¥‘‘•¸¥µÁ±•µ•¹Ñ…Ñ¥½¸‘•Ñ•Ñ•è€Äˆìô()ml€µàÍÉ¥ÁÑÌ½Ù…±¥‘…Ñ”µÍ¡•±°¹Í utñð™…¥°€‰ÍÉ¥ÁÑÌ½Ù…±¥‘…Ñ”µÍ¡•±°¹Í µÕÍÐÉ•Ñ…¥¸¥ÑÌ•á•ÕÑ…‰±”‰¥Ðˆ()™½ÈÁ…Ñ ¥¸ÁÉ½©•Ð¹åµ°I5¹µM¡•±°½ÁÀ½]•±‘¥¹…Í]…±±•ÑÁÀ¹ÍÝ¥™ÐM¡•±°½ÁÀ½M¡•±±½¹™¥ÕÉ…Ñ¥½¸¹ÍÝ¥™ÐM¡•±°½ÁÀ½M¡•±±I½½ÑY¥•Ü¹ÍÝ¥™ÐM¡•±°½•…ÑÕÉ•Ì½•…ÑÕÉ•Y¥•Ü¹ÍÝ¥™ÐM¡•±°½•…ÑÕÉ•Ì½]…±±•ÑMÑ½É”¹ÍÝ¥™ÐM¡•±°½•…ÑÕÉ•Ì½M•ÑÑ¥¹ÍY¥•Ü¹ÍÝ¥™ÐM¡•±°½•…ÑÕÉ•Ì½A…åÝ…±±Y¥•Ü¹ÍÝ¥™ÐM¡•±°½M•ÉÙ¥•Ì½AÕÉ¡…Í•M•ÉÙ¥”¹ÍÝ¥™ÐM¡•±°½I•Í½ÕÉ•Ì½%¹™¼¹Á±¥ÍÐM¡•±°½I•Í½ÕÉ•Ì½AÉ¥Ù…å%¹™¼¹áÁÉ¥Ù…äM¡•±°½I•Í½ÕÉ•Ì½ÍÍ•ÑÌ¹á…ÍÍ•ÑÌ½å±¥¹‘•ÉQ…‰%½¸¹¥µ…•Í•Ð½½¹Ñ•¹ÑÌ¹©Í½¸M¡•±°½I•Í½ÕÉ•Ì½ÍÍ•ÑÌ¹á…ÍÍ•ÑÌ½å±¥¹‘•ÉQ…‰%½¸¹¥µ…•Í•Ð½å±¥¹‘•ÉQ…‰%½¸¹ÍÙœì‘¼(€É•ÅÕ¥É•}™¥±”€ˆ‘Á…Ñ ˆ)‘½¹”()É•©•Ñ}ÑÉ••}Ñ•áÐ€¥µÁ½ÉÐ€¡±ÕÑÑ•ÉñI•…ÑñI•…Ñ9…Ñ¥Ù”¥ñ±ÕÑÑ•ÉY¥•Ý½¹ÑÉ½±±•ÉñIQI½½ÑY¥•ÜœM¡•±°)É•ÅÕ¥É•}Ñ•áÐÁÉ½©•Ð¹åµ°€¹…µ”è]•±‘¥¹…Í]…±±•Ðœ)É•ÅÕ¥É•}Ñ•áÐÁÉ½©•Ð¹åµ°€AI=UQ}	U91}%9Q%%Hè½´¹½½‘ÕÍ•ÍÑÕ‘¥½Ì¹Ý•±‘¥¹…ÍÝ…±±•Ðœ)É•ÅÕ¥É•}Ñ•áÐÁÉ½©•Ð¹åµ°€%9=A1%MQ}%1èM¡•±°½I•Í½ÕÉ•Ì½%¹™¼¹Á±¥ÍÐœ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½ÁÀ½M¡•±±½¹™¥ÕÉ…Ñ¥½¸¹ÍÝ¥™Ð€µ½‘”è€¹™É••µ¥Õµ]¥Ñ¡MÕ‰ÍÉ¥ÁÑ¥½¸œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½ÁÀ½M¡•±±½¹™¥ÕÉ…Ñ¥½¸¹ÍÝ¥™Ð€½´¹½½‘ÕÍ”¹Ý•±‘¥¹…ÍÝ…±±•Ð¹ÁÉ¼¹µ½¹Ñ¡±äœ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½ÁÀ½M¡•±±½¹™¥ÕÉ…Ñ¥½¸¹ÍÝ¥™Ð€	…­ÕÁ½¹™¥ÕÉ…Ñ¥½¸¡•¹…‰±•èÑÉÕ”¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½ÁÀ½M¡•±±I½½ÑY¥•Ü¹ÍÝ¥™Ð€1…‰•° ‰å±¥¹‘•ÉÌˆ°¥µ…”è€‰å±¥¹‘•ÉQ…‰%½¸ˆ¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½ÁÀ½M¡•±±I½½ÑY¥•Ü¹ÍÝ¥™Ð€M•ÑÑ¥¹ÍY¥•Ü¡µ½‘•°èµ½‘•°°Ý…±±•ÐèÝ…±±•Ð¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½ÁÀ½M¡•±±I½½ÑY¥•Ü¹ÍÝ¥™Ð€œ¹•¹Ù¥É½¹µ•¹Ð¡µ½‘•°¤œ(„É•À€µÄ€=¹‰½…É‘¥¹Y¥•Ü œM¡•±°½ÁÀ½M¡•±±I½½ÑY¥•Ü¹ÍÝ¥™Ðñð™…¥°€AÉ½‘ÕÑ¥½¸±…Õ¹ µÕÍÐ¹½Ð…Ñ”Ñ¡”Ý…±±•Ð‰•¡¥¹½¹‰½…É‘¥¹œœ(„É•À€µÄ€±•…±½¹Í•¹ÐœM¡•±°½ÁÀ½M¡•±±I½½ÑY¥•Ü¹ÍÝ¥™Ðñð™…¥°€AÉ½‘ÕÑ¥½¸±…Õ¹ µÕÍÐ¹½Ð‘•Á•¹½¸Á•ÉÍ¥ÍÑ•±•…°…•ÁÑ…¹”œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½M•ÑÑ¥¹ÍY¥•Ü¹ÍÝ¥™Ð€±•…±	ÕÑÑ½¸ ¹ÁÉ¥Ù…äœ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½M•ÑÑ¥¹ÍY¥•Ü¹ÍÝ¥™Ð€±•…±	ÕÑÑ½¸ ¹Ñ•ÉµÌœ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½A…åÝ…±±Y¥•Ü¹ÍÝ¥™Ð€	ÕÑÑ½¸ ‰ÁÉ¥Ù…äˆ¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½A…åÝ…±±Y¥•Ü¹ÍÝ¥™Ð€	ÕÑÑ½¸ ‰Ñ•ÉµÌˆ¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½]…±±•ÑMÑ½É”¹ÍÝ¥™Ð€ÍÑ…Ñ¥Œ±•Ð™É••Ñ¥Ù•å±¥¹‘•É1¥µ¥Ð€ô€Ìœ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½]…±±•ÑMÑ½É”¹ÍÝ¥™Ð€™Õ¹Œ…¹‘‘å±¥¹‘•È¡¥Í¹Ñ¥Ñ±•è	½½°¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½]…±±•ÑMÑ½É”¹ÍÝ¥™Ð€™Õ¹Œ…¹5…¹…•å±¥¹‘•È¡|¥èUU%°¥Í¹Ñ¥Ñ±•è	½½°¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½]…±±•ÑMÑ½É”¹ÍÝ¥™Ð€™Õ¹ŒÉ•ÅÕ¥É•ÍÉ••å±¥¹‘•ÉM•±•Ñ¥½¸¡¥Í¹Ñ¥Ñ±•è	½½°¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½]…±±•ÑMÑ½É”¹ÍÝ¥™Ð€™Õ¹ŒÍ•±•ÑÉ••5…¹…•‘å±¥¹‘•ÉÌ¡|¥‘ÌèM•ÐñUU%ø°¥Í¹Ñ¥Ñ±•è	½½°¤œ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½•…ÑÕÉ•Y¥•Ü¹ÍÝ¥™Ð€ÕÁ±¥…Ñ”å±¥¹‘•Èœ)É•ÅÕ¥É•}Ñ•áÐM¡•±°½•…ÑÕÉ•Ì½mz¶‰žËkºwµçZ[™\ÜÉÂœ™\]Z\™WÝ^Ú[Ñ™X]\™\ËÔ^]Ø[šY]ËœÝÚY	Ü^]Ø[˜™[™Yš]š\ÝÜžIÂœ™\]Z\™WÝ^Ú[Ñ™X]\™\ËÔÙ][™ÜÕšY]ËœÝÚY	ÜÙ][™ÜË\Ü˜YKœšXÙKœ\š[Ù	P	P	Âœ™\]Z\™WÝ^Ú[Ñ™X]\™\ËÔÙ][™ÜÕšY]ËœÝÚY	Ð˜XÚÝ\šY]ÊØ[]ˆØ[]\Ñ[]Y‰Âœ™\]Z\™WÝ^Ú[Ñ™X]\™\ËÔÙ][™ÜÕšY]ËœÝÚY	ÔÝXœØÜš\[Û”Ù][™ÜÔ™\Ù[][Û‹œ™\ÛÛ™IÂœ™\]Z\™WÝ^Ú[Ñ™X]\™\ËÔÙ][™ÜÕšY]ËœÝÚY	ÜÚ[œÙ][™ÜËœÝXœØÜš\[Û‹›X[˜YÙIÂœ™\]Z\™WÝ^Ú[Ñ™X]\™\ËÔÙ][™ÜÕšY]ËœÝÚY	Ë›˜]šYØ][Û•]J\ØØ[^˜][Û‹œÝš[™ÊœÙ][™ÜÈ‹ØØ[NˆØØ[JJIÂœ™\]Z\™WÝ^Ú[Ñ™X]\™\ËÔÙ][™ÜÕšY]ËœÝÚY	Ë˜]Û”Ý[JœZ[ŠIÂœ™\]Z\™WÝ^Ú[ÔÙ\šXÙ\ËÔ\˜Ú\ÙTÙ\šXÙKœÝÚY	ØØ\ÙHÝXœØÜšX™Y
-Ú[]]Ô™[™]Îˆ›ÛÛ^\˜][Û‘]Nˆ]JIÂœ™\]Z\™WÝ^Ú[ÔÙ\šXÙ\ËÔ\˜Ú\ÙTÙ\šXÙKœÝÚY	ØØ\ÙHÜ˜XÙT\š[Ù
-^\˜][Û‘]Nˆ]JIÂœ™\]Z\™WÝ^Ú[ÔÙ\šXÙ\ËÔ\˜Ú\ÙTÙ\šXÙKœÝÚY	ØØ\ÙHš[[™Ô™]žIÂœ™\]Z\™WÝ^Ú[ÔÙ\šXÙ\ËÔ\˜Ú\ÙTÙ\šXÙKœÝÚY	ÜØÚY[Q[][Y[™Yœ™\Ú
-]‰Âœ™Z™XÝÝ™YWÝ^	ÓXZÙHH\ÙY[[™È[›[Z]YÛX\ˆ˜[YK˜[œÜ\™[\ÝÜ™HšXÚ[™ß[›[Z]YÛÜ™HXÝ[Ûœß™\œÚ[Ûˆ[™›Ü›X][Ûˆ[™\\ÜXÚYšXÈ›ÝXÙ\È™[Û™È\™IÈÚ[œ™\]Z\™WÝ^™Ú]X‹ÝÛÜšÙ›ÝÜËÝ\Ý›YÚž[[	ÕTÐQÑSS‘ÈÐSU“ÑPÕSÓˆTÕ	Âœ™\]Z\™WÝ^™Ú]X‹ÝÛÜšÙ›ÝÜËÝ\Ý›YÚž[[	Ô[ˆ[š]\ÝÈ™Y›Ü™H\ØY	Âœ™\]Z\™WÝ^™Ú]X‹ÝÛÜšÙ›ÝÜËÝ\Ý›YÚž[[	ÑSP“WÕTÕP’SUOVQTÉÂœ™\]Z\™WÝ^™Ú]X‹ÝÛÜšÙ›ÝÜËÝ\Ý›YÚž[[	Ù]H]H
-É^I[IY	R	SIÂˆHÜ™\QœH	ÔÐÔ‘QS”ÒÕÐ•RS	È™Ú]X‹ÝÛÜšÙ›ÝÜËÝ\Ý›YÚž[[˜Z[	Ô›ÙXÝ[Ûˆ\Ý›YÚÛÜšÙ›ÝÈ]\Ý›ÝÛÛ\[HÐÔ‘QS”ÒÕÐ•RS	Â‚™›Üˆ][ˆ›Ú™XÝž[[Ú[ÈÂˆ™Z™XÝÝ™YWÝ^	ÑÛÛÙÛS[Øš[PYß\Ù\“Y\ÜØYÚ[™Ô]›Ü›_ÐQ\XØ][Û’Y[YšY\ŸÙ[[™ÐY˜[›™\•[š]QQ×ÑSP“QÑSS‘×ÒSÔ×ÐQSÐŸØKX\\X‹IÈ‰]‚™Û™B‚™›Üˆ\›[ˆš]˜XÞH\›\ÈÝ\Ü[][Ûˆ\ØÛZ[Y\ŽÈÂˆ™\]Z\™WÝ^Ú[Ð\ÔÚ[ÛÛ™šYÝ\˜][Û‹œÝÚYšÎ‹ËÛ›Ù]™[Ü\œ‹™Ú]X‹š[ËÜš]˜XÞK\ÛXÞKÝÙ[[™ËYØ\Ë]Ø[]É\›È‚™Û™B‚›[™ÝXYÙWØÛÝ[H‰
-ÙY[ˆ	ËÜÝ]XÈ]Ý\ÜY[™ÝXYÙ\Î‹Ë×ˆKÜ	ÈÚ[Ð\ÔÚ[ÛÛ™šYÝ\˜][Û‹œÝÚYÜ™\XÈ	×š[š]
-Y‰ÊH‚–ÖÈ‰[™ÝXYÙWØÛÝ[ˆOHŒÌHˆWH˜Z[‘^XÝYHÛÛ\]HÌK[[™ÝXYÙH›ÙXÝØ][ÙÎÈ›Ý[™	[™ÝXYÙWØÛÝ[‚ˆHÜ™\QœH	Ëš[š]
-YˆœÞ\Ý[H‰ÈÚ[Ð\ÔÚ[ÛÛ™šYÝ\˜][Û‹œÝÚY˜Z[	Ó[™ÝXYÙHÙ[XÝÜˆ]\Ý›ÝÛÛZ[ˆ›ÛÝÈÞ\Ý[IÂœ™\]Z\™WÝ^Ú[Ð\ÔÚ[›ÛÝšY]ËœÝÚY	Ë™[š\›Û›Y[
-›^[Ý]\™XÝ[Û‹[Ù[›[™ÝXYÙK›^[Ý]\™XÝ[ÛŠIÂœ™\]Z\™WÝ^Ú[ÔÙ\šXÙ\ËÓ[™ÝXYÙPÛÛ›Û\‹œÝÚY	ÖÈ˜\ˆ‹šH‹\ˆ—IÂœ]ÛŒÈØÜš\ËÝ˜[Y]K[ØØ[^˜][ÛœËœB‚™›ÜˆÛÜšÙ›ÝÈ[ˆ™Ú]X‹ÝÛÜšÙ›ÝÜËÊ‹ž[[ÈÂˆ™\]Z\™WÝ^‰ÛÜšÙ›ÝÈˆ	ÝÛÜšÙ›Ý×Ù\Ü]Ú‰ÂˆYˆ™È[ˆ	×—ÊÊ\Ú[Ü™\]Y\ÝØÚY[JN‰È‰ÛÜšÙ›ÝÈŽÈ[ˆ˜Z[‰ÛÜšÙ›ÝÈ]\Ý™[XZ[ˆX[X[[Û›HŽÈšB™Û™B‚šYˆÛÛ[X[™]ˆ][‹Ù]‹Û[‰ŒNÈ[‚ˆ][[[Ú[Ô™\ÛÝ\˜Ù\ËÒ[™›Ëœ\Ý‹Ù]‹Û[ˆ][[[Ú[Ô™\ÛÝ\˜Ù\ËÔš]˜XÞR[™›ËžÜš]˜XÞH‹Ù]‹Û[™šB‚™XÚÈ•Ù[[™ÈØ\ÈØ[]SÔÈ˜[Y][Ûˆ\ÜÙY
-	[ÙJKˆ‚
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode="${1:---app}"
+case "$mode" in
+  --app|--release) ;;
+  *) echo "Usage: $0 [--app|--release]" >&2; exit 64 ;;
+esac
+
+fail() { echo "VALIDATION FAILED: $*" >&2; exit 1; }
+require_file() { [[ -f "$1" ]] || fail "Missing $1"; }
+require_text() { grep -Fq "$2" "$1" || fail "$1 must contain: $2"; }
+reject_tree_text() { ! rg -n "$1" "$2" || fail "Forbidden implementation detected: $1"; }
+
+[[ -x scripts/validate-shell.sh ]] || fail "scripts/validate-shell.sh must retain its executable bit"
+
+for path in project.yml README.md Shell/App/WeldingGasWalletApp.swift Shell/App/ShellConfiguration.swift Shell/App/ShellRootView.swift Shell/Features/FeatureView.swift Shell/Features/WalletStore.swift Shell/Features/SettingsView.swift Shell/Features/PaywallView.swift Shell/Services/PurchaseService.swift Shell/Resources/Info.plist Shell/Resources/PrivacyInfo.xcprivacy Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/Contents.json Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/CylinderTabIcon.svg; do
+  require_file "$path"
+done
+
+reject_tree_text 'import (Flutter|React|ReactNative)|FlutterViewController|RCTRootView' Shell
+require_text project.yml 'name: WeldingGasWallet'
+require_text project.yml 'PRODUCT_BUNDLE_IDENTIFIER: com.goodusestudios.weldinggaswallet'
+require_text project.yml 'INFOPLIST_FILE: Shell/Resources/Info.plist'
+require_text Shell/App/ShellConfiguration.swift 'mode: .freemiumWithSubscription'
+require_text Shell/App/ShellConfiguration.swift 'com.gooduse.weldinggaswallet.pro.monthly'
+require_text Shell/App/ShellConfiguration.swift 'BackupConfiguration(enabled: true)'
+require_text Shell/App/ShellRootView.swift 'Label("Cylinders", image: "CylinderTabIcon")'
+require_text Shell/App/ShellRootView.swift 'SettingsView(model: model, wallet: wallet)'
+require_text Shell/App/ShellRootView.swift '.environment(model)'
+! grep -Fq 'OnboardingView(' Shell/App/ShellRootView.swift || fail 'Production launch must not gate the wallet behind onboarding'
+! grep -Fq 'legalConsent' Shell/App/ShellRootView.swift || fail 'Production launch must not depend on persisted legal acceptance'
+require_text Shell/Features/SettingsView.swift 'legalButton(.privacy'
+require_text Shell/Features/SettingsView.swift 'legalButton(.terms'
+require_text Shell/Features/PaywallView.swift 'Button("privacy")'
+require_text Shell/Features/PaywallView.swift 'Button("terms")'
+require_text Shell/Features/WalletStore.swift 'static let freeActiveCylinderLimit = 3'
+require_text Shell/Features/WalletStore.swift 'func canAddCylinder(isEntitled: Bool)'
+require_text Shell/Features/WalletStore.swift 'func canManageCylinder(_ id: UUID, isEntitled: Bool)'
+require_text Shell/Features/WalletStore.swift 'func requiresFreeCylinderSelection(isEntitled: Bool)'
+require_text Shell/Features/WalletStore.swift 'func selectFreeManagedCylinders(_ ids: Set<UUID>, isEntitled: Bool)'
+require_text Shell/Features/FeatureView.swift 'Duplicate cylinder'
+require_text Shell/Features/FeatureView.swift 'Search cylinders'
+require_text Shell/Features/WalletStore.swift 'func currencySign(for code: String)'
+require_text Shell/Features/WalletStore.swift 'func deleteAllData()'
+require_text Shell/Features/WalletStore.swift 'try? await Task.sleep(for: .seconds(15))'
+require_text Shell/Features/SettingsView.swift 'delete.confirmationWord'
+require_text Shell/Features/SettingsView.swift 'wallet.currencySign(for:'
+require_text Shell/Services/PurchaseService.swift 'Transaction.currentEntitlements'
+require_text Shell/Resources/Info.plist 'ITSAppUsesNonExemptEncryption'
+require_text Shell/Features/PaywallView.swift 'paywall.benefit.readiness'
+require_text Shell/Features/PaywallView.swift 'paywall.benefit.history'
+require_text Shell/Features/SettingsView.swift 'settings.upgrade.price.period %@ %@'
+require_text Shell/Features/SettingsView.swift 'BackupView(wallet: wallet, isEntitled:'
+require_text Shell/Features/SettingsView.swift 'SubscriptionSettingsPresentation.resolve'
+require_text Shell/Features/SettingsView.swift 'shell.settings.subscription.manage'
+require_text Shell/Features/SettingsView.swift '.navigationTitle(AppLocalization.string("settings", locale: locale))'
+require_text Shell/Features/SettingsView.swift '.buttonStyle(.plain)'
+require_text Shell/Services/PurchaseService.swift 'case subscribed(willAutoRenew: Bool, expirationDate: Date)'
+require_text Shell/Services/PurchaseService.swift 'case gracePeriod(expirationDate: Date)'
+require_text Shell/Services/PurchaseService.swift 'case billingRetry'
+require_text Shell/Services/PurchaseService.swift 'scheduleEntitlementRefresh(at:'
+reject_tree_text 'Make the useful thing unlimited|Clear value, transparent App Store pricing|Unlimited core actions|Version information and app-specific notices belong here' Shell
+require_text .github/workflows/testflight.yml 'UPLOAD WELDING WALLET PRODUCTION TEST'
+require_text .github/workflows/testflight.yml 'Run unit tests before upload'
+require_text .github/workflows/testflight.yml 'ENABLE_TESTABILITY=YES'
+require_text .github/workflows/testflight.yml 'date -u +%y%m%d%H%M'
+! grep -Fq 'SCREENSHOT_BUILD' .github/workflows/testflight.yml || fail 'Production TestFlight workflow must not compile SCREENSHOT_BUILD'
+
+for path in project.yml Shell; do
+  reject_tree_text 'GoogleMobileAds|UserMessagingPlatform|GADApplicationIdentifier|WeldingAdBannerUnitID|ADS_ENABLED|WELDING_IOS_ADMOB|ca-app-pub-' "$path"
+done
+
+for url in privacy terms support deletion disclaimer; do
+  require_text Shell/App/ShellConfiguration.swift "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/$url/"
+done
+
+language_count="$(sed -n '/static let supportedLanguages:/,/^    ]/p' Shell/App/ShellConfiguration.swift | grep -c '\.init(id:')"
+[[ "$language_count" == "31" ]] || fail "Expected the complete 31-language product catalog; found $language_count"
+! grep -Fq '.init(id: "system"' Shell/App/ShellConfiguration.swift || fail 'Language selector must not contain Follow system'
+require_text Shell/App/ShellRootView.swift '.environment(\.layoutDirection, model.language.layoutDirection)'
+require_text Shell/Services/LanguageController.swift '["ar", "he", "ur"]'
+python3 scripts/validate-localizations.py
+
+for workflow in .github/workflows/*.yml; do
+  require_text "$workflow" 'workflow_dispatch:'
+  if rg -n '^\s+(push|pull_request|schedule):' "$workflow"; then fail "$workflow must remain manual-only"; fi
+done
+
+if command -v plutil >/dev/null 2>&1; then
+  plutil -lint Shell/Resources/Info.plist >/dev/null
+  plutil -lint Shell/Resources/PrivacyInfo.xcprivacy >/dev/null
+fi
+
+echo "Welding Gas Wallet iOS validation passed ($mode)."
