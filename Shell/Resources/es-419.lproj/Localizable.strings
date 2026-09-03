@@ -49,12 +49,12 @@
 "feature.replaceDetail" = "Sustituye por contenido específico de la función.";
 "usage.remaining %lld" = "Quedan %lld acciones gratuitas";
 
-"paywall.title" = "Que no te falte gas a mitad del trabajo.";
-"paywall.message" = "Lleva todos tus cilindros en un solo lugar para detectar cuáles están por acabarse, planear la recarga y evitar vueltas innecesarias al proveedor.";
+"paywall.title" = "Evita quedarte sin gas a mitad del trabajo.";
+"paywall.message" = "Controla todos tus cilindros, identifica los que tienen poco gas y evita viajes urgentes al proveedor.";
 "paywall.benefit.unlimited" = "Controla todos los cilindros del taller y de cada obra";
-"paywall.benefit.readiness" = "Identifica de un vistazo los que están bajos, vacíos o fuera del taller";
-"paywall.benefit.history" = "Mantén juntas las recargas, los costos, los proveedores y el historial";
-"paywall.purchase" = "Desbloquear control sin límites";
+"paywall.benefit.readiness" = "Distingue cilindros con poco gas, vacíos o fuera del taller";
+"paywall.benefit.history" = "Ten en un solo lugar recargas, costos, proveedores e historial";
+"paywall.purchase" = "Controlar cilindros sin límite";
 "paywall.loadingProduct" = "Cargando el precio de App Store…";
 "paywall.retryProduct" = "Reintentar App Store";
 "paywall.restore" = "Restaurar compras";
@@ -69,7 +69,7 @@
 "paywall.period.year.other %lld" = "cada %lld años";
 "paywall.period.unknown" = "periodo de suscripción";
 "settings.upgrade.unlimited" = "Controla cilindros activos sin límite";
-"settings.upgrade.price %@" = "Cilindros sin límite · %@ al mes";
+"settings.upgrade.price %@" = "Cilindros activos sin límite · %@ al mes";
 
 "upgrade.subtitle" = "Gestiona las compras y restaura el acceso";
 "language" = "Idioma";

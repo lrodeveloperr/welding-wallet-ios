@@ -2,6 +2,7 @@
 """Release gate: exposed locales must be complete and catalog keys must match."""
 
 from pathlib import Path
+from collections import Counter
 import re
 import sys
 
@@ -11,28 +12,47 @@ CATALOG_ROOT = ROOT / "Shell/Resources"
 
 locales = re.findall(r'\.init\(id: "([^"]+)", displayName:', CONFIG.read_text())
 
-def keys(path: Path) -> set[str]:
-    found = re.findall(r'^\s*"((?:\\.|[^"])*)"\s*=', path.read_text(), re.MULTILINE)
-    if len(found) != len(set(found)):
+def catalog(path: Path) -> dict[str, str]:
+    found = re.findall(
+        r'^\s*"((?:\\.|[^"])*)"\s*=\s*"((?:\\.|[^"])*)"\s*;',
+        path.read_text(),
+        re.MULTILINE,
+    )
+    found_keys = [key for key, _ in found]
+    if len(found_keys) != len(set(found_keys)):
         sys.exit(f"LOCALIZATION FAILED: duplicate keys in {path.relative_to(ROOT)}")
-    return set(found)
+    return dict(found)
+
+def placeholders(value: str) -> Counter[str]:
+    return Counter(re.findall(r'%(?:\d+\$)?(@|lld|ld|d|f|s)', value))
 
 english = CATALOG_ROOT / "en.lproj/Localizable.strings"
 if not english.is_file():
     sys.exit("LOCALIZATION FAILED: missing English source catalog")
-source = keys(english)
+source_catalog = catalog(english)
+source = set(source_catalog)
 
 for locale in locales:
     path = CATALOG_ROOT / f"{locale}.lproj/Localizable.strings"
     if not path.is_file():
         sys.exit(f"LOCALIZATION FAILED: enabled locale {locale} has no catalog")
-    current = keys(path)
+    current_catalog = catalog(path)
+    current = set(current_catalog)
     missing = sorted(source - current)
     extra = sorted(current - source)
     if missing or extra:
         sys.exit(
             f"LOCALIZATION FAILED: {locale} key mismatch; "
             f"missing={missing[:8]} extra={extra[:8]}"
+        )
+    mismatched_placeholders = sorted(
+        key for key in source
+        if placeholders(source_catalog[key]) != placeholders(current_catalog[key])
+    )
+    if mismatched_placeholders:
+        sys.exit(
+            f"LOCALIZATION FAILED: {locale} placeholder mismatch; "
+            f"keys={mismatched_placeholders[:8]}"
         )
 
 ui_files = [

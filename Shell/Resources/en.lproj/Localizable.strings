@@ -50,10 +50,10 @@
 "usage.remaining %lld" = "%lld free actions remaining";
 
 "paywall.title" = "Know what’s ready before the next job.";
-"paywall.message" = "Keep every cylinder visible so you can spot low gas before work stalls or a supplier run gets missed.";
-"paywall.benefit.unlimited" = "Track every shop and job-site cylinder";
-"paywall.benefit.readiness" = "See low, empty, and away cylinders at a glance";
-"paywall.benefit.history" = "Keep refill costs, suppliers, and history together";
+"paywall.message" = "Keep every cylinder visible, spot low gas before work stalls, and avoid urgent refill trips.";
+"paywall.benefit.unlimited" = "Track every active cylinder in the shop and on job sites";
+"paywall.benefit.readiness" = "See low, empty, and off-site cylinders at a glance";
+"paywall.benefit.history" = "Keep refill costs, suppliers, and service history together";
 "paywall.purchase" = "Unlock unlimited tracking";
 "paywall.loadingProduct" = "Loading App Store price…";
 "paywall.retryProduct" = "Retry App Store";
@@ -69,7 +69,7 @@
 "paywall.period.year.other %lld" = "every %lld years";
 "paywall.period.unknown" = "subscription period";
 "settings.upgrade.unlimited" = "Track unlimited active cylinders";
-"settings.upgrade.price %@" = "Unlimited cylinders · %@/month";
+"settings.upgrade.price %@" = "Unlimited active cylinders · %@/month";
 
 "upgrade.subtitle" = "Manage purchases and restore access";
 "language" = "Language";

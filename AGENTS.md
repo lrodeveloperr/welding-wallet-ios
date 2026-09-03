@@ -20,6 +20,7 @@ This is the authoritative native iOS application. It derives from `lrodeveloperr
 - Keep persisted enum/raw values stable, but never present raw values directly. Map statuses, relationships, lifecycle states, activity kinds and preset gases to localized display keys.
 - Use locale-aware parsing and formatting for decimal input, money, quantities, dates and plurals. Never assemble sentences with English singular/plural branches.
 - Review welding terminology for the target region, not only the language. Latin American Spanish uses `cilindro`, `recarga`, `proveedor` and `fuera del taller` in this app.
+- Translate cylinder states by domain meaning, not word-for-word. In Latin American Spanish, a low-gas cylinder `tiene poco gas`; never translate English “low” as `está bajo`. Use `fuera del taller` for off-site/away when no more specific location is known.
 - Validate Dynamic Type/text expansion and bidirectional layout before enabling a locale. RTL locales require an explicit RTL QA pass.
 - Notification copy, accessibility labels, validation errors, empty states, purchase copy and legal-link labels are part of the catalog.
 - Published legal documents must be available and appropriate for every enabled locale, or the app must clearly disclose the document language. Never imply translated legal coverage that does not exist.
