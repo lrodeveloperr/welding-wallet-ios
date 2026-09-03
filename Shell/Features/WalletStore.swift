@@ -273,15 +273,19 @@ final class WalletStore {
         return try encoder.encode(snapshot())
     }
 
-    func restore(from data: Data) throws {
+    func restore(from data: Data, activeCylinderLimit: Int? = nil, locale: Locale? = nil) throws {
         guard data.count <= 5 * 1024 * 1024 else { throw WalletError.backupTooLarge }
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         let decoded = try decoder.decode(WalletSnapshot.self, from: data)
         guard decoded.format == "welding-gas-wallet", decoded.version == 2 else { throw WalletError.unsupportedBackup }
+        let activeCount = decoded.cylinders.filter { $0.lifecycle == .active }.count
+        if let activeCylinderLimit, activeCount > activeCylinderLimit { throw WalletError.activeCylinderLimit(activeCylinderLimit) }
+        guard Self.isValid(decoded) else { throw WalletError.invalidBackup }
         cylinders = decoded.cylinders; suppliers = decoded.suppliers; activity = decoded.activity
         currencyOverride = decoded.currencyOverride; defaults = decoded.defaults
         save()
-        for cylinder in activeCylinders { Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: cylinder.reminderAt) } }
+        let reminderLocale = locale ?? Self.selectedLocale
+        for cylinder in activeCylinders { Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: cylinder.reminderAt, locale: reminderLocale) } }
     }
 
     func totals(for cylinderID: UUID? = nil) -> [(String, Decimal)] {
@@ -319,6 +323,34 @@ final class WalletStore {
     private func load() {
         guard let data = try? Data(contentsOf: fileURL) else { return }
         try? restore(from: data)
+    }
+
+    private static var selectedLocale: Locale {
+        Locale(identifier: UserDefaults.standard.string(forKey: "wallet.language") ?? Locale.preferredLanguages.first ?? "en")
+    }
+
+    private static func isValid(_ snapshot: WalletSnapshot) -> Bool {
+        let cylinderIDs = snapshot.cylinders.map(\.id)
+        let supplierIDs = snapshot.suppliers.map(\.id)
+        let activityIDs = snapshot.activity.map(\.id)
+        guard Set(cylinderIDs).count == cylinderIDs.count,
+              Set(supplierIDs).count == supplierIDs.count,
+              Set(activityIDs).count == activityIDs.count else { return false }
+
+        let knownCylinders = Set(cylinderIDs)
+        let knownSuppliers = Set(supplierIDs)
+        let serials = snapshot.cylinders.map { $0.serial.trimmed.lowercased() }.filter { !$0.isEmpty }
+        guard Set(serials).count == serials.count else { return false }
+        guard snapshot.cylinders.allSatisfy({ cylinder in
+            !cylinder.gas.trimmed.isEmpty && cylinder.capacityValue.isFinite && cylinder.capacityValue > 0 &&
+            (cylinder.supplierID == nil || knownSuppliers.contains(cylinder.supplierID!))
+        }) else { return false }
+        guard snapshot.activity.allSatisfy({ event in
+            knownCylinders.contains(event.cylinderID) && (event.amountMinor == nil || event.amountMinor! >= 0)
+        }) else { return false }
+        if let currency = snapshot.currencyOverride,
+           !Locale.Currency.isoCurrencies.contains(where: { $0.identifier == currency }) { return false }
+        return true
     }
 
     private static var defaultFileURL: URL {
@@ -401,9 +433,14 @@ final class WalletStore {
 }
 
 enum WalletError: LocalizedError {
-    case backupTooLarge, unsupportedBackup
+    case backupTooLarge, unsupportedBackup, invalidBackup, activeCylinderLimit(Int)
     var errorDescription: String? {
-        switch self { case .backupTooLarge: "The backup is larger than 5 MB."; case .unsupportedBackup: "This backup format is not supported." }
+        switch self {
+        case .backupTooLarge: "The backup is larger than 5 MB."
+        case .unsupportedBackup: "This backup format is not supported."
+        case .invalidBackup: "The backup contains invalid or inconsistent records."
+        case .activeCylinderLimit(let limit): "This backup contains more than \(limit) active cylinders."
+        }
     }
 }
 

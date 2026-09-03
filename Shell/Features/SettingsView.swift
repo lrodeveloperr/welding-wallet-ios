@@ -24,7 +24,7 @@ struct SettingsView: View {
             Section {
                 NavigationLink { LanguageView() } label: { SettingsLabel("Language", subtitle: "Choose the app language", symbol: "globe") }
                 NavigationLink { CurrencyView(wallet: wallet) } label: { SettingsLabel("Currency", verbatimSubtitle: "\(wallet.currencySign(for: wallet.defaultCurrency)) · \(AppLocalization.string(wallet.currencyOverride == nil ? "Automatic" : "Selected", locale: locale))", symbol: "dollarsign.circle") }
-                NavigationLink { BackupView(wallet: wallet) } label: { SettingsLabel("Backup", subtitle: "Optional native file backup", symbol: "externaldrive.badge.icloud") }
+                NavigationLink { BackupView(wallet: wallet, activeCylinderLimit: model.access.isEntitled ? nil : 3) } label: { SettingsLabel("Backup", subtitle: "Optional native file backup", symbol: "externaldrive.badge.icloud") }
                 NavigationLink { HelpView() } label: { SettingsLabel("Help", subtitle: "Simple numbered guide", symbol: "questionmark.circle") }
                 if model.access.configuration.includesAdvertising && model.ads.isPrivacyOptionsRequired {
                     Button { Task { await model.ads.presentPrivacyOptions() } } label: { SettingsLabel("Ad privacy choices", subtitle: nil, symbol: "hand.raised.square") }
@@ -99,6 +99,7 @@ private struct CurrencyView: View {
 
 private struct BackupView: View {
     @Bindable var wallet: WalletStore
+    let activeCylinderLimit: Int?
     @Environment(\.locale) private var locale
     @State private var exporting = false; @State private var importing = false; @State private var document = WalletBackupDocument(); @State private var message = ""
     var body: some View {
@@ -110,7 +111,15 @@ private struct BackupView: View {
         }
         .navigationTitle("Backup").navigationBarTitleDisplayMode(.inline)
         .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "welding-wallet-backup-\(Self.dateStamp)") { result in message = AppLocalization.string(result.isSuccess ? "backup.fileCreated" : "backup.notSaved", locale: locale) }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in do { let url = try result.get(); guard url.startAccessingSecurityScopedResource() else { throw CocoaError(.fileReadNoPermission) }; defer { url.stopAccessingSecurityScopedResource() }; try wallet.restore(from: Data(contentsOf: url)); message = AppLocalization.string("backup.restored", locale: locale) } catch { message = error.localizedDescription } }
+        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in do { let url = try result.get(); guard url.startAccessingSecurityScopedResource() else { throw CocoaError(.fileReadNoPermission) }; defer { url.stopAccessingSecurityScopedResource() }; try wallet.restore(from: Data(contentsOf: url), activeCylinderLimit: activeCylinderLimit, locale: locale); message = AppLocalization.string("backup.restored", locale: locale) } catch let error as WalletError { message = backupErrorMessage(error) } catch { message = error.localizedDescription } }
+    }
+    private func backupErrorMessage(_ error: WalletError) -> String {
+        switch error {
+        case .backupTooLarge: AppLocalization.string("backup.error.tooLarge", locale: locale)
+        case .unsupportedBackup: AppLocalization.string("backup.error.unsupported", locale: locale)
+        case .invalidBackup: AppLocalization.string("backup.error.invalid", locale: locale)
+        case .activeCylinderLimit(let limit): AppLocalization.string("backup.activeLimit", locale: locale, limit)
+        }
     }
     private static var dateStamp: String { String(ISO8601DateFormatter().string(from: .now).prefix(10)) }
 }

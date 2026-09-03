@@ -12,7 +12,10 @@ CATALOG_ROOT = ROOT / "Shell/Resources"
 locales = re.findall(r'\.init\(id: "([^"]+)", displayName:', CONFIG.read_text())
 
 def keys(path: Path) -> set[str]:
-    return set(re.findall(r'^\s*"((?:\\.|[^"])*)"\s*=', path.read_text(), re.MULTILINE))
+    found = re.findall(r'^\s*"((?:\\.|[^"])*)"\s*=', path.read_text(), re.MULTILINE)
+    if len(found) != len(set(found)):
+        sys.exit(f"LOCALIZATION FAILED: duplicate keys in {path.relative_to(ROOT)}")
+    return set(found)
 
 english = CATALOG_ROOT / "en.lproj/Localizable.strings"
 if not english.is_file():

@@ -12,6 +12,10 @@ enum AppLocalization {
         return String(format: format, locale: locale, arguments: arguments)
     }
 
+    static var selectedLocale: Locale {
+        Locale(identifier: UserDefaults.standard.string(forKey: "wallet.language") ?? Locale.preferredLanguages.first ?? "en")
+    }
+
     static func decimal(from text: String, locale: Locale) -> Decimal? {
         let formatter = NumberFormatter()
         formatter.locale = locale

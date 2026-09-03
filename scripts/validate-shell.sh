@@ -38,6 +38,12 @@ require_text Shell/Features/SettingsView.swift 'wallet.currencySign(for:'
 require_text Shell/Services/AdConsentService.swift 'ConsentForm.loadAndPresentIfRequired'
 require_text Shell/Services/AdaptiveAdBanner.swift '.frame(height: adSize.size.height)'
 require_text Shell/Services/PurchaseService.swift 'Transaction.currentEntitlements'
+require_text Shell/Resources/Info-Ads.plist 'ITSAppUsesNonExemptEncryption'
+require_text .github/workflows/testflight.yml 'UPLOAD WELDING WALLET PRODUCTION TEST'
+require_text .github/workflows/testflight.yml 'ca-app-pub-3940256099942544/2435281174'
+require_text .github/workflows/testflight.yml 'Run unit tests before upload'
+require_text .github/workflows/testflight.yml 'date -u +%y%m%d%H%M'
+require_text Shell/Features/SettingsView.swift 'activeCylinderLimit: model.access.isEntitled ? nil : 3'
 
 for url in privacy terms support deletion disclaimer; do
   require_text Shell/App/ShellConfiguration.swift "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/$url/"
@@ -64,6 +70,7 @@ fi
 
 if [[ "$mode" == "--release" ]]; then
   reject_tree_text 'MISSING_PRODUCTION_ADMOB' Shell/Resources
+  reject_tree_text 'MISSING_PRODUCTION_ADMOB' project.yml
 fi
 
 echo "Welding Gas Wallet iOS validation passed ($mode)."

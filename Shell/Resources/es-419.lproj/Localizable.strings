@@ -57,6 +57,7 @@
 "paywall.benefit.support" = "Restaura Pro con tu cuenta de Apple";
 "paywall.purchase" = "Pasar a Pro";
 "paywall.loadingProduct" = "Cargando el precio de App Store…";
+"paywall.retryProduct" = "Reintentar App Store";
 "paywall.restore" = "Restaurar compras";
 "paywall.subscriptionDisclosure" = "El pago se carga a tu cuenta de Apple al confirmar. La suscripción se renueva automáticamente salvo que la canceles en los ajustes de tu cuenta de Apple antes de la renovación.";
 "paywall.period.day.one" = "cada día";
@@ -153,6 +154,13 @@
 "backup.fileCreated" = "Se creó el archivo de respaldo";
 "backup.notSaved" = "No se guardó el respaldo";
 "backup.restored" = "Se restauró el respaldo";
+"backup.activeLimit" = "Este respaldo supera el límite gratuito de %lld cilindros activos. Pasa a Pro antes de restaurarlo.";
+"backup.error.tooLarge" = "El respaldo supera los 5 MB.";
+"backup.error.unsupported" = "Este formato de respaldo no es compatible.";
+"backup.error.invalid" = "El respaldo contiene registros no válidos o incoherentes.";
+"purchase.productUnavailable" = "El producto de App Store no está disponible. Inténtalo de nuevo más tarde.";
+"purchase.pending" = "La compra está pendiente de aprobación. El acceso se actualizará automáticamente cuando App Store la complete.";
+"purchase.verificationFailed" = "No se pudo verificar la transacción de App Store.";
 "delete.confirmationWord" = "BORRAR";
 "delete.typeWord" = "Escribe BORRAR";
 

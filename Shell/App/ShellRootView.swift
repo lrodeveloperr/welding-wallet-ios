@@ -98,7 +98,7 @@ struct ShellRootView: View {
                         if destination.id == "cylinders" {
                             Label("Cylinders", image: "CylinderTabIcon")
                         } else {
-                            Label(destination.id.capitalized, systemImage: destination.symbol)
+                            Label { Text(LocalizedStringKey(destination.titleKey)) } icon: { Image(systemName: destination.symbol) }
                         }
                     }
                 }

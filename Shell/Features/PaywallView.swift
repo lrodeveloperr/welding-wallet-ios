@@ -45,8 +45,16 @@ struct PaywallView: View {
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
                     .accessibilityIdentifier("shell.paywall.purchase")
-                } else {
+                } else if model.access.purchases.isLoadingProducts {
                     ProgressView("paywall.loadingProduct").frame(maxWidth: .infinity)
+                } else {
+                    Button("paywall.retryProduct") {
+                        Task { await model.access.purchases.start() }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .frame(maxWidth: .infinity)
+                    .accessibilityIdentifier("shell.paywall.retryProduct")
                 }
 
                 if model.access.purchases.primaryProduct?.subscription != nil {

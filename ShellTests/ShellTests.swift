@@ -87,6 +87,16 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertFalse(ShellConfiguration.supportedLanguages.contains { $0.id == "system" })
         XCTAssertTrue(ShellConfiguration.supportedLanguages.contains { $0.id == "en" })
         XCTAssertEqual(ShellConfiguration.supportedLanguages.map(\.id), ["en", "es-419"])
+        XCTAssertEqual(LanguageController.closestSupported(to: "es-MX"), "es-419")
+        XCTAssertEqual(LanguageController.closestSupported(to: "zh-Hans"), "en")
+        XCTAssertEqual(LanguageController.closestSupported(to: "fr-CA"), "en")
+    }
+
+    func testStaleStoredLanguageFallsBackToSupportedLocale() {
+        let defaults = makeDefaults()
+        defaults.set("zh-Hans", forKey: "wallet.language")
+        let controller = LanguageController(defaults: defaults, preferredLanguages: ["es-MX"])
+        XCTAssertEqual(controller.selection, "es-419")
     }
 
     func testEveryPublishedLegalDestinationIsSecureAndProductSpecific() {
@@ -112,6 +122,20 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertEqual(ShellContract.currentVersion.split(separator: ".").count, 3)
     }
 
+    func testFreeBackupRestoreCannotBypassActiveCylinderLimit() throws {
+        let source = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        for index in 1...4 {
+            XCTAssertNotNil(source.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "LIMIT-\(index)"))
+        }
+        let target = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        XCTAssertThrowsError(try target.restore(from: source.exportData(), activeCylinderLimit: 3)) { error in
+            guard case WalletError.activeCylinderLimit(3) = error else {
+                return XCTFail("Unexpected error: \(error)")
+            }
+        }
+        XCTAssertTrue(target.cylinders.isEmpty)
+    }
+
     private func resolve(_ mode: MonetizationMode, entitled: Bool, checking: Bool, free: Bool) -> AccessDecision {
         AccessController.resolveDecision(mode: mode, isEntitled: entitled, isChecking: checking, hasFreeActionRemaining: free)
     }
@@ -122,5 +146,9 @@ final class WeldingGasWalletTests: XCTestCase {
 
     private func makeDefaults() -> UserDefaults {
         UserDefaults(suiteName: "WeldingGasWalletTests.\(UUID().uuidString)")!
+    }
+
+    private func temporaryWalletURL() -> URL {
+        FileManager.default.temporaryDirectory.appending(path: "wallet-test-\(UUID().uuidString).json")
     }
 }
