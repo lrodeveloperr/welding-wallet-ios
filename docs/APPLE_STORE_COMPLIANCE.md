@@ -29,7 +29,7 @@ Reviewed against Apple’s official material on **2026-09-02**. Apple’s App Re
 
 - [ ] Digital features/content use StoreKit In-App Purchase unless a current guideline exception applies and is documented.
 - [ ] Before confirmation, the commerce surface clearly states the exact benefit, StoreKit-fetched localized price and billing period. Do not hard-code a storefront price.
-- [ ] The configured monthly product uses the approved US$1.99 reference price and geo-priced territory equivalents in App Store Connect; repository code remains price-agnostic.
+- [ ] The configured monthly product uses the approved US$1.99 base price in App Store Connect. Repository code has no location-based pricing rules and displays StoreKit’s storefront-localized price and currency.
 - [ ] Auto-renewal is disclosed; privacy and Terms of Use are visible; subscription grouping prevents accidental duplicate subscriptions.
 - [ ] Restore is visible for restorable purchases. Pending, cancelled, unverified, expired, refunded or revoked transactions never unlock access.
 - [ ] Purchase success is verified through StoreKit; `Transaction.updates` and current entitlements keep access current.
@@ -41,12 +41,11 @@ Reviewed against Apple’s official material on **2026-09-02**. Apple’s App Re
 - [ ] House rule: in-app paywall, purchase, restore, subscription and win-back surfaces contain no app logo, AppIcon, custom brand mark or app-name hero. Run `scripts/check-commerce-branding.sh`. This is intentionally stricter than Apple’s published in-app UI rule and prevents recurrence of the prior rejection pattern.
 - [ ] Standard Apple EULA link appears in the description when used, or the custom EULA is configured in App Store Connect.
 
-## Advertising profile
+## Subscription-only profile
 
-- [ ] Non-ad apps archive the default `Shell` target. Confirm the archive has no GoogleMobileAds/UMP framework and its Info.plist has no GAD or SKAdNetwork metadata.
-- [ ] Ad-supported apps deliberately archive `WeldingGasWallet`, replace demo IDs, configure UMP/privacy choices, and reconcile SDK behavior with privacy disclosures.
-- [ ] Ads are identifiable, age-appropriate, non-deceptive and do not block core use or manipulate taps. Any dismiss control is visible and usable.
-- [ ] The app is not predominantly an advertisement and does not artificially increase impressions or clicks.
+- [ ] Archive `WeldingGasWallet` and confirm it has no GoogleMobileAds/UMP framework, GAD/SKAdNetwork metadata, ad unit IDs, consent controls, or reserved banner spacing.
+- [ ] Free users can use the complete wallet with no more than three active cylinders; a verified monthly entitlement removes only that cylinder limit.
+- [ ] Settings, backup restore, duplicate/add actions, and the paywall all apply the same three-active-cylinder rule.
 
 ## Full App Review Guidelines applicability sweep
 
@@ -68,7 +67,7 @@ Do not mark a family N/A as a whole. Review its current subsections. Examples th
 - Shell contract version:
 - Review date and guideline “Last Updated” date:
 - Monetization mode and App Store product IDs:
-- Archive target (`Shell` or `WeldingGasWallet`):
+- Archive target (`WeldingGasWallet`):
 - Data collected/tracked and SDK inventory:
 - Legal document versions/URLs:
 - Review access/sample data supplied:

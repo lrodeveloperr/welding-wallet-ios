@@ -22,7 +22,7 @@ struct PaywallView: View {
                 Text("paywall.message")
                     .font(.title3)
                     .foregroundStyle(.secondary)
-                ForEach(["paywall.benefit.unlimited", "paywall.benefit.noAds", "paywall.benefit.support"], id: \.self) { benefit in
+                ForEach(["paywall.benefit.unlimited", "paywall.benefit.readiness", "paywall.benefit.history"], id: \.self) { benefit in
                     Label(LocalizedStringKey(benefit), systemImage: "checkmark.circle.fill")
                         .symbolRenderingMode(.hierarchical)
                 }

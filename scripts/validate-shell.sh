@@ -14,18 +14,17 @@ reject_tree_text() { ! rg -n "$1" "$2" || fail "Forbidden implementation detecte
 
 [[ -x scripts/validate-shell.sh ]] || fail "scripts/validate-shell.sh must retain its executable bit"
 
-for path in project.yml README.md Shell/App/WeldingGasWalletApp.swift Shell/App/ShellConfiguration.swift Shell/App/ShellRootView.swift Shell/Features/FeatureView.swift Shell/Features/WalletStore.swift Shell/Features/SettingsView.swift Shell/Services/PurchaseService.swift Shell/Services/AdConsentService.swift Shell/Services/AdaptiveAdBanner.swift Shell/Resources/Info-Ads.plist Shell/Resources/PrivacyInfo.xcprivacy Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/Contents.json Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/CylinderTabIcon.svg; do
+for path in project.yml README.md Shell/App/WeldingGasWalletApp.swift Shell/App/ShellConfiguration.swift Shell/App/ShellRootView.swift Shell/Features/FeatureView.swift Shell/Features/WalletStore.swift Shell/Features/SettingsView.swift Shell/Features/PaywallView.swift Shell/Services/PurchaseService.swift Shell/Resources/Info.plist Shell/Resources/PrivacyInfo.xcprivacy Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/Contents.json Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/CylinderTabIcon.svg; do
   require_file "$path"
 done
 
 reject_tree_text 'import (Flutter|React|ReactNative)|FlutterViewController|RCTRootView' Shell
 require_text project.yml 'name: WeldingGasWallet'
 require_text project.yml 'PRODUCT_BUNDLE_IDENTIFIER: com.goodusestudios.weldinggaswallet'
-require_text project.yml 'SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ADS_ENABLED"'
-require_text Shell/App/ShellConfiguration.swift 'mode: .adsWithSubscription'
+require_text project.yml 'INFOPLIST_FILE: Shell/Resources/Info.plist'
+require_text Shell/App/ShellConfiguration.swift 'mode: .freemiumWithSubscription'
 require_text Shell/App/ShellConfiguration.swift 'com.gooduse.weldinggaswallet.pro.monthly'
 require_text Shell/App/ShellConfiguration.swift 'BackupConfiguration(enabled: true)'
-require_text Shell/App/ShellRootView.swift '.safeAreaInset(edge: .bottom, spacing: 0) { adBanner }'
 require_text Shell/App/ShellRootView.swift 'Label("Cylinders", image: "CylinderTabIcon")'
 require_text Shell/App/ShellRootView.swift 'SettingsView(model: model, wallet: wallet)'
 require_text Shell/App/ShellRootView.swift '.environment(model)'
@@ -37,16 +36,20 @@ require_text Shell/Features/WalletStore.swift 'func deleteAllData()'
 require_text Shell/Features/WalletStore.swift 'try? await Task.sleep(for: .seconds(15))'
 require_text Shell/Features/SettingsView.swift 'delete.confirmationWord'
 require_text Shell/Features/SettingsView.swift 'wallet.currencySign(for:'
-require_text Shell/Services/AdConsentService.swift 'ConsentForm.loadAndPresentIfRequired'
-require_text Shell/Services/AdaptiveAdBanner.swift '.frame(height: adSize.size.height)'
 require_text Shell/Services/PurchaseService.swift 'Transaction.currentEntitlements'
-require_text Shell/Resources/Info-Ads.plist 'ITSAppUsesNonExemptEncryption'
-require_text .github/workflows/testflight.yml 'UPLOAD WELDING WALLET PRODUCTION TEST'
-require_text .github/workflows/testflight.yml 'ca-app-pub-3940256099942544/2435281174'
+require_text Shell/Resources/Info.plist 'ITSAppUsesNonExemptEncryption'
+require_text Shell/Features/PaywallView.swift 'paywall.benefit.readiness'
+require_text Shell/Features/PaywallView.swift 'paywall.benefit.history'
+require_text Shell/Features/SettingsView.swift 'settings.upgrade.price %@'
+require_text .github/workflows/testflight.yml 'UPLOAD WELDING WALLET SUBSCRIPTION TEST'
 require_text .github/workflows/testflight.yml 'Run unit tests before upload'
 require_text .github/workflows/testflight.yml 'ENABLE_TESTABILITY=YES'
 require_text .github/workflows/testflight.yml 'date -u +%y%m%d%H%M'
 require_text Shell/Features/SettingsView.swift 'activeCylinderLimit: model.access.isEntitled ? nil : 3'
+
+for path in project.yml Shell; do
+  reject_tree_text 'GoogleMobileAds|UserMessagingPlatform|GADApplicationIdentifier|WeldingAdBannerUnitID|ADS_ENABLED|WELDING_IOS_ADMOB|ca-app-pub-' "$path"
+done
 
 for url in privacy terms support deletion disclaimer; do
   require_text Shell/App/ShellConfiguration.swift "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/$url/"
@@ -67,13 +70,8 @@ for workflow in .github/workflows/*.yml; do
 done
 
 if command -v plutil >/dev/null 2>&1; then
-  plutil -lint Shell/Resources/Info-Ads.plist >/dev/null
+  plutil -lint Shell/Resources/Info.plist >/dev/null
   plutil -lint Shell/Resources/PrivacyInfo.xcprivacy >/dev/null
-fi
-
-if [[ "$mode" == "--release" ]]; then
-  reject_tree_text 'MISSING_PRODUCTION_ADMOB' Shell/Resources
-  reject_tree_text 'MISSING_PRODUCTION_ADMOB' project.yml
 fi
 
 echo "Welding Gas Wallet iOS validation passed ($mode)."

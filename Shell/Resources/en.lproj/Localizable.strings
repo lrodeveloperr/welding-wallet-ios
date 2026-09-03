@@ -11,7 +11,6 @@
 "terms" = "Terms";
 "upgrade" = "Upgrade";
 "store" = "Store";
-"advertisement" = "Advertisement";
 "access.checking" = "Checking App Store access…";
 "access.purchase.title" = "Upgrade required";
 "access.purchase.message" = "Upgrade to use this feature.";
@@ -50,12 +49,12 @@
 "feature.replaceDetail" = "Replace with feature-specific content.";
 "usage.remaining %lld" = "%lld free actions remaining";
 
-"paywall.title" = "Your whole cylinder inventory. One wallet.";
-"paywall.message" = "Upgrade Welding Gas Wallet to track more than three active cylinders and work without banner ads.";
-"paywall.benefit.unlimited" = "Track unlimited active cylinders";
-"paywall.benefit.noAds" = "Remove banner advertising";
-"paywall.benefit.support" = "Restore Pro with your Apple Account";
-"paywall.purchase" = "Upgrade to Pro";
+"paywall.title" = "Know what’s ready before the next job.";
+"paywall.message" = "Keep every cylinder visible so you can spot low gas before work stalls or a supplier run gets missed.";
+"paywall.benefit.unlimited" = "Track every shop and job-site cylinder";
+"paywall.benefit.readiness" = "See low, empty, and away cylinders at a glance";
+"paywall.benefit.history" = "Keep refill costs, suppliers, and history together";
+"paywall.purchase" = "Unlock unlimited tracking";
 "paywall.loadingProduct" = "Loading App Store price…";
 "paywall.retryProduct" = "Retry App Store";
 "paywall.restore" = "Restore purchases";
@@ -69,14 +68,12 @@
 "paywall.period.year.one" = "every year";
 "paywall.period.year.other %lld" = "every %lld years";
 "paywall.period.unknown" = "subscription period";
+"settings.upgrade.unlimited" = "Track unlimited active cylinders";
+"settings.upgrade.price %@" = "Unlimited cylinders · %@/month";
 
 "upgrade.subtitle" = "Manage purchases and restore access";
 "language" = "Language";
 "support" = "Help & support";
-"privacyOptions" = "Privacy choices";
-"privacyOptions.subtitle" = "Review advertising consent";
-"privacyRetry" = "Retry privacy setup";
-"privacyRetry.subtitle" = "Ads remain off until setup succeeds";
 "legal" = "Legal";
 "privacyPolicy" = "Privacy Policy";
 "termsOfUse" = "Terms of Use";
@@ -247,7 +244,6 @@
 "Notes (optional)" = "Notes (optional)";
 
 "Upgrade" = "Upgrade";
-"Remove ads and cylinder limit" = "Remove ads and cylinder limit";
 "Language" = "Language";
 "Choose the app language" = "Choose the app language";
 "Currency" = "Currency";
@@ -259,7 +255,6 @@
 "Optional native file backup" = "Optional native file backup";
 "Help" = "Help";
 "Simple numbered guide" = "Simple numbered guide";
-"Ad privacy choices" = "Ad privacy choices";
 "Privacy policy" = "Privacy policy";
 "Terms of use" = "Terms of use";
 "Support" = "Support";

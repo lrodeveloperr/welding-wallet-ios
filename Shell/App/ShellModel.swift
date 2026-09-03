@@ -15,28 +15,21 @@ final class ShellModel {
     var startupMessage: String?
 
     let access: AccessController
-    let ads: AdConsentService
     let language: LanguageController
     let backup: BackupCoordinator
     private let migrationManager: ShellMigrationManager
 
     init(
         access: AccessController = AccessController(),
-        ads: AdConsentService = AdConsentService(),
         language: LanguageController = LanguageController(),
         backup: BackupCoordinator = BackupCoordinator(),
         migrationManager: ShellMigrationManager = ShellMigrationManager()
     ) {
         self.access = access
-        self.ads = ads
         self.language = language
         self.backup = backup
         self.migrationManager = migrationManager
     }
-
-    /// The free layout always reserves the lower banner slot. The banner itself
-    /// only requests an ad after the consent controller allows it.
-    var shouldRenderAd: Bool { access.shouldShowAd }
 
     func start() async {
         do { try migrationManager.migrateIfNeeded(using: ShellConfiguration.migrations) }
@@ -45,9 +38,5 @@ final class ShellModel {
             return
         }
         await access.purchases.start()
-    }
-
-    func prepareAdvertisingIfNeeded() async {
-        await ads.prepareIfNeeded(advertisingEnabled: access.shouldShowAd)
     }
 }

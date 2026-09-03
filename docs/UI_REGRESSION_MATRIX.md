@@ -5,16 +5,15 @@ Run only when the user authorizes testing. Source tests live in `WeldingGasWalle
 | Destination | Size / mode | Required checks |
 |---|---|---|
 | Small iPhone | current compact supported iPhone, portrait | no clipping; onboarding fits; checkbox and legal links reachable; keyboard does not hide action; paywall price/period/restore/legal visible |
-| Large iPhone | portrait and landscape | readable line lengths; sheets dismiss; bottom navigation and optional banner do not overlap |
+| Large iPhone | portrait and landscape | readable line lengths; sheets dismiss; bottom navigation never overlaps content |
 | iPad | compact and regular split/full screen | adaptive sidebar/tab behavior; no empty unusable column; sheets and forms remain bounded |
 | Accessibility | largest accessibility Dynamic Type | scrolling preserves every action; labels do not truncate meaning; 44-point targets |
 | VoiceOver | iPhone and iPad | logical order; icons have labels; purchase price/period and restore are announced |
 | RTL | Arabic or Hebrew pseudolocalized build | navigation, chevrons, text alignment and directional icons mirror correctly |
 | Localization | every advertised locale | no raw keys, accidental English, clipped price/period or untranslated legal/purchase text |
 | Onboarding | first install and revised legal version | exactly one explicit acceptance gate; links readable before acceptance; re-consent triggers after version change |
-| Commerce | one-time, subscription, cap exhausted, pending, cancelled, failure, restore | accurate StoreKit terms; no app logo/icon/brand asset; no false unlock; recovery is clear |
-| Ads target | consent required/not required/error; remove-ads bought | no request before consent permits; privacy choices available; banner above navigation; removed after verified entitlement |
-| Ad-free target | default `Shell` archive | no banner gap; no Google SDK linkage; no GAD/SKAdNetwork metadata |
+| Commerce | subscription, free cylinder cap, pending, cancelled, failure, restore | accurate StoreKit terms; no app logo/icon/brand asset; no false unlock; recovery is clear |
+| Subscription-only archive | `WeldingGasWallet` | no banner gap, ad settings, Google SDK linkage, ad unit IDs, or GAD/SKAdNetwork metadata |
 | Backup option | disabled and app-enabled provider | no UI/capability when disabled; explicit conflict choice; failed restore preserves device data |
 
 Required automation destinations when execution is authorized:
@@ -24,4 +23,3 @@ Required automation destinations when execution is authorized:
 - A current iPad simulator.
 - English, Spanish and an RTL locale.
 - Default and accessibility Dynamic Type sizes.
-

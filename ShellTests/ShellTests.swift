@@ -4,8 +4,9 @@ import XCTest
 @MainActor
 final class WeldingGasWalletTests: XCTestCase {
     func testAllMonetizationModesResolveAccess() {
-        for mode in [MonetizationMode.free, .ads, .adsWithRemovePurchase, .adsWithSubscription] {
+        for mode in [MonetizationMode.free, .freemiumWithSubscription] {
             XCTAssertEqual(resolve(mode, entitled: false, checking: true, free: false), .allowed)
+            XCTAssertEqual(resolve(mode, entitled: false, checking: false, free: false), .allowed)
         }
         for mode in [MonetizationMode.oneTimeUnlock, .subscription] {
             XCTAssertEqual(resolve(mode, entitled: true, checking: false, free: false), .allowed)
@@ -18,14 +19,6 @@ final class WeldingGasWalletTests: XCTestCase {
             XCTAssertEqual(resolve(mode, entitled: false, checking: true, free: false), .checkingEntitlement)
             XCTAssertEqual(resolve(mode, entitled: false, checking: false, free: false), .usageLimitReached)
         }
-    }
-
-    func testAdVisibilityNeverLeaksBeforeRemoveAdsEntitlementCheck() {
-        XCTAssertTrue(AccessController.resolveAdVisibility(mode: .ads, isEntitled: false, isChecking: true))
-        XCTAssertFalse(AccessController.resolveAdVisibility(mode: .adsWithRemovePurchase, isEntitled: false, isChecking: true))
-        XCTAssertTrue(AccessController.resolveAdVisibility(mode: .adsWithRemovePurchase, isEntitled: false, isChecking: false))
-        XCTAssertFalse(AccessController.resolveAdVisibility(mode: .adsWithRemovePurchase, isEntitled: true, isChecking: false))
-        XCTAssertFalse(AccessController.resolveAdVisibility(mode: .subscription, isEntitled: false, isChecking: false))
     }
 
     func testSuccessfulUsageIsPersistentAndDeduplicated() {
@@ -71,9 +64,7 @@ final class WeldingGasWalletTests: XCTestCase {
 
     func testProductIdentifiersAreSelectedByProfile() {
         XCTAssertEqual(configuration(.free).productIDs, [])
-        XCTAssertEqual(configuration(.ads).productIDs, [])
-        XCTAssertEqual(configuration(.adsWithRemovePurchase).productIDs, ["lifetime"])
-        XCTAssertEqual(configuration(.adsWithSubscription).productIDs, ["monthly"])
+        XCTAssertEqual(configuration(.freemiumWithSubscription).productIDs, ["monthly"])
         XCTAssertEqual(configuration(.oneTimeUnlock).productIDs, ["lifetime"])
         XCTAssertEqual(configuration(.subscription).productIDs, ["monthly"])
         XCTAssertEqual(configuration(.usageCapWithOneTimeUnlock).productIDs, ["lifetime"])

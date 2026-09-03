@@ -41,7 +41,7 @@ final class AccessController {
         hasFreeActionRemaining: Bool
     ) -> AccessDecision {
         switch mode {
-        case .free, .ads, .adsWithRemovePurchase, .adsWithSubscription:
+        case .free, .freemiumWithSubscription:
             .allowed
         case .oneTimeUnlock, .subscription:
             if isEntitled { .allowed }
@@ -60,25 +60,6 @@ final class AccessController {
             usage.remaining
         default:
             nil
-        }
-    }
-
-    var shouldShowAd: Bool {
-        Self.resolveAdVisibility(
-            mode: configuration.mode,
-            isEntitled: isEntitled,
-            isChecking: purchases.isChecking
-        )
-    }
-
-    static func resolveAdVisibility(mode: MonetizationMode, isEntitled: Bool, isChecking: Bool) -> Bool {
-        switch mode {
-        case .ads:
-            true
-        case .adsWithRemovePurchase, .adsWithSubscription:
-            !isChecking && !isEntitled
-        default:
-            false
         }
     }
 

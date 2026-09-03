@@ -4,12 +4,11 @@ The compiled shell contract is `ShellContract.currentVersion`. A derived app rec
 
 ## Adopt 2.0.0
 
-1. Choose `Shell` for no advertising or `WeldingGasWallet` for an app whose reviewed monetization mode includes ads.
-2. Keep GAD/SKAdNetwork metadata only in `Info-Ads.plist`; never copy it into `Info.plist`.
-3. Remove every app logo, icon, named brand image and app-name hero from commerce surfaces. Run `scripts/check-commerce-branding.sh` when execution is authorized.
-4. Leave `backup.enabled` false unless the app adds a reviewed `NativeBackupProviding` implementation, iCloud entitlement, privacy disclosure, serialization version and rollback-safe conflict behavior.
-5. Advertise a locale only after all shell, product, legal and store text is translated and reviewed. `LocalizationBaseline` is terminology scope, not proof of completion.
-6. Add a migration closure before changing persistent product schema. Each step must be idempotent, preserve a recoverable copy when practical, and update the stored contract version only after success.
+1. Keep this product subscription-only: no advertising dependency, GAD/SKAdNetwork metadata, consent service, reserved banner space, or ad-specific Settings option.
+2. Remove every app logo, icon, named brand image and app-name hero from commerce surfaces. Run `scripts/check-commerce-branding.sh` when execution is authorized.
+3. Leave `backup.enabled` false unless the app adds a reviewed `NativeBackupProviding` implementation, iCloud entitlement, privacy disclosure, serialization version and rollback-safe conflict behavior.
+4. Advertise a locale only after all shell, product, legal and store text is translated and reviewed. `LocalizationBaseline` is terminology scope, not proof of completion.
+5. Add a migration closure before changing persistent product schema. Each step must be idempotent, preserve a recoverable copy when practical, and update the stored contract version only after success.
 
 Example:
 

@@ -14,10 +14,10 @@ enum ShellConfiguration {
     )
     static let onboarding: OnboardingProfile = .legalOnly
 
-    /// Free users keep the complete wallet with a three-active-cylinder limit
-    /// and a lower banner. A verified monthly subscription removes both.
-    /// App Store Connect owns the US$1.99 reference price and geo-priced
-    /// equivalents; customer-facing UI must use StoreKit's localized price.
+    /// Free users keep the complete wallet with a three-active-cylinder limit.
+    /// A verified monthly subscription unlocks unlimited active cylinders.
+    /// App Store Connect owns the US$1.99 monthly price configuration;
+    /// customer-facing UI must use StoreKit's storefront-localized price.
 #if SCREENSHOT_BUILD
     static let monetization = MonetizationConfiguration(
         mode: .free,
@@ -27,15 +27,12 @@ enum ShellConfiguration {
     )
 #else
     static let monetization = MonetizationConfiguration(
-        mode: .adsWithSubscription,
-        freeSuccessfulActions: 3,
+        mode: .freemiumWithSubscription,
+        freeSuccessfulActions: .max,
         lifetimeProductID: "unused",
         subscriptionProductID: "com.gooduse.weldinggaswallet.pro.monthly"
     )
 #endif
-    static let advertising = AdvertisingConfiguration(
-        bannerUnitID: Bundle.main.object(forInfoDictionaryKey: "WeldingAdBannerUnitID") as? String ?? ""
-    )
     static let backup = BackupConfiguration(enabled: true)
     static let migrations: [ShellMigration] = []
     static let destinations: [ShellDestination] = [
@@ -61,7 +58,6 @@ struct LegalConfiguration: Sendable {
     let safetyURL: URL
 }
 enum OnboardingProfile: Equatable, Sendable { case legalOnly, singleScreen, guidedTour }
-struct AdvertisingConfiguration: Sendable { let bannerUnitID: String }
 struct BackupConfiguration: Sendable { let enabled: Bool }
 
 struct MonetizationConfiguration: Sendable {
@@ -71,12 +67,11 @@ struct MonetizationConfiguration: Sendable {
     let subscriptionProductID: String
     var productIDs: Set<String> {
         switch mode {
-        case .adsWithRemovePurchase, .oneTimeUnlock, .usageCapWithOneTimeUnlock: [lifetimeProductID]
-        case .adsWithSubscription, .subscription, .usageCapWithSubscription: [subscriptionProductID]
-        case .free, .ads: []
+        case .oneTimeUnlock, .usageCapWithOneTimeUnlock: [lifetimeProductID]
+        case .freemiumWithSubscription, .subscription, .usageCapWithSubscription: [subscriptionProductID]
+        case .free: []
         }
     }
-    var includesAdvertising: Bool { mode == .ads || mode == .adsWithRemovePurchase || mode == .adsWithSubscription }
     var includesPurchase: Bool { !productIDs.isEmpty }
 }
 
@@ -84,15 +79,13 @@ struct ShellDestination: Hashable, Identifiable, Sendable { let id: String; let 
 struct AppLanguage: Identifiable, Hashable, Sendable { let id: String; let displayName: String }
 
 enum MonetizationMode: String, CaseIterable, Identifiable, Sendable {
-    case free, ads, adsWithRemovePurchase, adsWithSubscription
+    case free, freemiumWithSubscription
     case oneTimeUnlock, subscription, usageCapWithOneTimeUnlock, usageCapWithSubscription
     var id: Self { self }
     var title: String {
         switch self {
         case .free: "Free"
-        case .ads: "Ads"
-        case .adsWithRemovePurchase: "Ads + remove purchase"
-        case .adsWithSubscription: "Ads + subscription"
+        case .freemiumWithSubscription: "Free feature limit + subscription"
         case .oneTimeUnlock: "One-time unlock"
         case .subscription: "Subscription"
         case .usageCapWithOneTimeUnlock: "Usage cap + one-time unlock"

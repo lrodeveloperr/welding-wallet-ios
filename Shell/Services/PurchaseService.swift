@@ -63,11 +63,11 @@ final class PurchaseService {
     var primaryProduct: Product? {
         let desiredID: String
         switch configuration.mode {
-        case .adsWithRemovePurchase, .oneTimeUnlock, .usageCapWithOneTimeUnlock:
+        case .oneTimeUnlock, .usageCapWithOneTimeUnlock:
             desiredID = configuration.lifetimeProductID
-        case .adsWithSubscription, .subscription, .usageCapWithSubscription:
+        case .freemiumWithSubscription, .subscription, .usageCapWithSubscription:
             desiredID = configuration.subscriptionProductID
-        case .free, .ads:
+        case .free:
             return nil
         }
         return products.first { $0.id == desiredID }

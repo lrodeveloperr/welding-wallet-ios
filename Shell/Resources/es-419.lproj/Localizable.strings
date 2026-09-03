@@ -11,7 +11,6 @@
 "terms" = "Condiciones";
 "upgrade" = "Pasar a Pro";
 "store" = "Tienda";
-"advertisement" = "Anuncio";
 "access.checking" = "Comprobando el acceso de App Store…";
 "access.purchase.title" = "Se requiere una mejora";
 "access.purchase.message" = "Mejora el plan para usar esta función.";
@@ -50,12 +49,12 @@
 "feature.replaceDetail" = "Sustituye por contenido específico de la función.";
 "usage.remaining %lld" = "Quedan %lld acciones gratuitas";
 
-"paywall.title" = "Todo tu inventario de cilindros, en un solo lugar.";
-"paywall.message" = "Pasa a Welding Gas Wallet Pro para gestionar más de tres cilindros activos y quitar los anuncios.";
-"paywall.benefit.unlimited" = "Gestiona cilindros activos sin límite";
-"paywall.benefit.noAds" = "Quita los anuncios";
-"paywall.benefit.support" = "Restaura Pro con tu cuenta de Apple";
-"paywall.purchase" = "Pasar a Pro";
+"paywall.title" = "Que no te falte gas a mitad del trabajo.";
+"paywall.message" = "Lleva todos tus cilindros en un solo lugar para detectar cuáles están por acabarse, planear la recarga y evitar vueltas innecesarias al proveedor.";
+"paywall.benefit.unlimited" = "Controla todos los cilindros del taller y de cada obra";
+"paywall.benefit.readiness" = "Identifica de un vistazo los que están bajos, vacíos o fuera del taller";
+"paywall.benefit.history" = "Mantén juntas las recargas, los costos, los proveedores y el historial";
+"paywall.purchase" = "Desbloquear control sin límites";
 "paywall.loadingProduct" = "Cargando el precio de App Store…";
 "paywall.retryProduct" = "Reintentar App Store";
 "paywall.restore" = "Restaurar compras";
@@ -69,14 +68,12 @@
 "paywall.period.year.one" = "cada año";
 "paywall.period.year.other %lld" = "cada %lld años";
 "paywall.period.unknown" = "periodo de suscripción";
+"settings.upgrade.unlimited" = "Controla cilindros activos sin límite";
+"settings.upgrade.price %@" = "Cilindros sin límite · %@ al mes";
 
 "upgrade.subtitle" = "Gestiona las compras y restaura el acceso";
 "language" = "Idioma";
 "support" = "Ayuda y soporte";
-"privacyOptions" = "Opciones de privacidad";
-"privacyOptions.subtitle" = "Revisa el consentimiento publicitario";
-"privacyRetry" = "Reintentar la configuración de privacidad";
-"privacyRetry.subtitle" = "Los anuncios siguen desactivados hasta completar la configuración";
 "legal" = "Información legal";
 "privacyPolicy" = "Política de privacidad";
 "termsOfUse" = "Condiciones de uso";
@@ -247,7 +244,6 @@
 "Notes (optional)" = "Notas (opcional)";
 
 "Upgrade" = "Pasar a Pro";
-"Remove ads and cylinder limit" = "Quita los anuncios y el límite de cilindros";
 "Language" = "Idioma";
 "Choose the app language" = "Elige el idioma de la app";
 "Currency" = "Moneda";
@@ -259,7 +255,6 @@
 "Optional native file backup" = "Respaldo opcional en un archivo";
 "Help" = "Ayuda";
 "Simple numbered guide" = "Guía breve paso a paso";
-"Ad privacy choices" = "Opciones de privacidad de anuncios";
 "Privacy policy" = "Política de privacidad";
 "Terms of use" = "Condiciones de uso";
 "Support" = "Soporte";

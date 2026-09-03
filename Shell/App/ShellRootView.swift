@@ -73,15 +73,6 @@ struct ShellRootView: View {
         }
         .task {
             await model.start()
-            if !screenshotMode && !legalConsent.requiresPresentation { await model.prepareAdvertisingIfNeeded() }
-        }
-        .onChange(of: legalConsent.requiresPresentation) { _, requiresPresentation in
-            if !screenshotMode && !requiresPresentation { Task { await model.prepareAdvertisingIfNeeded() } }
-        }
-        .onChange(of: model.access.shouldShowAd) { _, shouldShowAd in
-            if !screenshotMode && shouldShowAd && !legalConsent.requiresPresentation {
-                Task { await model.prepareAdvertisingIfNeeded() }
-            }
         }
     }
 
@@ -110,23 +101,8 @@ struct ShellRootView: View {
     private func destinationStack(_ destination: ShellDestination) -> some View {
         NavigationStack {
             FeatureCanvasHost(destination: destination, provider: featureProvider)
-                .safeAreaInset(edge: .bottom, spacing: 0) { adBanner }
                 .navigationTitle(LocalizedStringKey(destination.titleKey))
                 .shellSettingsToolbar()
-        }
-    }
-
-    @ViewBuilder
-    private var adBanner: some View {
-        if model.shouldRenderAd {
-            AdaptiveAdBanner(
-                adUnitID: ShellConfiguration.advertising.bannerUnitID,
-                requestsAds: !screenshotMode && model.ads.canRequestAds
-            )
-            .accessibilityLabel(Text("advertisement"))
-            .accessibilityIdentifier("shell.ad.slot")
-            .frame(maxWidth: .infinity)
-            .background(.bar)
         }
     }
 }

@@ -16,7 +16,7 @@ struct SettingsView: View {
             if !model.access.isEntitled {
                 Section {
                     Button { showPaywall = true } label: {
-                        SettingsLabel("Upgrade", subtitle: "Remove ads and cylinder limit", symbol: "sparkles")
+                        SettingsLabel("Upgrade", verbatimSubtitle: upgradeSubtitle, symbol: "sparkles")
                     }
                     .accessibilityIdentifier("shell.settings.upgrade")
                 }
@@ -26,9 +26,6 @@ struct SettingsView: View {
                 NavigationLink { CurrencyView(wallet: wallet) } label: { SettingsLabel("Currency", verbatimSubtitle: "\(wallet.currencySign(for: wallet.defaultCurrency)) · \(AppLocalization.string(wallet.currencyOverride == nil ? "Automatic" : "Selected", locale: locale))", symbol: "dollarsign.circle") }
                 NavigationLink { BackupView(wallet: wallet, activeCylinderLimit: model.access.isEntitled ? nil : 3) } label: { SettingsLabel("Backup", subtitle: "Optional native file backup", symbol: "externaldrive.badge.icloud") }
                 NavigationLink { HelpView() } label: { SettingsLabel("Help", subtitle: "Simple numbered guide", symbol: "questionmark.circle") }
-                if model.access.configuration.includesAdvertising && model.ads.isPrivacyOptionsRequired {
-                    Button { Task { await model.ads.presentPrivacyOptions() } } label: { SettingsLabel("Ad privacy choices", subtitle: nil, symbol: "hand.raised.square") }
-                }
             }
             Section {
                 legalButton(.privacy, title: "Privacy policy", symbol: "hand.raised.shield")
@@ -59,6 +56,13 @@ struct SettingsView: View {
 
     private var deletionPhraseMatches: Bool {
         deletePhrase.trimmingCharacters(in: .whitespacesAndNewlines).localizedCaseInsensitiveCompare(AppLocalization.string("delete.confirmationWord", locale: locale)) == .orderedSame
+    }
+
+    private var upgradeSubtitle: String {
+        guard let product = model.access.purchases.primaryProduct else {
+            return AppLocalization.string("settings.upgrade.unlimited", locale: locale)
+        }
+        return AppLocalization.string("settings.upgrade.price %@", locale: locale, product.displayPrice)
     }
 
     private func legalButton(_ document: LegalDocument, title: String, symbol: String) -> some View {
