@@ -13,6 +13,8 @@ enum ShellConfiguration {
 
     /// Free users keep the complete wallet with a three-active-cylinder limit
     /// and a lower banner. A verified monthly subscription removes both.
+    /// App Store Connect owns the US$1.99 reference price and geo-priced
+    /// equivalents; customer-facing UI must use StoreKit's localized price.
 #if SCREENSHOT_BUILD
     static let monetization = MonetizationConfiguration(
         mode: .free,
