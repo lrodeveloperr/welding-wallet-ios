@@ -322,7 +322,7 @@ final class WalletStore {
     /// Deterministic, screenshot-only fixture spanning September 2025 through
     /// August 2026. It is activated exclusively by the UI-test launch flag and
     /// never enters a normal user's on-device wallet.
-    static func screenshotYear() -> WalletStore {
+    static func screenshotYear(openSlot: Bool = false) -> WalletStore {
         let store = WalletStore(
             fileURL: FileManager.default.temporaryDirectory.appending(path: "welding-wallet-screenshots-\(UUID().uuidString).json"),
             loadExisting: false
@@ -351,6 +351,9 @@ final class WalletStore {
             CylinderRecord(id: oxygenID, gas: "Oxygen", capacityValue: 40, capacityUnit: "ft3", supplierID: airLiquideID, relationship: .owned, serial: "OX-2037", status: .away, acquiredAt: date(2026, 1, 12), notes: "With mobile repair kit"),
             CylinderRecord(id: acetyleneID, gas: "Acetylene", capacityValue: 75, capacityUnit: "ft3", supplierID: localID, relationship: .deposit, serial: "AC-7315", status: .empty, lifecycle: .archived, acquiredAt: date(2025, 9, 18), notes: "Returned after torch upgrade"),
         ]
+        if openSlot, let index = store.cylinders.firstIndex(where: { $0.id == oxygenID }) {
+            store.cylinders[index].lifecycle = .archived
+        }
         store.activity = [
             ActivityRecord(cylinderID: c25ID, kind: .status, occurredAt: date(2026, 8, 28), title: "C25 Mix marked Low", detail: "Linde Canada · 125 ft³"),
             ActivityRecord(cylinderID: oxygenID, kind: .status, occurredAt: date(2026, 8, 12), title: "Oxygen marked Away", detail: "Mobile repair job"),
