@@ -32,12 +32,15 @@ This is the source-level acceptance gate for Settings. Device and StoreKit check
 
 ## Localization and culture
 
-- [x] English and Latin American Spanish catalogs have exact key parity and matching format placeholders.
-- [x] The language selector exposes only completed catalogs; the 29 target locales in the welding glossary remain blocked until full cultural review.
+- [x] All 31 selectable catalogs have exact 288-key parity and matching format placeholders.
+- [x] Every language is presented under its native autonym; regional/script fallback is explicit rather than accidental.
+- [x] The 29 added catalogs combine full automated coverage, matching previously reviewed product translations, the shared reviewed baseline and enforced welding terminology.
+- [x] Subscription and inactive-status labels use locale-specific nouns and matching grammar rather than template vocabulary.
+- [ ] A fluent regional reviewer validates every added catalog in screen context; generated coverage is not represented as native approval.
 - [x] Latin American welding terminology uses `cilindro`, `recarga`, `proveedor`, `poco gas` and `fuera del taller` in the relevant product states.
 - [x] StoreKit owns customer-facing currency and price localization; Settings contains no hard-coded US-dollar price.
 - [x] Persisted record values remain canonical while user-facing statuses, lifecycle states, gases, errors and actions resolve through localized display keys.
-- [x] Locale infrastructure explicitly changes SwiftUI layout direction when an approved Arabic, Urdu or Hebrew catalog is enabled later.
+- [x] Locale infrastructure explicitly changes SwiftUI layout direction for Arabic, Urdu and Hebrew at selection time, including presented sheets.
 - [ ] On-device pass: switch every enabled language while Settings is open and confirm the title and every visible row change with no stray English.
 - [ ] On-device pass: check Settings at accessibility text sizes and verify wrapping, hit targets and VoiceOver order.
 - [ ] On-device pass: verify each subscription condition with StoreKit test accounts, including cancellation and expiration.

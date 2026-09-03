@@ -14,7 +14,9 @@ GLOSSARY_PATH = CATALOG_ROOT / "welding-localization-glossary.json"
 
 locales = re.findall(r'\.init\(id: "([^"]+)", displayName:', CONFIG.read_text())
 EXPECTED_LOCALES = [
-    "en", "es-419",
+    "en", "es-419", "pt", "fr", "de", "it", "nl", "pl", "tr", "ro",
+    "cs", "uk", "ru", "ar", "zh-Hans", "ja", "ko", "hi", "ur", "bn",
+    "vi", "id", "th", "fil", "ms", "fi", "sv", "da", "nb", "el", "he",
 ]
 if locales != EXPECTED_LOCALES:
     sys.exit(f"LOCALIZATION FAILED: language options/order differ from the approved 31 locales: {locales}")
@@ -23,6 +25,10 @@ INTERNATIONAL_UNCHANGED_KEYS = {
     "ok", "0.00", " · ", "Argon", "C25 Mix", "Oxygen", "Acetylene",
     "Nitrogen", "CO₂", "Helium",
 }
+# Common, culturally natural loanwords can legitimately match English exactly.
+LOCALE_UNCHANGED_KEYS = {
+    "fil": {"subscription.status"},
+}
 GLOSSARY_KEYS = {
     "destination.cylinders": "cylinders", "Cylinders": "cylinders",
     "Cylinder": "cylinder", "cylinders.active.label": "active",
@@ -30,12 +36,13 @@ GLOSSARY_KEYS = {
     "status.away": "away", "activity.kind.refill": "refill",
     "Refill": "refill", "Supplier": "supplier",
     "delete.confirmationWord": "delete", "delete.typeWord": "typeDelete",
+    "subscription.status": "subscription", "subscription.inactive": "inactiveSubscription",
 }
 if not GLOSSARY_PATH.is_file():
     sys.exit("LOCALIZATION FAILED: missing welding terminology contract")
 glossary = json.loads(GLOSSARY_PATH.read_text())
-if len(glossary) != 31 or not set(EXPECTED_LOCALES).issubset(glossary):
-    sys.exit("LOCALIZATION FAILED: welding terminology contract does not cover all 31 target locales")
+if list(glossary) != EXPECTED_LOCALES:
+    sys.exit("LOCALIZATION FAILED: welding terminology contract does not cover the approved locale order")
 
 def catalog(path: Path) -> dict[str, str]:
     found = re.findall(
@@ -90,6 +97,7 @@ for locale in locales:
         untranslated = sorted(
             key for key in source
             if key not in INTERNATIONAL_UNCHANGED_KEYS
+            and key not in LOCALE_UNCHANGED_KEYS.get(locale, set())
             and len(source_catalog[key]) >= 12
             and re.search(r"[A-Za-z]{4}", source_catalog[key])
             and current_catalog[key].casefold() == source_catalog[key].casefold()
