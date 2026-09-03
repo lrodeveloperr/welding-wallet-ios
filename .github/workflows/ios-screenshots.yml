@@ -1,6 +1,8 @@
 name: iOS screenshot capture
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -37,14 +39,14 @@ jobs:
       - name: Capture every app screen
         id: capture
         continue-on-error: true
-        env:
-          SCREENSHOT_OUTPUT_DIR: ${{ github.workspace }}/screenshots
         run: |
-          mkdir -p "$SCREENSHOT_OUTPUT_DIR"
           xcodebuild -project WeldingGasWallet.xcodeproj -scheme WeldingGasWallet -configuration Debug -destination "platform=iOS Simulator,id=$DEVICE_ID" -resultBundlePath ScreenshotResults.xcresult CODE_SIGNING_ALLOWED=NO -only-testing:WeldingGasWalletUITests/WeldingGasWalletUITests/testCaptureAllScreens test
       - name: Package screenshots
         if: always()
         run: |
+          rm -rf screenshots
+          mkdir -p screenshots
+          xcrun xcresulttool export attachments --path ScreenshotResults.xcresult --output-path screenshots
           COUNT="$(find screenshots -type f -name '*.png' | wc -l | tr -d ' ')"
           echo "Captured $COUNT of 24 screenshots"
           ditto -c -k --sequesterRsrc --keepParent screenshots WeldingGasWallet-iPhone-All-Screens.zip
