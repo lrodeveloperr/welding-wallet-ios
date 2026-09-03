@@ -62,6 +62,22 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertFalse(snapshot.isEntitled(to: ["unknown"], at: now))
     }
 
+    func testSubscriptionCancellationKeepsAccessUntilPaidExpiration() {
+        let now = Date(timeIntervalSince1970: 1_000)
+        let expiration = now.addingTimeInterval(60)
+        let cancelledRenewal = SubscriptionCondition.subscribed(willAutoRenew: false, expirationDate: expiration)
+        XCTAssertTrue(SubscriptionAccessEvaluation.resolve(condition: cancelledRenewal, at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: cancelledRenewal, at: expiration).grantsAccess)
+    }
+
+    func testGracePeriodGrantsAccessButBillingRetryAndRevocationDoNot() {
+        let now = Date(timeIntervalSince1970: 1_000)
+        XCTAssertTrue(SubscriptionAccessEvaluation.resolve(condition: .gracePeriod(expirationDate: now.addingTimeInterval(60)), at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: .billingRetry, at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: .expired, at: now).grantsAccess)
+        XCTAssertFalse(SubscriptionAccessEvaluation.resolve(condition: .revoked, at: now).grantsAccess)
+    }
+
     func testProductIdentifiersAreSelectedByProfile() {
         XCTAssertEqual(configuration(.free).productIDs, [])
         XCTAssertEqual(configuration(.freemiumWithSubscription).productIDs, ["monthly"])
@@ -113,18 +129,74 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertEqual(ShellContract.currentVersion.split(separator: ".").count, 3)
     }
 
-    func testFreeBackupRestoreCannotBypassActiveCylinderLimit() throws {
+    func testFreeBackupRestorePreservesDataButLocksExcessCylinders() throws {
         let source = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
         for index in 1...4 {
-            XCTAssertNotNil(source.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "LIMIT-\(index)"))
+            XCTAssertNotNil(source.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "LIMIT-\(index)", isEntitled: true))
         }
         let target = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
-        XCTAssertThrowsError(try target.restore(from: source.exportData(), activeCylinderLimit: 3)) { error in
-            guard case WalletError.activeCylinderLimit(3) = error else {
-                return XCTFail("Unexpected error: \(error)")
-            }
+        try target.restore(from: source.exportData(), isEntitled: false)
+        XCTAssertEqual(target.activeCylinders.count, 4)
+        XCTAssertTrue(target.requiresFreeCylinderSelection(isEntitled: false))
+        XCTAssertTrue(target.activeCylinders.allSatisfy { !target.canManageCylinder($0.id, isEntitled: false) })
+    }
+
+    func testExpiredSubscriberChoosesThreeAndExcessMutationsStayLocked() {
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        for index in 1...5 {
+            XCTAssertNotNil(store.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "PRO-\(index)", isEntitled: true))
         }
-        XCTAssertTrue(target.cylinders.isEmpty)
+        store.reconcileAccess(isEntitled: false)
+        XCTAssertTrue(store.requiresFreeCylinderSelection(isEntitled: false))
+
+        let managed = Set(store.activeCylinders.prefix(3).map(\.id))
+        XCTAssertTrue(store.selectFreeManagedCylinders(managed, isEntitled: false))
+        let locked = store.activeCylinders.first { !managed.contains($0.id) }!
+        XCTAssertFalse(store.canManageCylinder(locked.id, isEntitled: false))
+        XCTAssertFalse(store.setStatus(.low, for: locked.id, isEntitled: false))
+        XCTAssertFalse(store.setReminder(.now, for: locked.id, isEntitled: false))
+        XCTAssertFalse(store.recordService(for: locked.id, kind: .refill, amount: 10, currency: "USD", date: .now, isEntitled: false))
+        XCTAssertNil(store.duplicate(locked, isEntitled: false))
+        XCTAssertNil(store.addCylinder(gas: "Oxygen", capacity: 40, unit: "ft3", supplierID: nil, relationship: .owned, serial: "BLOCKED", isEntitled: false))
+
+        var editedLocked = locked
+        editedLocked.notes = "Must not save"
+        XCTAssertFalse(store.update(editedLocked, isEntitled: false))
+
+        store.reconcileAccess(isEntitled: true)
+        XCTAssertTrue(store.canManageCylinder(locked.id, isEntitled: true))
+        XCTAssertTrue(store.update(editedLocked, isEntitled: true))
+    }
+
+    func testFreeSlotCannotBeSwappedUntilManagedCylinderLeavesActiveInventory() {
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        for index in 1...5 {
+            XCTAssertNotNil(store.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "SLOT-\(index)", isEntitled: true))
+        }
+        let managed = Set(store.activeCylinders.prefix(3).map(\.id))
+        XCTAssertTrue(store.selectFreeManagedCylinders(managed, isEntitled: false))
+        let replacement = store.activeCylinders.first { !managed.contains($0.id) }!.id
+        XCTAssertFalse(store.selectFreeManagedCylinders(Set([replacement]), isEntitled: false))
+
+        let departing = managed.first!
+        store.archive(departing, as: .archived)
+        let retained = store.freeManagedCylinderIDs
+        XCTAssertEqual(retained.count, 2)
+        XCTAssertTrue(store.selectFreeManagedCylinders(retained.union([replacement]), isEntitled: false))
+    }
+
+    func testDeleteAddUndoCannotCreateAFreeFourthManagedCylinder() {
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        for index in 1...3 {
+            XCTAssertNotNil(store.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "UNDO-\(index)", isEntitled: false))
+        }
+        store.reconcileAccess(isEntitled: false)
+        store.delete(store.activeCylinders[0].id)
+        XCTAssertNotNil(store.addCylinder(gas: "Oxygen", capacity: 40, unit: "ft3", supplierID: nil, relationship: .owned, serial: "UNDO-4", isEntitled: false))
+        store.undoDelete()
+        XCTAssertEqual(store.activeCylinders.count, 4)
+        XCTAssertTrue(store.requiresFreeCylinderSelection(isEntitled: false))
+        XCTAssertNil(store.addCylinder(gas: "Helium", capacity: 20, unit: "ft3", supplierID: nil, relationship: .owned, serial: "UNDO-5", isEntitled: false))
     }
 
     private func resolve(_ mode: MonetizationMode, entitled: Bool, checking: Bool, free: Bool) -> AccessDecision {

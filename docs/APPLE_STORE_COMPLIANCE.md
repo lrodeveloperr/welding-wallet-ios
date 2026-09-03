@@ -1,6 +1,6 @@
 # Apple App Store compliance gate
 
-Reviewed against Apple’s official material on **2026-09-02**. Apple’s App Review Guidelines showed “Last Updated: June 8, 2026” when reviewed. Policy changes and app-specific behavior mean a template can reduce risk but cannot guarantee acceptance. Before every submission, a human or reviewing agent must open the current sources below, assess every row, and record **PASS**, **N/A with reason**, or **BLOCKED**.
+Reviewed against Apple’s official material on **2026-09-03**. Apple’s App Review Guidelines showed “Last Updated: June 8, 2026” when reviewed. Policy changes and app-specific behavior mean a template can reduce risk but cannot guarantee acceptance. Before every submission, a human or reviewing agent must open the current sources below, assess every row, and record **PASS**, **N/A with reason**, or **BLOCKED**.
 
 ## Official sources
 
@@ -10,8 +10,12 @@ Reviewed against Apple’s official material on **2026-09-02**. Apple’s App Re
 - [In-app purchase design guidance](https://developer.apple.com/design/human-interface-guidelines/in-app-purchase)
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines)
 - [Privacy manifest files](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files)
+- [Required-reason API declarations](https://developer.apple.com/documentation/technotes/tn3183-adding-required-reason-api-entries-to-your-privacy-manifest)
 - [Third-party SDK requirements](https://developer.apple.com/support/third-party-SDK-requirements/)
 - [App privacy details](https://developer.apple.com/app-store/app-privacy-details/)
+- [Creating your product page](https://developer.apple.com/app-store/product-page/)
+- [Screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/)
+- [Preparing for App Review](https://developer.apple.com/distribute/app-review/)
 - [Set up win-back offers](https://developer.apple.com/help/app-store-connect/manage-subscriptions/set-up-win-back-offers/)
 
 ## Mandatory shell checks
@@ -21,9 +25,23 @@ Reviewed against Apple’s official material on **2026-09-02**. Apple’s App Re
 - [ ] App Review can reach every feature. Provide a demo account, sample data, QR code, hardware instructions or fully featured demo mode when applicable.
 - [ ] Privacy Policy and Terms of Use links use HTTPS, open before purchase and onboarding acceptance, and match actual data handling.
 - [ ] Privacy manifest, Required Reason APIs, SDK manifests/signatures and App Store privacy answers match the final archive—not the template plan.
+- [ ] `UserDefaults` access remains declared as `NSPrivacyAccessedAPICategoryUserDefaults` with the app-only `CA92.1` reason; reassess if data becomes accessible outside the app or a new required-reason API is added.
 - [ ] The app asks only for permissions needed at that moment, explains them clearly and remains useful when optional permission is declined.
 - [ ] No private API, downloaded executable code, misleading capability, hidden feature, placeholder or dormant switch ships.
 - [ ] Accessibility, Dynamic Type, VoiceOver, contrast, 44-point hit targets, RTL, compact iPhone and iPad layouts were manually checked using `UI_REGRESSION_MATRIX.md`.
+
+## Product-page listing
+
+- [ ] The first three screenshots tell the core search-results story: know what is ready, see refill/cost history, and keep cylinder/supplier details together. Every later screenshot communicates one distinct benefit.
+- [ ] Screenshots show real app UI, contain no alpha channel, meet a current accepted size, and include the required 13-inch set because this binary supports iPad.
+- [ ] English and Latin American Spanish each have metadata and screenshots whose visible UI matches that language; no translated overlay is placed over an English interface.
+- [ ] The description opens with the clearest differentiator, uses a short feature list and welding terminology, and omits a fixed subscription price because storefront prices vary.
+- [ ] Name and subtitle fit their 30-character limits; promotional text fits 170 characters; keywords fit 100 characters and exclude duplicates, category/app terms, competitor names and unauthorized trademarks.
+- [ ] The privacy label and URLs match the final SDK inventory. Review notes give exact steps to the three-cylinder limit, paywall, Restore Purchases and Manage Subscription.
+
+### Current listing blocker found 2026-09-03
+
+The five configured HTTPS pages are live and product-specific, but the published Privacy Policy, Terms, and Support text still describes AdMob/UMP, ad resumption, and rejection of free restores containing more than three active cylinders. The current iOS binary contains no advertising stack and now preserves valid paid-era backups while applying a read-only excess-record policy. Update and republish those three documents, including any advertising-based territory restriction language, before marking legal/store parity as passed. The policy source is not part of this repository, so this code change does not alter the live pages.
 
 ## Purchases and subscriptions
 
@@ -32,6 +50,7 @@ Reviewed against Apple’s official material on **2026-09-02**. Apple’s App Re
 - [ ] The configured monthly product uses the approved US$1.99 base price in App Store Connect. Repository code has no location-based pricing rules and displays StoreKit’s storefront-localized price and currency.
 - [ ] Auto-renewal is disclosed; privacy and Terms of Use are visible; subscription grouping prevents accidental duplicate subscriptions.
 - [ ] Restore is visible for restorable purchases. Pending, cancelled, unverified, expired, refunded or revoked transactions never unlock access.
+- [ ] Cancelling auto-renewal retains access through verified paid expiration. Verified Billing Grace Period remains entitled; billing retry after grace, expiry and revocation do not.
 - [ ] Purchase success is verified through StoreKit; `Transaction.updates` and current entitlements keep access current.
 - [ ] Free trial, introductory, promotional, offer-code and win-back claims appear only when StoreKit confirms eligibility and terms.
 - [ ] Recurring payment has defensible ongoing value. One-time value is not misleadingly sold as a subscription.

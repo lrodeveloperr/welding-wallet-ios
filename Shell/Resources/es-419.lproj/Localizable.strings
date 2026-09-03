@@ -69,7 +69,19 @@
 "paywall.period.year.other %lld" = "cada %lld años";
 "paywall.period.unknown" = "periodo de suscripción";
 "settings.upgrade.unlimited" = "Controla cilindros activos sin límite";
-"settings.upgrade.price %@" = "Cilindros activos sin límite · %@ al mes";
+"settings.upgrade.price %@" = "Cilindros activos sin límite · %@";
+"settings.upgrade.price.period %@ %@" = "Cilindros activos sin límite · %@ · %@";
+"subscription.status" = "Suscripción";
+"subscription.manage" = "Gestionar suscripción";
+"subscription.manage.subtitle" = "Consulta la facturación o desactiva la renovación automática";
+"subscription.inactive" = "Inactiva";
+"subscription.renews %@" = "Se renueva el %@";
+"subscription.ends %@" = "El acceso continúa hasta el %@";
+"subscription.grace %@" = "Problema de pago · Pro sigue activo hasta el %@";
+"subscription.billingRetry" = "Se requiere el pago para recuperar Pro";
+"subscription.offline %@" = "Verificada sin conexión hasta el %@";
+"paywall.billingRetry.title" = "Apple está reintentando el cobro";
+"paywall.billingRetry.message" = "Actualiza la información de pago de tu cuenta de Apple para recuperar la gestión de cilindros sin límite. Tus registros siguen en el inventario.";
 
 "upgrade.subtitle" = "Gestiona las compras y restaura el acceso";
 "language" = "Idioma";
@@ -101,7 +113,7 @@
 "common.all" = "Todos";
 "common.notSet" = "Sin definir";
 "status.ready" = "Listo";
-"status.low" = "Bajo";
+"status.low" = "Poco gas";
 "status.empty" = "Vacío";
 "status.away" = "Fuera del taller";
 "relationship.owned" = "Propio";
@@ -132,6 +144,8 @@
 "cylinders.current.one" = "%lld cilindro actual";
 "cylinders.current.other" = "%lld cilindros actuales";
 "cylinders.free.count" = "%lld de 3 gratis";
+"cylinders.free.selection" = "Elige 3 para gestionarlos gratis";
+"cylinders.free.managed %lld" = "3 gestionados gratis · %lld de solo lectura";
 "cylinder.deleted %@" = "Se eliminó %@";
 "cylinder.changeStatus %@" = "Cambiar el estado de %@";
 "days.one" = "%lld día";
@@ -143,6 +157,7 @@
 "service.todayCurrency %@" = "Hoy · %@";
 "service.useLastCost %@%@" = "Usar el último costo · %@%@";
 "error.upgradeRequired" = "Necesitas Pro para añadir otro cilindro activo.";
+"error.readOnly" = "Este cilindro es de solo lectura en el plan gratuito. Pasa a Pro para modificarlo.";
 "error.validCapacity" = "Ingresa una capacidad válida.";
 "error.requiredUniqueSerial" = "Revisa los campos obligatorios. Los números de serie no pueden repetirse.";
 "error.positiveAmountUniqueSerial" = "Ingresa un monto mayor que cero y un número de serie de reemplazo que no esté repetido.";
@@ -151,6 +166,7 @@
 "backup.fileCreated" = "Se creó el archivo de respaldo";
 "backup.notSaved" = "No se guardó el respaldo";
 "backup.restored" = "Se restauró el respaldo";
+"backup.restored.selectionRequired" = "Se restauró el respaldo. Cuando cierres Ajustes, elige los tres cilindros activos que quieres gestionar gratis.";
 "backup.activeLimit" = "Este respaldo supera el límite gratuito de %lld cilindros activos. Pasa a Pro antes de restaurarlo.";
 "backup.error.tooLarge" = "El respaldo supera los 5 MB.";
 "backup.error.unsupported" = "Este formato de respaldo no es compatible.";
@@ -166,6 +182,17 @@
 "Duplicate cylinder" = "Duplicar cilindro";
 "Delete cylinder" = "Eliminar cilindro";
 "Delete cylinder and history" = "Eliminar cilindro e historial";
+"Delete cylinder?" = "¿Eliminar el cilindro?";
+"Not now" = "Ahora no";
+"freeSelection.choose" = "Elegir 3";
+"freeSelection.title" = "Elige 3 cilindros para gestionar";
+"freeSelection.message" = "Tienes más de tres cilindros activos. Elige los tres que quieres gestionar gratis. Los demás registros seguirán visibles y nunca se eliminarán.";
+"freeSelection.section" = "Gestionados con el plan gratuito";
+"freeSelection.dataNotice" = "Puedes seguir consultando, exportando, devolviendo, archivando o eliminando los cilindros bloqueados. Vuelve a suscribirte para modificarlos.";
+"freeSelection.confirm" = "Conservar estos 3";
+"cylinder.readOnly" = "Solo lectura con el plan gratuito";
+"cylinder.readOnly.message" = "Este cilindro seguirá en tu inventario, pero necesitas Pro para cambiar sus datos, estado, costos, historial de servicio o recordatorios.";
+"cylinder.unlock" = "Desbloquear todos los cilindros";
 "Copy an existing cylinder" = "Copiar un cilindro existente";
 "Search cylinders" = "Buscar cilindros";
 "No cylinders yet" = "Aún no hay cilindros";

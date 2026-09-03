@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ShellRootView: View {
+    @Environment(\.scenePhase) private var scenePhase
     private let featureProvider: any FeatureCanvasProviding
     private let wallet: WalletStore
 #if SCREENSHOT_BUILD
@@ -73,6 +74,9 @@ struct ShellRootView: View {
         }
         .task {
             await model.start()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { Task { await model.access.purchases.refreshEntitlements() } }
         }
     }
 

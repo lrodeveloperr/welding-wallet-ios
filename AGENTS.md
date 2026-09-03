@@ -7,6 +7,9 @@ This is the authoritative native iOS application. It derives from `lrodeveloperr
 - The approved browser preview is the visual and behavioral source of truth.
 - Keep SwiftUI navigation, sheets, SF Symbols, keyboards, safe areas, Dynamic Type, VoiceOver, RTL, and iPhone/iPad adaptation native.
 - Free users have at most three active cylinders. A verified monthly subscription unlocks unlimited active cylinders.
+- Cancelling auto-renewal does not end Pro before the verified paid-through date. Verified Billing Grace Period remains Pro; billing retry after grace, expiry and revocation do not.
+- If Pro lapses with more than three active cylinders, never delete or silently archive data. The customer selects three cylinders to keep managing; excess active cylinders remain visible/read-only and may be exported, returned, archived or deleted. A freed managed slot may be assigned once, but the three selections cannot be swapped repeatedly to simulate unlimited use.
+- Enforce the limit inside `WalletStore` for add, duplicate, edit, status, service, reminder, restore and Undo—not only in SwiftUI. Forms must read current entitlement again when Save is pressed.
 - This app contains no advertising SDK, banner slot, ad metadata, or advertising-consent UI. Do not leave an empty safe-area inset or reintroduce ads through a release workflow.
 - The approved commercial price is US$1.99 per month. The app contains no geographic-pricing rules and must always display the price and currency returned by StoreKit instead of hard-coding US$1.99 into customer-facing UI.
 - Cylinder records stay on-device. Native Files export/import is optional and purchase entitlement is never included.
@@ -40,7 +43,10 @@ This is the authoritative native iOS application. It derives from `lrodeveloperr
 ## Release control
 
 - All GitHub workflows must remain `workflow_dispatch` only.
+- The production-logic TestFlight workflow must never accept or compile a screenshot/free fixture profile. Screenshot builds use a separately named workflow and confirmation phrase.
 - Never run or dispatch an iOS archive, TestFlight upload, or paid hosted build without explicit user authorization.
 - Release validation must reject Google Mobile Ads/UMP linkage, GAD/SKAdNetwork metadata, ad unit IDs, ad consent UI, and reserved banner spacing.
 - The monthly product must exist in App Store Connect with the configured identifier, a one-month duration, and the approved US$1.99 base price. The app must not implement location-based pricing behavior.
+- Use one subscription group and one level for the single monthly product. Localize the group and product display metadata in English and Latin American Spanish, attach the review screenshot/notes, and submit the first subscription with the app version.
+- Settings must show verified subscription status and Apple's management surface. The paywall must make StoreKit's full localized renewal price the most prominent pricing element; billing retry routes to management instead of another purchase.
 - Run `bash scripts/validate-shell.sh --app` for code-only structural checks.

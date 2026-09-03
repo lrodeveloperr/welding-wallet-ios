@@ -10,7 +10,7 @@ final class WeldingWalletFeatureProvider: FeatureCanvasProviding {
         AnyView(Group {
             switch destination.id {
             case "activity": ActivityHome(store: store)
-            case "suppliers": SupplierHome(store: store, isEntitled: context.isEntitled())
+            case "suppliers": SupplierHome(store: store, isEntitled: context.isEntitled, requestUpgrade: context.requestUpgrade)
             default: CylinderHome(store: store, context: context)
             }
         })
@@ -47,6 +47,7 @@ struct CylinderHome: View {
     @State private var filter = StatusFilter.all
     @State private var expandedStatusID: UUID?
     @State private var showingAdd = false
+    @State private var showingFreeSelection = false
 
     private var visible: [CylinderRecord] {
         store.activeCylinders.filter { cylinder in
@@ -74,7 +75,7 @@ struct CylinderHome: View {
                     else {
                         LazyVGrid(columns: geometry.size.width >= 700 ? [GridItem(.flexible()), GridItem(.flexible())] : [GridItem(.flexible())], spacing: 12) {
                             ForEach(visible) { cylinder in
-                                CylinderCard(store: store, cylinder: cylinder, expanded: expandedStatusID == cylinder.id, isEntitled: context.isEntitled()) {
+                                CylinderCard(store: store, cylinder: cylinder, expanded: expandedStatusID == cylinder.id, isEntitled: context.isEntitled, requestUpgrade: context.requestUpgrade) {
                                     withAnimation(.snappy) { expandedStatusID = expandedStatusID == cylinder.id ? nil : cylinder.id }
                                 }
                             }
@@ -91,13 +92,18 @@ struct CylinderHome: View {
                     .accessibilityLabel("Add cylinder")
                     .accessibilityIdentifier("wallet.addCylinder")
             }
-            .sheet(isPresented: $showingAdd) { NavigationStack { CylinderForm(store: store, mode: .new) } }
+            .sheet(isPresented: $showingAdd) { NavigationStack { CylinderForm(store: store, mode: .new, isEntitled: context.isEntitled) } }
+            .sheet(isPresented: $showingFreeSelection) {
+                NavigationStack { FreeCylinderSelectionView(store: store, isEntitled: context.isEntitled) }
+            }
             .safeAreaInset(edge: .bottom) {
                 if let deleted = store.lastDeleted {
                     HStack { Text(AppLocalization.string("cylinder.deleted %@", locale: locale, AppLocalization.gas(deleted.cylinder.gas, locale: locale))); Spacer(); Button("Undo") { store.undoDelete() } }
                         .padding().background(.regularMaterial).clipShape(RoundedRectangle(cornerRadius: 14)).padding(.horizontal)
                 }
             }
+            .onAppear(perform: synchronizeAccess)
+            .onChange(of: context.isEntitled()) { _, _ in synchronizeAccess() }
         }
     }
 
@@ -106,10 +112,16 @@ struct CylinderHome: View {
             CylinderSymbol().frame(width: 30, height: 44).foregroundStyle(.tint).padding(12).background(Color.blue.opacity(0.08), in: Circle())
             VStack(alignment: .leading, spacing: 4) {
                 Text(AppLocalization.string(store.activeCylinders.count == 1 ? "cylinders.active.one" : "cylinders.active.other", locale: locale, store.activeCylinders.count)).font(.headline)
-                if !context.isEntitled() { Text(AppLocalization.string("cylinders.free.count", locale: locale, store.activeCylinders.count)).foregroundStyle(.secondary) }
+                if !context.isEntitled() { Text(freeSummary).foregroundStyle(.secondary) }
             }
             Spacer()
-            if !context.isEntitled() { Button("Upgrade", action: context.requestUpgrade) }
+            if !context.isEntitled() {
+                if store.requiresFreeCylinderSelection(isEntitled: false) {
+                    Button("freeSelection.choose") { showingFreeSelection = true }
+                } else {
+                    Button("Upgrade", action: context.requestUpgrade)
+                }
+            }
         }
         .padding(18).background(.background).clipShape(RoundedRectangle(cornerRadius: 18)).overlay(RoundedRectangle(cornerRadius: 18).stroke(.separator))
     }
@@ -135,8 +147,87 @@ struct CylinderHome: View {
     }
 
     private func addTapped() {
-        if store.activeCylinders.count >= 3 && !context.isEntitled() { context.requestUpgrade() }
+        if !store.canAddCylinder(isEntitled: context.isEntitled()) { context.requestUpgrade() }
         else { showingAdd = true }
+    }
+
+    private func synchronizeAccess() {
+        let entitled = context.isEntitled()
+        store.reconcileAccess(isEntitled: entitled)
+        if !entitled && store.requiresFreeCylinderSelection(isEntitled: false) {
+            expandedStatusID = nil
+            showingFreeSelection = true
+        }
+    }
+
+    private var freeSummary: String {
+        let activeCount = store.activeCylinders.count
+        guard activeCount > WalletStore.freeActiveCylinderLimit else {
+            return AppLocalization.string("cylinders.free.count", locale: locale, activeCount)
+        }
+        if store.requiresFreeCylinderSelection(isEntitled: false) {
+            return AppLocalization.string("cylinders.free.selection", locale: locale)
+        }
+        let readOnlyCount = activeCount - store.freeManagedCylinderIDs.count
+        return AppLocalization.string("cylinders.free.managed %lld", locale: locale, readOnlyCount)
+    }
+}
+
+private struct FreeCylinderSelectionView: View {
+    @Bindable var store: WalletStore
+    let isEntitled: () -> Bool
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
+    @State private var selection: Set<UUID>
+
+    init(store: WalletStore, isEntitled: @escaping () -> Bool) {
+        self.store = store
+        self.isEntitled = isEntitled
+        _selection = State(initialValue: store.freeManagedCylinderIDs)
+    }
+
+    var body: some View {
+        List {
+            Section {
+                Text("freeSelection.message")
+                    .foregroundStyle(.secondary)
+            }
+            Section("freeSelection.section") {
+                ForEach(store.activeCylinders) { cylinder in
+                    Button { toggle(cylinder.id) } label: {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(AppLocalization.gas(cylinder.gas, locale: locale)).foregroundStyle(.primary)
+                                Text("\(cylinder.capacityLabel(locale: locale)) · \(AppLocalization.supplier(store.supplierName(cylinder.supplierID), locale: locale))").font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            if selection.contains(cylinder.id) { Image(systemName: "checkmark.circle.fill").foregroundStyle(.tint) }
+                        }
+                    }
+                    .disabled(store.freeManagedCylinderIDs.contains(cylinder.id))
+                    .accessibilityAddTraits(selection.contains(cylinder.id) ? .isSelected : [])
+                }
+            }
+            Section { Text("freeSelection.dataNotice").font(.footnote).foregroundStyle(.secondary) }
+        }
+        .navigationTitle("freeSelection.title")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) { Button("Not now") { dismiss() } }
+            ToolbarItem(placement: .confirmationAction) {
+                Button("freeSelection.confirm") {
+                    if store.selectFreeManagedCylinders(selection, isEntitled: isEntitled()) { dismiss() }
+                }
+                .disabled(selection.count != min(WalletStore.freeActiveCylinderLimit, store.activeCylinders.count))
+            }
+        }
+        .onChange(of: isEntitled()) { _, entitled in if entitled { dismiss() } }
+    }
+
+    private func toggle(_ id: UUID) {
+        guard !store.freeManagedCylinderIDs.contains(id) else { return }
+        if selection.contains(id) { selection.remove(id) }
+        else if selection.count < WalletStore.freeActiveCylinderLimit { selection.insert(id) }
     }
 }
 
@@ -144,29 +235,33 @@ private struct CylinderCard: View {
     @Bindable var store: WalletStore
     let cylinder: CylinderRecord
     let expanded: Bool
-    let isEntitled: Bool
+    let isEntitled: () -> Bool
+    let requestUpgrade: () -> Void
     let toggle: () -> Void
     @Environment(\.locale) private var locale
 
     var body: some View {
+        let entitled = isEntitled()
+        let canManage = store.canManageCylinder(cylinder.id, isEntitled: entitled)
         VStack(spacing: 0) {
             HStack(spacing: 14) {
                 Text(String((store.activeCylinders.firstIndex(where: { $0.id == cylinder.id }) ?? 0) + 1)).font(.headline).foregroundStyle(.tint).frame(width: 38, height: 44).background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
-                NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled) } label: {
+                NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled, requestUpgrade: requestUpgrade) } label: {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(AppLocalization.gas(cylinder.gas, locale: locale)).font(.title3.bold()).foregroundStyle(.primary)
                         Text(cylinder.capacityLabel(locale: locale)).foregroundStyle(.primary)
                         Text("\(AppLocalization.supplier(store.supplierName(cylinder.supplierID), locale: locale)) · \(AppLocalization.string(cylinder.relationship.localizationKey, locale: locale))").font(.subheadline).foregroundStyle(.secondary).lineLimit(1)
                     }.frame(maxWidth: .infinity, alignment: .leading)
                 }.buttonStyle(.plain)
-                StatusBadge(status: cylinder.status)
-                Button(action: toggle) { Image(systemName: expanded ? "chevron.up" : "chevron.forward") }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44).accessibilityLabel(Text(AppLocalization.string("cylinder.changeStatus %@", locale: locale, AppLocalization.gas(cylinder.gas, locale: locale)))).accessibilityIdentifier("wallet.status.\(cylinder.id.uuidString)")
+                if canManage { StatusBadge(status: cylinder.status) }
+                else { Image(systemName: "lock.fill").foregroundStyle(.secondary).accessibilityLabel(Text("cylinder.readOnly")) }
+                Button(action: canManage ? toggle : requestUpgrade) { Image(systemName: canManage && expanded ? "chevron.up" : "chevron.forward") }.buttonStyle(.plain).frame(minWidth: 44, minHeight: 44).accessibilityLabel(Text(canManage ? AppLocalization.string("cylinder.changeStatus %@", locale: locale, AppLocalization.gas(cylinder.gas, locale: locale)) : AppLocalization.string("cylinder.readOnly", locale: locale))).accessibilityIdentifier("wallet.status.\(cylinder.id.uuidString)")
             }.padding(14)
             if expanded {
                 Divider()
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Update status").foregroundStyle(.secondary)
-                    HStack(spacing: 8) { ForEach(CylinderStatus.allCases) { status in StatusButton(status: status, selected: cylinder.status == status) { store.setStatus(status, for: cylinder.id) } } }
+                    HStack(spacing: 8) { ForEach(CylinderStatus.allCases) { status in StatusButton(status: status, selected: cylinder.status == status) { store.setStatus(status, for: cylinder.id, isEntitled: isEntitled()) } } }
                 }.padding(14)
             }
         }
@@ -189,16 +284,19 @@ private struct StatusButton: View {
 struct CylinderDetail: View {
     @Bindable var store: WalletStore
     let cylinderID: UUID
-    var isEntitled = false
+    var isEntitled: () -> Bool = { false }
+    var requestUpgrade: () -> Void = {}
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @State private var sheet: DetailSheet?
     @State private var confirmLifecycle: CylinderLifecycle?
+    @State private var showDelete = false
 
     private var cylinder: CylinderRecord? { store.cylinders.first { $0.id == cylinderID } }
     var body: some View {
         Group {
             if let cylinder {
+                let canManage = store.canManageCylinder(cylinderID, isEntitled: isEntitled())
                 ScrollView {
                     VStack(spacing: 16) {
                         VStack(alignment: .leading, spacing: 8) {
@@ -209,27 +307,40 @@ struct CylinderDetail: View {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                             Fact(titleKey: "Supplier", value: AppLocalization.supplier(store.supplierName(cylinder.supplierID), locale: locale)); Fact(titleKey: "Relationship", value: AppLocalization.string(cylinder.relationship.localizationKey, locale: locale)); Fact(titleKey: "Serial", value: cylinder.serial.isEmpty ? AppLocalization.string("common.notSet", locale: locale) : cylinder.serial); Fact(titleKey: "Acquired", value: cylinder.acquiredAt.formatted(.dateTime.locale(locale).day().month(.abbreviated).year()))
                         }
-                        HStack { Button("Refill") { sheet = .service(.refill) }.buttonStyle(.borderedProminent); Button("Exchange") { sheet = .service(.exchange) }.buttonStyle(.bordered); Button("Add cost") { sheet = .service(.cost) }.buttonStyle(.bordered) }
-                        Button { sheet = .reminder } label: { Label(cylinder.reminderAt.map { AppLocalization.string("reminder.label %@", locale: locale, $0.formatted(.dateTime.locale(locale).day().month(.abbreviated).hour().minute())) } ?? AppLocalization.string("Add reminder", locale: locale), systemImage: "bell") }.buttonStyle(.bordered).frame(maxWidth: .infinity)
+                        if canManage {
+                            HStack { Button("Refill") { sheet = .service(.refill) }.buttonStyle(.borderedProminent); Button("Exchange") { sheet = .service(.exchange) }.buttonStyle(.bordered); Button("Add cost") { sheet = .service(.cost) }.buttonStyle(.bordered) }
+                            Button { sheet = .reminder } label: { Label(cylinder.reminderAt.map { AppLocalization.string("reminder.label %@", locale: locale, $0.formatted(.dateTime.locale(locale).day().month(.abbreviated).hour().minute())) } ?? AppLocalization.string("Add reminder", locale: locale), systemImage: "bell") }.buttonStyle(.bordered).frame(maxWidth: .infinity)
+                        } else {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Label("cylinder.readOnly", systemImage: "lock.fill").font(.headline)
+                                Text("cylinder.readOnly.message").foregroundStyle(.secondary)
+                                Button("cylinder.unlock", action: requestUpgrade).buttonStyle(.borderedProminent)
+                            }.frame(maxWidth: .infinity, alignment: .leading).padding(16).background(Color.secondary.opacity(0.07), in: RoundedRectangle(cornerRadius: 14))
+                        }
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Recent activity").font(.headline)
                             ForEach(store.activity.filter { $0.cylinderID == cylinderID }.prefix(5)) { ActivityRow(store: store, item: $0) }
                         }.frame(maxWidth: .infinity, alignment: .leading)
                         Menu("Return or archive") { Button("Return cylinder") { confirmLifecycle = .returned }; Button("Archive cylinder") { confirmLifecycle = .archived } }.buttonStyle(.bordered).frame(maxWidth: .infinity)
+                        if !canManage { Button("Delete cylinder", role: .destructive) { showDelete = true }.buttonStyle(.bordered).frame(maxWidth: .infinity) }
                     }.frame(maxWidth: 720).padding(16).frame(maxWidth: .infinity)
                 }
-                .toolbar { ToolbarItem(placement: .topBarTrailing) { Button("Edit") { sheet = .edit } } }
+                .toolbar { if canManage { ToolbarItem(placement: .topBarTrailing) { Button("Edit") { sheet = .edit } } } }
                 .sheet(item: $sheet) { value in NavigationStack { detailSheet(value, cylinder: cylinder) } }
                 .confirmationDialog(AppLocalization.string(confirmLifecycle == .returned ? "Return this cylinder?" : "Archive this cylinder?", locale: locale), isPresented: Binding(get: { confirmLifecycle != nil }, set: { if !$0 { confirmLifecycle = nil } })) {
                     if let lifecycle = confirmLifecycle { Button(AppLocalization.string(lifecycle == .returned ? "Return cylinder" : "Archive cylinder", locale: locale)) { store.archive(cylinderID, as: lifecycle); dismiss() } }
                     Button("Cancel", role: .cancel) { confirmLifecycle = nil }
                 }
+                .alert("Delete cylinder?", isPresented: $showDelete) {
+                    Button("Delete cylinder and history", role: .destructive) { store.delete(cylinderID); dismiss() }
+                    Button("Cancel", role: .cancel) {}
+                } message: { Text("You can undo for 15 seconds.") }
             } else { ContentUnavailableView("Cylinder not found", systemImage: "questionmark.square") }
         }.navigationTitle(cylinder.map { AppLocalization.gas($0.gas, locale: locale) } ?? AppLocalization.string("Cylinder", locale: locale)).navigationBarTitleDisplayMode(.inline).accessibilityIdentifier("screen.cylinderDetail")
     }
 
     @ViewBuilder private func detailSheet(_ sheet: DetailSheet, cylinder: CylinderRecord) -> some View {
-        switch sheet { case .edit: CylinderForm(store: store, mode: .edit(cylinder), canAddAnother: isEntitled || store.activeCylinders.count < 3); case .service(let kind): ServiceForm(store: store, cylinder: cylinder, kind: kind); case .reminder: ReminderForm(store: store, cylinder: cylinder) }
+        switch sheet { case .edit: CylinderForm(store: store, mode: .edit(cylinder), isEntitled: isEntitled); case .service(let kind): ServiceForm(store: store, cylinder: cylinder, kind: kind, isEntitled: isEntitled); case .reminder: ReminderForm(store: store, cylinder: cylinder, isEntitled: isEntitled) }
     }
 }
 
@@ -242,7 +353,7 @@ private enum CylinderFormMode { case new, edit(CylinderRecord), duplicate(Cylind
 private struct CylinderForm: View {
     @Bindable var store: WalletStore
     let mode: CylinderFormMode
-    var canAddAnother = true
+    let isEntitled: () -> Bool
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @State private var gas = ""
@@ -288,7 +399,7 @@ private struct CylinderForm: View {
                 }
             }
             if case .edit(let cylinder) = mode {
-                Section { Button("Duplicate cylinder") { if !canAddAnother { errorKey = "error.upgradeRequired" } else if store.duplicate(cylinder) != nil { dismiss() } }.foregroundStyle(.tint); Button("Delete cylinder", role: .destructive) { showDelete = true } }
+                Section { Button("Duplicate cylinder") { let entitled = isEntitled(); if !store.canAddCylinder(isEntitled: entitled) { errorKey = "error.upgradeRequired" } else if store.duplicate(cylinder, isEntitled: entitled) != nil { dismiss() } }.foregroundStyle(.tint); Button("Delete cylinder", role: .destructive) { showDelete = true } }
             }
         }
         .navigationTitle(LocalizedStringKey(titleKey)).navigationBarTitleDisplayMode(.inline)
@@ -315,9 +426,14 @@ private struct CylinderForm: View {
     private func save() {
         guard let value = AppLocalization.double(from: capacity, locale: locale), value > 0 else { errorKey = "error.validCapacity"; return }
         let success: Bool
+        let entitled = isEntitled()
         switch mode {
-        case .new, .duplicate: success = store.addCylinder(gas: resolvedGas, capacity: value, unit: unit, supplierID: supplierID, relationship: relationship, serial: serial, notes: notes) != nil
-        case .edit(var c): c.gas = resolvedGas; c.capacityValue = value; c.capacityUnit = unit; c.supplierID = supplierID; c.relationship = relationship; c.serial = serial; c.notes = notes; success = store.update(c)
+        case .new, .duplicate:
+            guard store.canAddCylinder(isEntitled: entitled) else { errorKey = "error.upgradeRequired"; return }
+            success = store.addCylinder(gas: resolvedGas, capacity: value, unit: unit, supplierID: supplierID, relationship: relationship, serial: serial, notes: notes, isEntitled: entitled) != nil
+        case .edit(var c):
+            guard store.canManageCylinder(c.id, isEntitled: entitled) else { errorKey = "error.readOnly"; return }
+            c.gas = resolvedGas; c.capacityValue = value; c.capacityUnit = unit; c.supplierID = supplierID; c.relationship = relationship; c.serial = serial; c.notes = notes; success = store.update(c, isEntitled: entitled)
         }
         if success { dismiss() } else { errorKey = "error.requiredUniqueSerial" }
     }
@@ -327,6 +443,7 @@ private struct ServiceForm: View {
     @Bindable var store: WalletStore
     let cylinder: CylinderRecord
     let kind: ActivityKind
+    let isEntitled: () -> Bool
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @State private var amount = ""
@@ -362,12 +479,14 @@ private struct ServiceForm: View {
     private func save() {
         let value = AppLocalization.decimal(from: amount, locale: locale)
         let replacementCapacity = sameCapacity ? nil : AppLocalization.double(from: capacity, locale: locale)
-        if !store.recordService(for: cylinder.id, kind: kind, amount: value, currency: store.defaultCurrency, date: date, replacementSerial: replacementSerial, replacementCapacity: replacementCapacity, replacementUnit: sameCapacity ? nil : unit) { errorKey = "error.positiveAmountUniqueSerial" } else { dismiss() }
+        let entitled = isEntitled()
+        guard store.canManageCylinder(cylinder.id, isEntitled: entitled) else { errorKey = "error.readOnly"; return }
+        if !store.recordService(for: cylinder.id, kind: kind, amount: value, currency: store.defaultCurrency, date: date, replacementSerial: replacementSerial, replacementCapacity: replacementCapacity, replacementUnit: sameCapacity ? nil : unit, isEntitled: entitled) { errorKey = "error.positiveAmountUniqueSerial" } else { dismiss() }
     }
 }
 
 private struct ReminderForm: View {
-    @Bindable var store: WalletStore; let cylinder: CylinderRecord
+    @Bindable var store: WalletStore; let cylinder: CylinderRecord; let isEntitled: () -> Bool
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @State private var enabled = true; @State private var days = 7; @State private var custom = false; @State private var date = Calendar.current.date(byAdding: .day, value: 7, to: .now)!
@@ -394,7 +513,7 @@ private struct ReminderForm: View {
         .navigationTitle("Reminder")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
-            ToolbarItem(placement: .confirmationAction) { Button("Save") { store.setReminder(enabled ? date : nil, for: cylinder.id); Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: enabled ? date : nil, locale: locale) }; dismiss() } }
+            ToolbarItem(placement: .confirmationAction) { Button("Save") { if store.setReminder(enabled ? date : nil, for: cylinder.id, isEntitled: isEntitled()) { Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: enabled ? date : nil, locale: locale) }; dismiss() } } }
         }
         .onAppear { if let existing = cylinder.reminderAt { date = existing; enabled = true } }
     }
@@ -435,7 +554,8 @@ private struct ActivityRow: View {
 
 struct SupplierHome: View {
     @Bindable var store: WalletStore
-    let isEntitled: Bool
+    let isEntitled: () -> Bool
+    let requestUpgrade: () -> Void
     @Environment(\.locale) private var locale
     @State private var query = ""; @State private var showingAdd = false
     var visible: [SupplierRecord] { store.suppliers.filter { query.isEmpty || $0.name.localizedCaseInsensitiveContains(query) } }
@@ -450,7 +570,7 @@ struct SupplierHome: View {
                     } else {
                         LazyVGrid(columns: geometry.size.width >= 700 ? [GridItem(.flexible()), GridItem(.flexible())] : [GridItem(.flexible())], spacing: 10) {
                             ForEach(visible) { supplier in
-                                NavigationLink { SupplierDetail(store: store, supplier: supplier, isEntitled: isEntitled) } label: {
+                                NavigationLink { SupplierDetail(store: store, supplier: supplier, isEntitled: isEntitled, requestUpgrade: requestUpgrade) } label: {
                                     HStack {
                                         Text(initials(supplier.name)).font(.headline).foregroundStyle(.tint).frame(width: 46, height: 46).background(Color.blue.opacity(0.08), in: Circle())
                                         VStack(alignment: .leading) {
@@ -475,9 +595,9 @@ struct SupplierHome: View {
 }
 
 private struct SupplierDetail: View {
-    @Bindable var store: WalletStore; let supplier: SupplierRecord; let isEntitled: Bool
+    @Bindable var store: WalletStore; let supplier: SupplierRecord; let isEntitled: () -> Bool; let requestUpgrade: () -> Void
     @Environment(\.locale) private var locale
-    var body: some View { List { Section { HStack { Text(supplier.name.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined().uppercased()).font(.title2.bold()).foregroundStyle(.tint).frame(width: 60, height: 60).background(Color.blue.opacity(0.08), in: Circle()); VStack(alignment: .leading) { Text(supplier.name).font(.title2.bold()); let count = store.activeCylinders.filter { $0.supplierID == supplier.id }.count; Text(AppLocalization.string(count == 1 ? "cylinders.current.one" : "cylinders.current.other", locale: locale, count)).foregroundStyle(.secondary) } } }; if !supplier.phone.isEmpty || !supplier.notes.isEmpty { Section { if !supplier.phone.isEmpty { LabeledContent("Phone", value: supplier.phone) }; if !supplier.notes.isEmpty { LabeledContent("Notes", value: supplier.notes) } } }; Section("Cylinders") { let linked = store.cylinders.filter { $0.supplierID == supplier.id }; if linked.isEmpty { Text("No linked cylinders").foregroundStyle(.secondary) } else { ForEach(linked) { cylinder in NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled) } label: { VStack(alignment: .leading) { Text(AppLocalization.gas(cylinder.gas, locale: locale)); Text("\(cylinder.capacityLabel(locale: locale)) · \(AppLocalization.string(cylinder.lifecycle.localizationKey, locale: locale))").font(.caption).foregroundStyle(.secondary) } } } } } }.navigationTitle(supplier.name).navigationBarTitleDisplayMode(.inline) }
+    var body: some View { List { Section { HStack { Text(supplier.name.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined().uppercased()).font(.title2.bold()).foregroundStyle(.tint).frame(width: 60, height: 60).background(Color.blue.opacity(0.08), in: Circle()); VStack(alignment: .leading) { Text(supplier.name).font(.title2.bold()); let count = store.activeCylinders.filter { $0.supplierID == supplier.id }.count; Text(AppLocalization.string(count == 1 ? "cylinders.current.one" : "cylinders.current.other", locale: locale, count)).foregroundStyle(.secondary) } } }; if !supplier.phone.isEmpty || !supplier.notes.isEmpty { Section { if !supplier.phone.isEmpty { LabeledContent("Phone", value: supplier.phone) }; if !supplier.notes.isEmpty { LabeledContent("Notes", value: supplier.notes) } } }; Section("Cylinders") { let linked = store.cylinders.filter { $0.supplierID == supplier.id }; if linked.isEmpty { Text("No linked cylinders").foregroundStyle(.secondary) } else { ForEach(linked) { cylinder in NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled, requestUpgrade: requestUpgrade) } label: { VStack(alignment: .leading) { Text(AppLocalization.gas(cylinder.gas, locale: locale)); Text("\(cylinder.capacityLabel(locale: locale)) · \(AppLocalization.string(cylinder.lifecycle.localizationKey, locale: locale))").font(.caption).foregroundStyle(.secondary) } } } } } }.navigationTitle(supplier.name).navigationBarTitleDisplayMode(.inline) }
 }
 
 private struct SupplierForm: View { @Bindable var store: WalletStore; let onSave: (SupplierRecord) -> Void; @Environment(\.dismiss) private var dismiss; @State private var name = ""; @State private var phone = ""; @State private var notes = ""; @State private var errorKey = ""; var body: some View { Form { if !errorKey.isEmpty { Text(LocalizedStringKey(errorKey)).foregroundStyle(.red) }; Section { TextField("Supplier name", text: $name); TextField("Phone (optional)", text: $phone).keyboardType(.phonePad); TextField("Notes (optional)", text: $notes) } }.navigationTitle("Add supplier").navigationBarTitleDisplayMode(.inline).toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save") { if let supplier = store.addSupplier(name: name, phone: phone, notes: notes) { onSave(supplier); dismiss() } else { errorKey = name.trimmed.isEmpty ? "error.supplierName" : "error.supplierDuplicate" } }.disabled(name.trimmed.isEmpty) } } } }

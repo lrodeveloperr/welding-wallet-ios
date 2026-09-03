@@ -73,6 +73,12 @@ struct MonetizationConfiguration: Sendable {
         }
     }
     var includesPurchase: Bool { !productIDs.isEmpty }
+    var includesSubscription: Bool {
+        switch mode {
+        case .freemiumWithSubscription, .subscription, .usageCapWithSubscription: true
+        case .free, .oneTimeUnlock, .usageCapWithOneTimeUnlock: false
+        }
+    }
 }
 
 struct ShellDestination: Hashable, Identifiable, Sendable { let id: String; let titleKey: String; let symbol: String }

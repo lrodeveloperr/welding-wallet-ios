@@ -69,7 +69,19 @@
 "paywall.period.year.other %lld" = "every %lld years";
 "paywall.period.unknown" = "subscription period";
 "settings.upgrade.unlimited" = "Track unlimited active cylinders";
-"settings.upgrade.price %@" = "Unlimited active cylinders · %@/month";
+"settings.upgrade.price %@" = "Unlimited active cylinders · %@";
+"settings.upgrade.price.period %@ %@" = "Unlimited active cylinders · %@ · %@";
+"subscription.status" = "Subscription";
+"subscription.manage" = "Manage subscription";
+"subscription.manage.subtitle" = "View billing or turn off auto-renewal";
+"subscription.inactive" = "Not active";
+"subscription.renews %@" = "Renews %@";
+"subscription.ends %@" = "Access continues until %@";
+"subscription.grace %@" = "Payment issue · Pro remains active until %@";
+"subscription.billingRetry" = "Payment required to restore Pro";
+"subscription.offline %@" = "Verified offline until %@";
+"paywall.billingRetry.title" = "Apple is retrying your payment";
+"paywall.billingRetry.message" = "Update your Apple Account billing information to restore unlimited cylinder management. Your records remain in the wallet.";
 
 "upgrade.subtitle" = "Manage purchases and restore access";
 "language" = "Language";
@@ -132,6 +144,8 @@
 "cylinders.current.one" = "%lld current cylinder";
 "cylinders.current.other" = "%lld current cylinders";
 "cylinders.free.count" = "%lld of 3 free";
+"cylinders.free.selection" = "Choose 3 to manage for free";
+"cylinders.free.managed %lld" = "3 managed free · %lld read-only";
 "cylinder.deleted %@" = "%@ deleted";
 "cylinder.changeStatus %@" = "Change %@ status";
 "days.one" = "%lld day";
@@ -143,6 +157,7 @@
 "service.todayCurrency %@" = "Today · %@";
 "service.useLastCost %@%@" = "Use last cost · %@%@";
 "error.upgradeRequired" = "Upgrade is required before adding another active cylinder.";
+"error.readOnly" = "This cylinder is read-only on the free plan. Upgrade to Pro to change it.";
 "error.validCapacity" = "Enter a valid capacity.";
 "error.requiredUniqueSerial" = "Check the required fields. Serial numbers must be unique.";
 "error.positiveAmountUniqueSerial" = "Enter a positive amount and a unique replacement serial.";
@@ -151,6 +166,7 @@
 "backup.fileCreated" = "Backup file created";
 "backup.notSaved" = "Backup was not saved";
 "backup.restored" = "Backup restored";
+"backup.restored.selectionRequired" = "Backup restored. Choose the three active cylinders to manage for free when you close Settings.";
 "backup.activeLimit" = "This backup exceeds the free limit of %lld active cylinders. Upgrade to Pro before restoring it.";
 "backup.error.tooLarge" = "The backup is larger than 5 MB.";
 "backup.error.unsupported" = "This backup format is not supported.";
@@ -166,6 +182,17 @@
 "Duplicate cylinder" = "Duplicate cylinder";
 "Delete cylinder" = "Delete cylinder";
 "Delete cylinder and history" = "Delete cylinder and history";
+"Delete cylinder?" = "Delete cylinder?";
+"Not now" = "Not now";
+"freeSelection.choose" = "Choose 3";
+"freeSelection.title" = "Choose 3 cylinders to manage";
+"freeSelection.message" = "You have more than three active cylinders. Choose the three you want to manage for free. Every other record stays visible and is never deleted.";
+"freeSelection.section" = "Managed on the free plan";
+"freeSelection.dataNotice" = "Locked cylinders can still be viewed, exported, returned, archived, or deleted. Resubscribe to edit them.";
+"freeSelection.confirm" = "Keep these 3";
+"cylinder.readOnly" = "Read-only on the free plan";
+"cylinder.readOnly.message" = "This cylinder stays in your wallet, but changing its details, status, costs, service history, or reminders requires Pro.";
+"cylinder.unlock" = "Unlock all cylinders";
 "Copy an existing cylinder" = "Copy an existing cylinder";
 "Search cylinders" = "Search cylinders";
 "No cylinders yet" = "No cylinders yet";

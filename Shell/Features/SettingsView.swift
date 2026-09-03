@@ -1,3 +1,4 @@
+import StoreKit
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -10,10 +11,11 @@ struct SettingsView: View {
     @State private var showPaywall = false
     @State private var deletePhrase = ""
     @State private var legalDocument: LegalDocument?
+    @State private var showingManageSubscriptions = false
 
     var body: some View {
         List {
-            if !model.access.isEntitled {
+            if !model.access.isEntitled && model.access.purchases.subscriptionCondition != .billingRetry {
                 Section {
                     Button { showPaywall = true } label: {
                         SettingsLabel("Upgrade", verbatimSubtitle: upgradeSubtitle, symbol: "sparkles")
@@ -21,10 +23,18 @@ struct SettingsView: View {
                     .accessibilityIdentifier("shell.settings.upgrade")
                 }
             }
+            if ShellConfiguration.monetization.includesSubscription {
+                Section {
+                    SettingsLabel("subscription.status", verbatimSubtitle: subscriptionStatus, symbol: "checkmark.seal")
+                    Button { showingManageSubscriptions = true } label: {
+                        SettingsLabel("subscription.manage", subtitle: "subscription.manage.subtitle", symbol: "person.crop.circle.badge.checkmark")
+                    }
+                }
+            }
             Section {
                 NavigationLink { LanguageView() } label: { SettingsLabel("Language", subtitle: "Choose the app language", symbol: "globe") }
                 NavigationLink { CurrencyView(wallet: wallet) } label: { SettingsLabel("Currency", verbatimSubtitle: "\(wallet.currencySign(for: wallet.defaultCurrency)) · \(AppLocalization.string(wallet.currencyOverride == nil ? "Automatic" : "Selected", locale: locale))", symbol: "dollarsign.circle") }
-                NavigationLink { BackupView(wallet: wallet, activeCylinderLimit: model.access.isEntitled ? nil : 3) } label: { SettingsLabel("Backup", subtitle: "Optional native file backup", symbol: "externaldrive.badge.icloud") }
+                NavigationLink { BackupView(wallet: wallet, isEntitled: { model.access.isEntitled }) } label: { SettingsLabel("Backup", subtitle: "Optional native file backup", symbol: "externaldrive.badge.icloud") }
                 NavigationLink { HelpView() } label: { SettingsLabel("Help", subtitle: "Simple numbered guide", symbol: "questionmark.circle") }
             }
             Section {
@@ -47,6 +57,7 @@ struct SettingsView: View {
             LegalView(document: document)
                 .ignoresSafeArea()
         }
+        .manageSubscriptionsSheet(isPresented: $showingManageSubscriptions)
         .alert("Delete all data?", isPresented: $showDelete) {
             TextField("delete.typeWord", text: $deletePhrase).textInputAutocapitalization(.characters)
             Button("Delete all data", role: .destructive) { if deletionPhraseMatches { wallet.deleteAllData(); dismiss() }; deletePhrase = "" }.disabled(!deletionPhraseMatches)
@@ -62,7 +73,51 @@ struct SettingsView: View {
         guard let product = model.access.purchases.primaryProduct else {
             return AppLocalization.string("settings.upgrade.unlimited", locale: locale)
         }
-        return AppLocalization.string("settings.upgrade.price %@", locale: locale, product.displayPrice)
+        guard let subscription = product.subscription else {
+            return AppLocalization.string("settings.upgrade.price %@", locale: locale, product.displayPrice)
+        }
+        return AppLocalization.string(
+            "settings.upgrade.price.period %@ %@",
+            locale: locale,
+            product.displayPrice,
+            subscriptionPeriod(subscription.subscriptionPeriod)
+        )
+    }
+
+    private func subscriptionPeriod(_ period: Product.SubscriptionPeriod) -> String {
+        switch period.unit {
+        case .day:
+            return period.value == 1 ? AppLocalization.string("paywall.period.day.one", locale: locale) : AppLocalization.string("paywall.period.day.other %lld", locale: locale, period.value)
+        case .week:
+            return period.value == 1 ? AppLocalization.string("paywall.period.week.one", locale: locale) : AppLocalization.string("paywall.period.week.other %lld", locale: locale, period.value)
+        case .month:
+            return period.value == 1 ? AppLocalization.string("paywall.period.month.one", locale: locale) : AppLocalization.string("paywall.period.month.other %lld", locale: locale, period.value)
+        case .year:
+            return period.value == 1 ? AppLocalization.string("paywall.period.year.one", locale: locale) : AppLocalization.string("paywall.period.year.other %lld", locale: locale, period.value)
+        @unknown default:
+            return AppLocalization.string("paywall.period.unknown", locale: locale)
+        }
+    }
+
+    private var subscriptionStatus: String {
+        switch model.access.purchases.subscriptionCondition {
+        case .notApplicable, .expired, .revoked:
+            return AppLocalization.string("subscription.inactive", locale: locale)
+        case .checking:
+            return AppLocalization.string("access.checking", locale: locale)
+        case let .subscribed(willAutoRenew, expiration):
+            return AppLocalization.string(willAutoRenew ? "subscription.renews %@" : "subscription.ends %@", locale: locale, subscriptionDate(expiration))
+        case let .gracePeriod(expiration):
+            return AppLocalization.string("subscription.grace %@", locale: locale, subscriptionDate(expiration))
+        case .billingRetry:
+            return AppLocalization.string("subscription.billingRetry", locale: locale)
+        case let .offlineCached(expiration):
+            return AppLocalization.string("subscription.offline %@", locale: locale, subscriptionDate(expiration))
+        }
+    }
+
+    private func subscriptionDate(_ date: Date) -> String {
+        date.formatted(.dateTime.locale(locale).day().month(.abbreviated).year())
     }
 
     private func legalButton(_ document: LegalDocument, title: String, symbol: String) -> some View {
@@ -103,7 +158,7 @@ private struct CurrencyView: View {
 
 private struct BackupView: View {
     @Bindable var wallet: WalletStore
-    let activeCylinderLimit: Int?
+    let isEntitled: () -> Bool
     @Environment(\.locale) private var locale
     @State private var exporting = false; @State private var importing = false; @State private var document = WalletBackupDocument(); @State private var message = ""
     var body: some View {
@@ -115,7 +170,7 @@ private struct BackupView: View {
         }
         .navigationTitle("Backup").navigationBarTitleDisplayMode(.inline)
         .fileExporter(isPresented: $exporting, document: document, contentType: .json, defaultFilename: "welding-wallet-backup-\(Self.dateStamp)") { result in message = AppLocalization.string(result.isSuccess ? "backup.fileCreated" : "backup.notSaved", locale: locale) }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in do { let url = try result.get(); guard url.startAccessingSecurityScopedResource() else { throw CocoaError(.fileReadNoPermission) }; defer { url.stopAccessingSecurityScopedResource() }; try wallet.restore(from: Data(contentsOf: url), activeCylinderLimit: activeCylinderLimit, locale: locale); message = AppLocalization.string("backup.restored", locale: locale) } catch let error as WalletError { message = backupErrorMessage(error) } catch { message = error.localizedDescription } }
+        .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in do { let url = try result.get(); guard url.startAccessingSecurityScopedResource() else { throw CocoaError(.fileReadNoPermission) }; defer { url.stopAccessingSecurityScopedResource() }; let entitled = isEntitled(); try wallet.restore(from: Data(contentsOf: url), isEntitled: entitled, locale: locale); message = AppLocalization.string(wallet.requiresFreeCylinderSelection(isEntitled: entitled) ? "backup.restored.selectionRequired" : "backup.restored", locale: locale) } catch let error as WalletError { message = backupErrorMessage(error) } catch { message = error.localizedDescription } }
     }
     private func backupErrorMessage(_ error: WalletError) -> String {
         switch error {
