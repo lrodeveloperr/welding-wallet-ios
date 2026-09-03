@@ -28,7 +28,7 @@ final class AccessController {
     var decision: AccessDecision {
         Self.resolveDecision(
             mode: configuration.mode,
-            isEntitled: purchases.isEntitled,
+            isEntitled: isEntitled,
             isChecking: purchases.isChecking,
             hasFreeActionRemaining: usage.hasFreeActionRemaining
         )
@@ -66,7 +66,7 @@ final class AccessController {
     var shouldShowAd: Bool {
         Self.resolveAdVisibility(
             mode: configuration.mode,
-            isEntitled: purchases.isEntitled,
+            isEntitled: isEntitled,
             isChecking: purchases.isChecking
         )
     }
@@ -86,10 +86,18 @@ final class AccessController {
     func recordSuccessfulAction(id: String) -> UsageRecordingResult {
         switch configuration.mode {
         case .usageCapWithOneTimeUnlock, .usageCapWithSubscription:
-            guard !purchases.isEntitled else { return .notMetered }
+            guard !isEntitled else { return .notMetered }
             return usage.recordSuccessfulAction(id: id)
         default:
             return .notMetered
         }
+    }
+
+    var isEntitled: Bool {
+#if SCREENSHOT_BUILD
+        true
+#else
+        purchases.isEntitled
+#endif
     }
 }

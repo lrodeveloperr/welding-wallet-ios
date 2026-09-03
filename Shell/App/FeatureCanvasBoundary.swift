@@ -27,7 +27,7 @@ struct FeatureCanvasHost: View {
                 for: destination,
                 context: FeatureCanvasContext(
                     remainingFreeActions: { model.access.remainingFreeActions },
-                    isEntitled: { model.access.purchases.isEntitled },
+                    isEntitled: { model.access.isEntitled },
                     recordSuccessfulAction: { model.access.recordSuccessfulAction(id: $0) },
                     requestUpgrade: { model.paywallPresented = true }
                 )

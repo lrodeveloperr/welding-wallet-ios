@@ -2,7 +2,10 @@ import SwiftUI
 
 struct ShellRootView: View {
     private let featureProvider: any FeatureCanvasProviding
-#if DEBUG
+#if SCREENSHOT_BUILD
+    private let screenshotMode = true
+    private let screenshotOnboarding = false
+#elseif DEBUG
     private let screenshotMode = ProcessInfo.processInfo.arguments.contains("-welding.screenshotData")
     private let screenshotOnboarding = ProcessInfo.processInfo.arguments.contains("-welding.screenshotOnboarding")
 #else

@@ -318,7 +318,7 @@ final class WalletStore {
         return store
     }
 
-#if DEBUG
+#if DEBUG || SCREENSHOT_BUILD
     /// Deterministic, screenshot-only fixture spanning September 2025 through
     /// August 2026. It is activated exclusively by the UI-test launch flag and
     /// never enters a normal user's on-device wallet.

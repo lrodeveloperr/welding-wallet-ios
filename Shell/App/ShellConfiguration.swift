@@ -13,12 +13,21 @@ enum ShellConfiguration {
 
     /// Free users keep the complete wallet with a three-active-cylinder limit
     /// and a lower banner. A verified monthly subscription removes both.
+#if SCREENSHOT_BUILD
+    static let monetization = MonetizationConfiguration(
+        mode: .free,
+        freeSuccessfulActions: .max,
+        lifetimeProductID: "unused",
+        subscriptionProductID: "unused"
+    )
+#else
     static let monetization = MonetizationConfiguration(
         mode: .adsWithSubscription,
         freeSuccessfulActions: 3,
         lifetimeProductID: "unused",
         subscriptionProductID: "com.gooduse.weldinggaswallet.pro.monthly"
     )
+#endif
     static let advertising = AdvertisingConfiguration(
         bannerUnitID: Bundle.main.object(forInfoDictionaryKey: "WeldingAdBannerUnitID") as? String ?? ""
     )
