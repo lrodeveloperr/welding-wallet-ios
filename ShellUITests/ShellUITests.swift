@@ -22,7 +22,19 @@ final class WeldingGasWalletUITests: XCTestCase {
         openSettings(app)
         tap(app, identifier: "shell.settings.upgrade", label: "Upgrade")
         XCTAssertTrue(app.scrollViews["shell.paywall"].waitForExistence(timeout: 8))
+        XCTAssertTrue(app.staticTexts["Your whole cylinder inventory. One wallet."].exists)
         XCTAssertTrue(app.buttons["shell.paywall.restore"].exists)
+    }
+
+    func testBannerSlotStaysAboveVisibleTabBar() {
+        let app = launch(screenshotData: false)
+        XCTAssertTrue(app.navigationBars["Cylinders"].waitForExistence(timeout: 8))
+        let tabBar = app.tabBars.firstMatch
+        let adSlot = app.descendants(matching: .any)["shell.ad.slot"]
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 8))
+        XCTAssertTrue(adSlot.waitForExistence(timeout: 8))
+        XCTAssertLessThanOrEqual(adSlot.frame.maxY, tabBar.frame.minY + 1)
+        XCTAssertLessThanOrEqual(tabBar.frame.maxY, app.windows.firstMatch.frame.maxY)
     }
 
     func testCylindersTabHasVisibleIcon() {

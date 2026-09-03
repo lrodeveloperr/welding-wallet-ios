@@ -50,11 +50,12 @@
 "feature.replaceDetail" = "Replace with feature-specific content.";
 "usage.remaining %lld" = "%lld free actions remaining";
 
-"paywall.title" = "Make the useful thing unlimited.";
-"paywall.message" = "Clear value, transparent App Store pricing, restore access, and no dark patterns.";
-"paywall.benefit.unlimited" = "Unlimited core actions";
-"paywall.benefit.noAds" = "No advertising";
-"paywall.benefit.support" = "Supports continued development";
+"paywall.title" = "Your whole cylinder inventory. One wallet.";
+"paywall.message" = "Upgrade Welding Gas Wallet to track more than three active cylinders and work without banner ads.";
+"paywall.benefit.unlimited" = "Track unlimited active cylinders";
+"paywall.benefit.noAds" = "Remove banner advertising";
+"paywall.benefit.support" = "Restore Pro with your Apple Account";
+"paywall.purchase" = "Upgrade to Pro";
 "paywall.loadingProduct" = "Loading App Store price…";
 "paywall.restore" = "Restore purchases";
 "paywall.subscriptionDisclosure" = "Payment is charged to your Apple Account at confirmation. The subscription renews automatically unless cancelled in Apple Account settings before renewal.";
@@ -83,10 +84,6 @@
 "development" = "Development";
 "shellLab" = "Shell Lab";
 "shellLab.subtitle" = "Exercise reusable states";
-
-"legal.privacy.body" = "REPLACE_WITH_REVIEWED_PRIVACY_POLICY";
-"legal.terms.body" = "REPLACE_WITH_REVIEWED_TERMS_OF_USE";
-"legal.openReviewedDocument" = "Open full document";
 
 "backup" = "Backup";
 "backup.create" = "Create backup";

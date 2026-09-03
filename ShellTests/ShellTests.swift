@@ -89,6 +89,22 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertEqual(ShellConfiguration.supportedLanguages.count, 30)
     }
 
+    func testEveryPublishedLegalDestinationIsSecureAndProductSpecific() {
+        let urls = [
+            ShellConfiguration.legal.privacyURL,
+            ShellConfiguration.legal.termsURL,
+            ShellConfiguration.legal.supportURL,
+            ShellConfiguration.legal.deletionURL,
+            ShellConfiguration.legal.safetyURL,
+        ]
+        XCTAssertEqual(Set(urls).count, urls.count)
+        for url in urls {
+            XCTAssertEqual(url.scheme, "https")
+            XCTAssertEqual(url.host, "lrodeveloperr.github.io")
+            XCTAssertTrue(url.path.hasPrefix("/privacy-policy/welding-gas-wallet/"))
+        }
+    }
+
     func testSafeTemplateDefaultsAndSharedLocalizationContract() {
         XCTAssertTrue(ShellConfiguration.backup.enabled)
         XCTAssertEqual(LocalizationBaseline.localeIdentifiers.count, 31)

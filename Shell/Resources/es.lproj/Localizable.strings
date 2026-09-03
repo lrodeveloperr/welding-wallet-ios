@@ -50,11 +50,12 @@
 "feature.replaceDetail" = "Sustituye por contenido específico de la función.";
 "usage.remaining %lld" = "Quedan %lld acciones gratuitas";
 
-"paywall.title" = "Usa la función sin límites.";
-"paywall.message" = "Valor claro, precio transparente de App Store, restauración de acceso y sin patrones engañosos.";
-"paywall.benefit.unlimited" = "Acciones principales ilimitadas";
-"paywall.benefit.noAds" = "Sin anuncios";
-"paywall.benefit.support" = "Apoya el desarrollo continuo";
+"paywall.title" = "Todo tu inventario de cilindros. En una sola cartera.";
+"paywall.message" = "Mejora Welding Gas Wallet para controlar más de tres cilindros activos y trabajar sin anuncios de banner.";
+"paywall.benefit.unlimited" = "Controla cilindros activos ilimitados";
+"paywall.benefit.noAds" = "Elimina los anuncios de banner";
+"paywall.benefit.support" = "Restaura Pro con tu cuenta de Apple";
+"paywall.purchase" = "Mejorar a Pro";
 "paywall.loadingProduct" = "Cargando el precio de App Store…";
 "paywall.restore" = "Restaurar compras";
 "paywall.subscriptionDisclosure" = "El pago se carga a tu cuenta de Apple al confirmar. La suscripción se renueva automáticamente salvo que la canceles en los ajustes de tu cuenta de Apple antes de la renovación.";
@@ -83,10 +84,6 @@
 "development" = "Desarrollo";
 "shellLab" = "Laboratorio del shell";
 "shellLab.subtitle" = "Prueba los estados reutilizables";
-
-"legal.privacy.body" = "REPLACE_WITH_REVIEWED_PRIVACY_POLICY";
-"legal.terms.body" = "REPLACE_WITH_REVIEWED_TERMS_OF_USE";
-"legal.openReviewedDocument" = "Abrir el documento completo";
 
 "backup" = "Copia de seguridad";
 "backup.create" = "Crear copia de seguridad";

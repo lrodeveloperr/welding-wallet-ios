@@ -6,12 +6,19 @@ struct SettingsView: View {
     let wallet: WalletStore
     @Environment(\.dismiss) private var dismiss
     @State private var showDelete = false
+    @State private var showPaywall = false
     @State private var deletePhrase = ""
+    @State private var legalDocument: LegalDocument?
 
     var body: some View {
         List {
             if !model.access.isEntitled {
-                Section { NavigationLink { PaywallView() } label: { SettingsLabel("Upgrade", subtitle: "Remove ads and cylinder limit", symbol: "sparkles") }.accessibilityIdentifier("shell.settings.upgrade") }
+                Section {
+                    Button { showPaywall = true } label: {
+                        SettingsLabel("Upgrade", subtitle: "Remove ads and cylinder limit", symbol: "sparkles")
+                    }
+                    .accessibilityIdentifier("shell.settings.upgrade")
+                }
             }
             Section {
                 NavigationLink { LanguageView() } label: { SettingsLabel("Language", subtitle: "Choose the app language", symbol: "globe") }
@@ -23,19 +30,37 @@ struct SettingsView: View {
                 }
             }
             Section {
-                Link(destination: ShellConfiguration.legal.privacyURL) { SettingsLabel("Privacy policy", subtitle: "Opens in your browser", symbol: "hand.raised.shield") }
-                Link(destination: ShellConfiguration.legal.termsURL) { SettingsLabel("Terms of use", subtitle: "Opens in your browser", symbol: "doc.text") }
+                legalButton(.privacy, title: "Privacy policy", symbol: "hand.raised.shield")
+                legalButton(.terms, title: "Terms of use", symbol: "doc.text")
+                legalButton(.support, title: "Support", symbol: "questionmark.bubble")
+                legalButton(.deletion, title: "Data deletion", symbol: "trash.slash")
+                legalButton(.safety, title: "Safety notice", symbol: "exclamationmark.triangle")
             }
             Section { Button(role: .destructive) { showDelete = true } label: { SettingsLabel("Delete all data", subtitle: "Erase this wallet from this device", symbol: "trash") } }
             Section { Text("Welding Gas Wallet · Cylinder records stay on this device").font(.footnote).foregroundStyle(.secondary) }
         }
         .navigationTitle("Settings").navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
+        .sheet(isPresented: $showPaywall) {
+            NavigationStack { PaywallView(showsDoneButton: true) }
+                .environment(model)
+        }
+        .sheet(item: $legalDocument) { document in
+            LegalView(document: document)
+                .ignoresSafeArea()
+        }
         .alert("Delete all data?", isPresented: $showDelete) {
             TextField("Type DELETE", text: $deletePhrase).textInputAutocapitalization(.characters)
             Button("Delete all data", role: .destructive) { if deletePhrase.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() == "DELETE" { wallet.deleteAllData(); dismiss() }; deletePhrase = "" }.disabled(deletePhrase.trimmingCharacters(in: .whitespacesAndNewlines).uppercased() != "DELETE")
             Button("Cancel", role: .cancel) { deletePhrase = "" }
         } message: { Text("This removes cylinders, suppliers, costs, activity, reminders and preferences. Purchases and separately saved backup files are not deleted.") }
+    }
+
+    private func legalButton(_ document: LegalDocument, title: String, symbol: String) -> some View {
+        Button { legalDocument = document } label: {
+            SettingsLabel(title, subtitle: "Opens the current published document", symbol: symbol)
+        }
+        .accessibilityIdentifier("shell.settings.legal.\(document.rawValue)")
     }
 }
 

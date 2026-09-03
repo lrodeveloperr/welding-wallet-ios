@@ -1,28 +1,34 @@
+import SafariServices
 import SwiftUI
 
 enum LegalDocument: String, Identifiable {
-    case privacy, terms
+    case privacy, terms, support, deletion, safety
     var id: Self { self }
-    var titleKey: LocalizedStringKey { self == .privacy ? "privacyPolicy" : "termsOfUse" }
-    var bodyKey: LocalizedStringKey { self == .privacy ? "legal.privacy.body" : "legal.terms.body" }
+
+    var url: URL {
+        switch self {
+        case .privacy: ShellConfiguration.legal.privacyURL
+        case .terms: ShellConfiguration.legal.termsURL
+        case .support: ShellConfiguration.legal.supportURL
+        case .deletion: ShellConfiguration.legal.deletionURL
+        case .safety: ShellConfiguration.legal.safetyURL
+        }
+    }
 }
 
-struct LegalView: View {
+/// Presents the published document in Apple's in-app browser. This avoids stale
+/// placeholder legal copy and gives every legal entry point the same destination.
+struct LegalView: UIViewControllerRepresentable {
     let document: LegalDocument
-    @Environment(\.dismiss) private var dismiss
 
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text(document.bodyKey)
-                Link("legal.openReviewedDocument", destination: document == .privacy ? ShellConfiguration.legal.privacyURL : ShellConfiguration.legal.termsURL)
-            }
-            .frame(maxWidth: 680, alignment: .leading)
-            .frame(maxWidth: .infinity)
-            .padding(24)
-        }
-        .navigationTitle(document.titleKey)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar { ToolbarItem(placement: .confirmationAction) { Button("done") { dismiss() } } }
+    func makeUIViewController(context: Context) -> SFSafariViewController {
+        let configuration = SFSafariViewController.Configuration()
+        configuration.entersReaderIfAvailable = false
+        let controller = SFSafariViewController(url: document.url, configuration: configuration)
+        controller.preferredControlTintColor = UIColor(ShellConfiguration.tint)
+        controller.dismissButtonStyle = .done
+        return controller
     }
+
+    func updateUIViewController(_ controller: SFSafariViewController, context: Context) {}
 }

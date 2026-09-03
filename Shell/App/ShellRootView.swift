@@ -66,7 +66,7 @@ struct ShellRootView: View {
         }
 #endif
         .sheet(isPresented: $model.paywallPresented) {
-            NavigationStack { PaywallView() }
+            NavigationStack { PaywallView(showsDoneButton: true) }
                 .environment(model)
                 .environment(model.language)
                 .environment(\.locale, model.language.locale)
@@ -88,20 +88,11 @@ struct ShellRootView: View {
     @ViewBuilder
     private var shell: some View {
         if ShellConfiguration.destinations.count == 1, let destination = ShellConfiguration.destinations.first {
-            NavigationStack {
-                FeatureCanvasHost(destination: destination, provider: featureProvider)
-                    .navigationTitle(destination.id == "cylinders" ? "Cylinders" : destination.id.capitalized)
-                    .shellSettingsToolbar()
-            }
-            .safeAreaInset(edge: .bottom) { adBanner }
+            destinationStack(destination)
         } else {
             TabView(selection: $model.selectedDestination) {
                 ForEach(ShellConfiguration.destinations) { destination in
-                    NavigationStack {
-                        FeatureCanvasHost(destination: destination, provider: featureProvider)
-                            .navigationTitle(destination.id == "cylinders" ? "Cylinders" : destination.id.capitalized)
-                            .shellSettingsToolbar()
-                    }
+                    destinationStack(destination)
                     .tag(destination.id)
                     .tabItem {
                         if destination.id == "cylinders" {
@@ -113,23 +104,27 @@ struct ShellRootView: View {
                 }
             }
             .tabViewStyle(.sidebarAdaptable)
-            .safeAreaInset(edge: .bottom, spacing: 0) { adBanner }
+        }
+    }
+
+    private func destinationStack(_ destination: ShellDestination) -> some View {
+        NavigationStack {
+            FeatureCanvasHost(destination: destination, provider: featureProvider)
+                .safeAreaInset(edge: .bottom, spacing: 0) { adBanner }
+                .navigationTitle(destination.id == "cylinders" ? "Cylinders" : destination.id.capitalized)
+                .shellSettingsToolbar()
         }
     }
 
     @ViewBuilder
     private var adBanner: some View {
         if model.shouldRenderAd {
-            Group {
-                if screenshotMode {
-                    Color.clear.frame(height: 60).accessibilityHidden(true)
-                } else if model.ads.canRequestAds {
-                    AdaptiveAdBanner(adUnitID: ShellConfiguration.advertising.bannerUnitID)
-                        .accessibilityLabel(Text("advertisement"))
-                } else {
-                    Color.clear.frame(height: 60).accessibilityHidden(true)
-                }
-            }
+            AdaptiveAdBanner(
+                adUnitID: ShellConfiguration.advertising.bannerUnitID,
+                requestsAds: !screenshotMode && model.ads.canRequestAds
+            )
+            .accessibilityLabel(Text("advertisement"))
+            .accessibilityIdentifier("shell.ad.slot")
             .frame(maxWidth: .infinity)
             .background(.bar)
         }

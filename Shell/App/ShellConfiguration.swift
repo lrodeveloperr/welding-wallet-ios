@@ -7,7 +7,10 @@ enum ShellConfiguration {
     static let legal = LegalConfiguration(
         version: "1",
         privacyURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/privacy/")!,
-        termsURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/terms/")!
+        termsURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/terms/")!,
+        supportURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/support/")!,
+        deletionURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/deletion/")!,
+        safetyURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/disclaimer/")!
     )
     static let onboarding: OnboardingProfile = .legalOnly
 
@@ -77,7 +80,14 @@ enum ShellConfiguration {
     ]
 }
 
-struct LegalConfiguration: Sendable { let version: String; let privacyURL: URL; let termsURL: URL }
+struct LegalConfiguration: Sendable {
+    let version: String
+    let privacyURL: URL
+    let termsURL: URL
+    let supportURL: URL
+    let deletionURL: URL
+    let safetyURL: URL
+}
 enum OnboardingProfile: Equatable, Sendable { case legalOnly, singleScreen, guidedTour }
 struct AdvertisingConfiguration: Sendable { let bannerUnitID: String }
 struct BackupConfiguration: Sendable { let enabled: Bool }

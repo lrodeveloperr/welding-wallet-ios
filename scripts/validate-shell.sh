@@ -23,7 +23,7 @@ require_text project.yml 'SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) ADS
 require_text Shell/App/ShellConfiguration.swift 'mode: .adsWithSubscription'
 require_text Shell/App/ShellConfiguration.swift 'com.gooduse.weldinggaswallet.pro.monthly'
 require_text Shell/App/ShellConfiguration.swift 'BackupConfiguration(enabled: true)'
-require_text Shell/App/ShellRootView.swift 'Color.clear.frame(height: 60)'
+require_text Shell/App/ShellRootView.swift '.safeAreaInset(edge: .bottom, spacing: 0) { adBanner }'
 require_text Shell/App/ShellRootView.swift 'Label("Cylinders", image: "CylinderTabIcon")'
 require_text Shell/App/ShellRootView.swift 'SettingsView(model: model, wallet: wallet)'
 require_text Shell/App/ShellRootView.swift '.environment(model)'
@@ -36,7 +36,12 @@ require_text Shell/Features/WalletStore.swift 'try? await Task.sleep(for: .secon
 require_text Shell/Features/SettingsView.swift 'Type DELETE'
 require_text Shell/Features/SettingsView.swift 'wallet.currencySign(for:'
 require_text Shell/Services/AdConsentService.swift 'ConsentForm.loadAndPresentIfRequired'
+require_text Shell/Services/AdaptiveAdBanner.swift '.frame(height: adSize.size.height)'
 require_text Shell/Services/PurchaseService.swift 'Transaction.currentEntitlements'
+
+for url in privacy terms support deletion disclaimer; do
+  require_text Shell/App/ShellConfiguration.swift "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/$url/"
+done
 
 language_count="$(sed -n '/static let supportedLanguages:/,/^    ]/p' Shell/App/ShellConfiguration.swift | grep -c '\.init(id:')"
 [[ "$language_count" == "30" ]] || fail "Expected 30 language choices; found $language_count"
