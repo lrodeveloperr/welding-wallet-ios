@@ -1,6 +1,9 @@
 name: iOS screenshot capture
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
