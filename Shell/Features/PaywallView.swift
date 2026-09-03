@@ -46,7 +46,7 @@ struct PaywallView: View {
                                 .font(.headline)
                             Group {
                                 if let subscription = product.subscription {
-                                    Text(product.displayPrice) + Text(" · ") + Text(periodKey(subscription.subscriptionPeriod))
+                                    Text(product.displayPrice) + Text(" · ") + Text(periodText(subscription.subscriptionPeriod))
                                 } else {
                                     Text(product.displayPrice)
                                 }
@@ -123,13 +123,16 @@ struct PaywallView: View {
         )
     }
 
-    private func periodKey(_ period: Product.SubscriptionPeriod) -> LocalizedStringKey {
+    private func periodText(_ period: Product.SubscriptionPeriod) -> String {
+        let unit: NSCalendar.Unit
         switch period.unit {
-        case .day: period.value == 1 ? "paywall.period.day.one" : "paywall.period.day.other \(period.value)"
-        case .week: period.value == 1 ? "paywall.period.week.one" : "paywall.period.week.other \(period.value)"
-        case .month: period.value == 1 ? "paywall.period.month.one" : "paywall.period.month.other \(period.value)"
-        case .year: period.value == 1 ? "paywall.period.year.one" : "paywall.period.year.other \(period.value)"
-        @unknown default: "paywall.period.unknown"
+        case .day: unit = .day
+        case .week: unit = .weekOfMonth
+        case .month: unit = .month
+        case .year: unit = .year
+        @unknown default: return AppLocalization.string("paywall.period.unknown", locale: model.language.locale)
         }
+        return AppLocalization.duration(period.value, unit: unit, locale: model.language.locale)
+            ?? AppLocalization.string("paywall.period.unknown", locale: model.language.locale)
     }
 }

@@ -118,13 +118,16 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertTrue(ShellConfiguration.supportedLanguages.contains { $0.id == "en" })
         XCTAssertEqual(ShellConfiguration.supportedLanguages.map(\.id), ["en", "es-419"])
         XCTAssertEqual(LanguageController.closestSupported(to: "es-MX"), "es-419")
-        XCTAssertEqual(LanguageController.closestSupported(to: "zh-Hans"), "en")
+        XCTAssertEqual(LanguageController.closestSupported(to: "zh-Hant"), "en")
         XCTAssertEqual(LanguageController.closestSupported(to: "fr-CA"), "en")
+        XCTAssertEqual(LanguageController.closestSupported(to: "xx-YY"), "en")
+        XCTAssertTrue(SupportedLocaleResolver.isRightToLeft("ar"))
+        XCTAssertFalse(SupportedLocaleResolver.isRightToLeft("en"))
     }
 
     func testStaleStoredLanguageFallsBackToSupportedLocale() {
         let defaults = makeDefaults()
-        defaults.set("zh-Hans", forKey: "wallet.language")
+        defaults.set("xx-YY", forKey: "wallet.language")
         let controller = LanguageController(defaults: defaults, preferredLanguages: ["es-MX"])
         XCTAssertEqual(controller.selection, "es-419")
     }

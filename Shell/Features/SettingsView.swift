@@ -109,18 +109,16 @@ struct SettingsView: View {
     }
 
     private func subscriptionPeriod(_ period: Product.SubscriptionPeriod) -> String {
+        let unit: NSCalendar.Unit
         switch period.unit {
-        case .day:
-            return period.value == 1 ? AppLocalization.string("paywall.period.day.one", locale: locale) : AppLocalization.string("paywall.period.day.other %lld", locale: locale, period.value)
-        case .week:
-            return period.value == 1 ? AppLocalization.string("paywall.period.week.one", locale: locale) : AppLocalization.string("paywall.period.week.other %lld", locale: locale, period.value)
-        case .month:
-            return period.value == 1 ? AppLocalization.string("paywall.period.month.one", locale: locale) : AppLocalization.string("paywall.period.month.other %lld", locale: locale, period.value)
-        case .year:
-            return period.value == 1 ? AppLocalization.string("paywall.period.year.one", locale: locale) : AppLocalization.string("paywall.period.year.other %lld", locale: locale, period.value)
-        @unknown default:
-            return AppLocalization.string("paywall.period.unknown", locale: locale)
+        case .day: unit = .day
+        case .week: unit = .weekOfMonth
+        case .month: unit = .month
+        case .year: unit = .year
+        @unknown default: return AppLocalization.string("paywall.period.unknown", locale: locale)
         }
+        return AppLocalization.duration(period.value, unit: unit, locale: locale)
+            ?? AppLocalization.string("paywall.period.unknown", locale: locale)
     }
 
     private var subscriptionStatus: String {

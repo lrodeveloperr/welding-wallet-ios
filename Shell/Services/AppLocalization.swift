@@ -4,8 +4,7 @@ enum AppLocalization {
     private static let presetGases: Set<String> = ["Argon", "C25 Mix", "Oxygen", "Acetylene", "Nitrogen", "CO₂", "Helium"]
 
     static func string(_ key: String, locale: Locale, _ arguments: CVarArg...) -> String {
-        let identifier = locale.identifier.replacingOccurrences(of: "_", with: "-")
-        let language = identifier.lowercased().hasPrefix("es") ? "es-419" : "en"
+        let language = SupportedLocaleResolver.closestSupported(to: locale.identifier)
         let path = Bundle.main.path(forResource: language, ofType: "lproj")
         let bundle = path.flatMap { Bundle(path: $0) } ?? .main
         let format = bundle.localizedString(forKey: key, value: key, table: nil)
@@ -48,5 +47,28 @@ enum AppLocalization {
 
     static func number(_ value: Double, locale: Locale, maximumFractionDigits: Int = 1) -> String {
         number(Decimal(value), locale: locale, maximumFractionDigits: maximumFractionDigits)
+    }
+
+    static func labeledCount(_ labelKey: String, count: Int, locale: Locale) -> String {
+        "\(string(labelKey, locale: locale)): \(number(Decimal(count), locale: locale))"
+    }
+
+    static func duration(_ value: Int, unit: NSCalendar.Unit, locale: Locale) -> String? {
+        let formatter = DateComponentsFormatter()
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = locale
+        formatter.calendar = calendar
+        formatter.allowedUnits = unit
+        formatter.unitsStyle = .full
+        formatter.maximumUnitCount = 1
+        var components = DateComponents()
+        switch unit {
+        case .day: components.day = value
+        case .weekOfMonth: components.weekOfMonth = value
+        case .month: components.month = value
+        case .year: components.year = value
+        default: return nil
+        }
+        return formatter.string(from: components)
     }
 }

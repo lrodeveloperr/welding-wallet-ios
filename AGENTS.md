@@ -26,6 +26,9 @@ This is the authoritative native iOS application. It derives from `lrodeveloperr
 - Review welding terminology for the target region, not only the language. Latin American Spanish uses `cilindro`, `recarga`, `proveedor` and `fuera del taller` in this app.
 - Translate cylinder states by domain meaning, not word-for-word. In Latin American Spanish, a low-gas cylinder `tiene poco gas`; never translate English “low” as `está bajo`. Use `fuera del taller` for off-site/away when no more specific location is known.
 - Validate Dynamic Type/text expansion and bidirectional layout before enabling a locale. RTL locales require an explicit RTL QA pass.
+- Generated translation is a draft, never release evidence. Every user-visible string must be reviewed in product context for trade terminology, tone, Apple terminology, grammar and regional usage before its locale is exposed.
+- Display language choices as native autonyms. Map language-region/script identifiers deliberately, and update SwiftUI `layoutDirection` explicitly when the in-app selection changes between LTR and Arabic, Urdu or Hebrew.
+- Keep a per-locale PASS/FAIL matrix in `docs/LOCALIZATION_RELEASE_CHECKLIST.md`; a key-count check or blanket claim cannot replace cultural review.
 - Notification copy, accessibility labels, validation errors, empty states, purchase copy and legal-link labels are part of the catalog.
 - Published legal documents must be available and appropriate for every enabled locale, or the app must clearly disclose the document language. Never imply translated legal coverage that does not exist.
 - Run `bash scripts/validate-shell.sh --app`; localization parity is a release-blocking check.

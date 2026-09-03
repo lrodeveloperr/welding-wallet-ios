@@ -59,14 +59,6 @@
 "paywall.retryProduct" = "Reintentar App Store";
 "paywall.restore" = "Restaurar compras";
 "paywall.subscriptionDisclosure" = "El pago se carga a tu cuenta de Apple al confirmar. La suscripción se renueva automáticamente salvo que la canceles en los ajustes de tu cuenta de Apple antes de la renovación.";
-"paywall.period.day.one" = "cada día";
-"paywall.period.day.other %lld" = "cada %lld días";
-"paywall.period.week.one" = "cada semana";
-"paywall.period.week.other %lld" = "cada %lld semanas";
-"paywall.period.month.one" = "cada mes";
-"paywall.period.month.other %lld" = "cada %lld meses";
-"paywall.period.year.one" = "cada año";
-"paywall.period.year.other %lld" = "cada %lld años";
 "paywall.period.unknown" = "periodo de suscripción";
 "settings.upgrade.unlimited" = "Controla cilindros activos sin límite";
 "settings.upgrade.price %@" = "Cilindros activos sin límite · %@";
@@ -138,17 +130,13 @@
 "activity.title.archived %@" = "Se archivó %@";
 "activity.historyRetained" = "Se conservó el historial";
 "activity.replacement %@" = "Reemplazo: %@";
-"cylinders.active.one" = "%lld cilindro activo";
-"cylinders.active.other" = "%lld cilindros activos";
-"cylinders.current.one" = "%lld cilindro actual";
-"cylinders.current.other" = "%lld cilindros actuales";
+"cylinders.active.label" = "Cilindros activos";
+"cylinders.current.label" = "Cilindros actuales";
 "cylinders.free.count" = "%lld de 3 gratis";
 "cylinders.free.selection" = "Elige 3 para gestionarlos gratis";
 "cylinders.free.managed %lld" = "3 gestionados gratis · %lld de solo lectura";
 "cylinder.deleted %@" = "Se eliminó %@";
 "cylinder.changeStatus %@" = "Cambiar el estado de %@";
-"days.one" = "%lld día";
-"days.other" = "%lld días";
 "reminder.scheduled %@" = "Programado para %@.";
 "reminder.label %@" = "Recordatorio · %@";
 "notification.check %@" = "Revisa %@";
@@ -173,8 +161,8 @@
 "purchase.productUnavailable" = "El producto de App Store no está disponible. Inténtalo de nuevo más tarde.";
 "purchase.pending" = "La compra está pendiente de aprobación. El acceso se actualizará automáticamente cuando App Store la complete.";
 "purchase.verificationFailed" = "No se pudo verificar la transacción de App Store.";
-"delete.confirmationWord" = "BORRAR";
-"delete.typeWord" = "Escribe BORRAR";
+"delete.confirmationWord" = "ELIMINAR";
+"delete.typeWord" = "Escribe ELIMINAR";
 
 "Add cylinder" = "Añadir cilindro";
 "Edit cylinder" = "Editar cilindro";

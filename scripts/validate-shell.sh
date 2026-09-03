@@ -76,12 +76,10 @@ for url in privacy terms support deletion disclaimer; do
 done
 
 language_count="$(sed -n '/static let supportedLanguages:/,/^    ]/p' Shell/App/ShellConfiguration.swift | grep -c '\.init(id:')"
-[[ "$language_count" == "2" ]] || fail "Expected only the two completed language choices; found $language_count"
+[[ "$language_count" == "2" ]] || fail "Expected only the completed language choices; found $language_count"
 ! grep -Fq '.init(id: "system"' Shell/App/ShellConfiguration.swift || fail 'Language selector must not contain Follow system'
-
-for locale in en es-419; do
-  require_file "Shell/Resources/$locale.lproj/Localizable.strings"
-done
+require_text Shell/App/ShellRootView.swift '.environment(\.layoutDirection, model.language.layoutDirection)'
+require_text Shell/Services/LanguageController.swift '["ar", "he", "ur"]'
 python3 scripts/validate-localizations.py
 
 for workflow in .github/workflows/*.yml; do

@@ -33,11 +33,12 @@ This is the source-level acceptance gate for Settings. Device and StoreKit check
 ## Localization and culture
 
 - [x] English and Latin American Spanish catalogs have exact key parity and matching format placeholders.
-- [x] The language selector exposes only those complete current Swift catalogs; the wider historical/shared vocabulary is not misrepresented as full product localization.
+- [x] The language selector exposes only completed catalogs; the 29 target locales in the welding glossary remain blocked until full cultural review.
 - [x] Latin American welding terminology uses `cilindro`, `recarga`, `proveedor`, `poco gas` and `fuera del taller` in the relevant product states.
 - [x] StoreKit owns customer-facing currency and price localization; Settings contains no hard-coded US-dollar price.
 - [x] Persisted record values remain canonical while user-facing statuses, lifecycle states, gases, errors and actions resolve through localized display keys.
-- [ ] On-device pass: switch English → Español (Latinoamérica) while Settings is open and confirm the title changes to `Ajustes` with no stray English.
+- [x] Locale infrastructure explicitly changes SwiftUI layout direction when an approved Arabic, Urdu or Hebrew catalog is enabled later.
+- [ ] On-device pass: switch every enabled language while Settings is open and confirm the title and every visible row change with no stray English.
 - [ ] On-device pass: check Settings at accessibility text sizes and verify wrapping, hit targets and VoiceOver order.
 - [ ] On-device pass: verify each subscription condition with StoreKit test accounts, including cancellation and expiration.
 
