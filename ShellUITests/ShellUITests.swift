@@ -43,12 +43,12 @@ final class WeldingGasWalletUITests: XCTestCase {
             tap(app, identifier: "wallet.status.\(argonID)", label: "Change Argon status")
             XCTAssertTrue(app.staticTexts["Update status"].waitForExistence(timeout: 5))
         }
-        try scenario(4, "Add-Cylinder") { app in
+        try scenario(4, "Add-Cylinder", openSlot: true) { app in
             waitForHome(app)
             tap(app, identifier: "wallet.addCylinder", label: "Add cylinder")
             waitForNavigationTitle(app, "Add cylinder")
         }
-        try scenario(5, "Add-Supplier-Inline") { app in
+        try scenario(5, "Add-Supplier-Inline", openSlot: true) { app in
             waitForHome(app)
             tap(app, identifier: "wallet.addCylinder", label: "Add cylinder")
             tap(app, label: "Add supplier, relationship or serial")
@@ -116,7 +116,7 @@ final class WeldingGasWalletUITests: XCTestCase {
         }
     }
 
-    private func launch(onboardingComplete: Bool = true, screenshotData: Bool = true) -> XCUIApplication {
+    private func launch(onboardingComplete: Bool = true, screenshotData: Bool = true, openSlot: Bool = false) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments += [
             "-AppleLanguages", "(en)",
@@ -126,6 +126,7 @@ final class WeldingGasWalletUITests: XCTestCase {
         ]
         if screenshotData { app.launchArguments += ["-welding.screenshotData", "YES"] }
         if screenshotData && !onboardingComplete { app.launchArguments += ["-welding.screenshotOnboarding", "YES"] }
+        if openSlot { app.launchArguments += ["-welding.screenshotOpenSlot", "YES"] }
         app.launch()
         return app
     }
@@ -134,9 +135,10 @@ final class WeldingGasWalletUITests: XCTestCase {
         _ number: Int,
         _ label: String,
         onboardingComplete: Bool = true,
+        openSlot: Bool = false,
         navigation: (XCUIApplication) -> Void
     ) throws {
-        let app = launch(onboardingComplete: onboardingComplete)
+        let app = launch(onboardingComplete: onboardingComplete, openSlot: openSlot)
         navigation(app)
         RunLoop.current.run(until: Date().addingTimeInterval(0.45))
         try saveScreenshot(number: number, label: label)
