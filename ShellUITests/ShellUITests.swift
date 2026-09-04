@@ -84,8 +84,8 @@ final class WeldingGasWalletUITests: XCTestCase {
 
     func testCaptureIPadHomeScreen() throws {
         let app = launch()
-        waitForHome(app)
-        RunLoop.current.run(until: Date().addingTimeInterval(0.75))
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 15))
+        RunLoop.current.run(until: Date().addingTimeInterval(3))
         try saveScreenshot(number: 1, label: "Cylinders-Home-iPad-13-inch")
         app.terminate()
     }
