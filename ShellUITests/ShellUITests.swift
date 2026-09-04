@@ -52,10 +52,12 @@ final class WeldingGasWalletUITests: XCTestCase {
 
     func testPrimaryControlsMeetMinimumHitTarget() {
         let app = launch(screenshotData: false)
-        let control = app.buttons["shell.settings"]
-        XCTAssertTrue(control.waitForExistence(timeout: 8))
-        XCTAssertGreaterThanOrEqual(control.frame.height, 44)
-        XCTAssertGreaterThanOrEqual(control.frame.width, 44)
+        for control in [app.buttons["shell.settings"], app.buttons["wallet.addCylinder"], app.tabBars.buttons["Cylinders"], app.tabBars.buttons["Activity"], app.tabBars.buttons["Suppliers"]] {
+            XCTAssertTrue(control.waitForExistence(timeout: 8))
+            XCTAssertTrue(control.isHittable)
+            XCTAssertGreaterThanOrEqual(control.frame.height, 44)
+            XCTAssertGreaterThanOrEqual(control.frame.width, 44)
+        }
     }
 
     func testCaptureAllScreens() throws {
@@ -201,24 +203,26 @@ final class WeldingGasWalletUITests: XCTestCase {
 
     private func tap(_ app: XCUIApplication, identifier: String, label: String) {
         let identified = app.buttons[identifier]
-        if identified.waitForExistence(timeout: 3) { identified.tap(); return }
+        if identified.waitForExistence(timeout: 3) {
+            XCTAssertTrue(identified.isHittable, "Control is not hittable: \(identifier)")
+            identified.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
+            return
+        }
         tap(app, label: label)
     }
 
     private func tap(_ app: XCUIApplication, label: String) {
         let exactButton = app.buttons[label].firstMatch
-        if exactButton.waitForExistence(timeout: 3) { exactButton.tap(); return }
-        let exactText = app.staticTexts[label].firstMatch
-        XCTAssertTrue(exactText.waitForExistence(timeout: 5), "Missing control: \(label)")
-        exactText.tap()
+        XCTAssertTrue(exactButton.waitForExistence(timeout: 5), "Missing tappable control: \(label)")
+        XCTAssertTrue(exactButton.isHittable, "Control is not hittable: \(label)")
+        exactButton.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5)).tap()
     }
 
     private func tap(_ app: XCUIApplication, containing text: String) {
         let predicate = NSPredicate(format: "label CONTAINS[c] %@", text)
         let button = app.buttons.matching(predicate).firstMatch
-        if button.waitForExistence(timeout: 3) { button.tap(); return }
-        let label = app.staticTexts.matching(predicate).firstMatch
-        XCTAssertTrue(label.waitForExistence(timeout: 5), "Missing control containing: \(text)")
-        label.tap()
+        XCTAssertTrue(button.waitForExistence(timeout: 5), "Missing tappable control containing: \(text)")
+        XCTAssertTrue(button.isHittable, "Control is not hittable: \(text)")
+        button.coordinate(withNormalizedOffset: CGVector(dx: 0.1, dy: 0.5)).tap()
     }
 }

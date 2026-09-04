@@ -43,6 +43,18 @@ This is the authoritative native iOS application. It derives from `lrodeveloperr
 - Monetization/legal/destinations: `Shell/App/ShellConfiguration.swift`
 - StoreKit: `Shell/Services/PurchaseService.swift`, `Shell/Services/AccessController.swift`
 - Validation: `scripts/validate-shell.sh`
+- Reliability audit: `docs/RELIABILITY_AUDIT.md`
+
+## Reliability and touchscreen gate
+
+- Treat every visible control as a single full-surface target. Interactive labels must be at least 44×44 points, use `contentShape(Rectangle())` when the visual row is larger than its text, and remain tappable at the left, center, and right edges.
+- UI tests must locate controls by the button/control accessibility element. Never fall back to tapping a child `Text` or `Image`, because that hides broken or partial hit regions.
+- Every wallet mutation is transactional: validate first, persist atomically, then publish success and perform reminder side effects. On a write failure, roll back the in-memory mutation and expose an actionable error.
+- Never decode malformed or inconsistent storage/backup data to an empty wallet. Preserve a recovery copy of damaged local data; reject a bad import without changing current records.
+- Apply the three-active-cylinder policy, lifecycle read-only policy, finite numeric/range checks, unique IDs/serials, valid references, units and currencies inside `WalletStore`, including restore and Undo paths.
+- Restore must sort activity, cancel reminders for records it removes, and reschedule only valid active reminders. Editing reminder copy must refresh its pending notification. Do not save a past reminder or claim success when notification authorization/scheduling fails.
+- Purchase, restore and retry operations must be single-flight. Disable conflicting controls while work is active, never offer an already-owned product, and give explicit feedback when restore finds no entitlement.
+- A reliability change is incomplete without regression coverage for the failing store path and edge-of-control touchscreen taps. Run `bash scripts/validate-shell.sh --app`; run XCTest/XCUITest when Xcode is available.
 
 ## Release control
 

@@ -12,7 +12,7 @@ require_file() { [[ -f "$1" ]] || fail "Missing $1"; }
 require_text() { grep -Fq "$2" "$1" || fail "$1 must contain: $2"; }
 reject_tree_text() { ! rg -n "$1" "$2" || fail "Forbidden implementation detected: $1"; }
 
-[[ -x scripts/validate-shell.sh ]] || fail "scripts/validate-shell.sh must retain its executable bit"
+[[ "$(git ls-files -s scripts/validate-shell.sh | awk '{print $1}')" == "100755" ]] || fail "scripts/validate-shell.sh must retain its executable bit"
 
 for path in project.yml README.md Shell/App/WeldingGasWalletApp.swift Shell/App/ShellConfiguration.swift Shell/App/ShellRootView.swift Shell/Features/FeatureView.swift Shell/Features/WalletStore.swift Shell/Features/SettingsView.swift Shell/Features/PaywallView.swift Shell/Services/PurchaseService.swift Shell/Resources/Info.plist Shell/Resources/PrivacyInfo.xcprivacy Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/Contents.json Shell/Resources/Assets.xcassets/CylinderTabIcon.imageset/CylinderTabIcon.svg; do
   require_file "$path"

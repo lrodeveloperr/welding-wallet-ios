@@ -111,10 +111,21 @@ final class WalletStore {
     private(set) var activity: [ActivityRecord] = []
     private(set) var lastDeleted: DeletedCylinderSnapshot?
     private(set) var freeManagedCylinderIDs: Set<UUID> = []
+    private(set) var persistenceError: String?
     var currencyOverride: String?
     var defaults: CylinderDefaults
     private let fileURL: URL
     private var undoTask: Task<Void, Never>?
+
+    private struct StoreState {
+        let cylinders: [CylinderRecord]
+        let suppliers: [SupplierRecord]
+        let activity: [ActivityRecord]
+        let lastDeleted: DeletedCylinderSnapshot?
+        let freeManagedCylinderIDs: Set<UUID>
+        let currencyOverride: String?
+        let defaults: CylinderDefaults
+    }
 
     init(fileURL: URL? = nil, loadExisting: Bool = true) {
         let regionUnit = Locale.current.region?.identifier == "US" ? "ft3" : "L"
@@ -126,6 +137,8 @@ final class WalletStore {
     var activeCylinders: [CylinderRecord] { cylinders.filter { $0.lifecycle == .active } }
     var automaticCurrency: String { Locale.current.currency?.identifier ?? "USD" }
     var defaultCurrency: String { currencyOverride ?? automaticCurrency }
+
+    func clearPersistenceError() { persistenceError = nil }
 
     func currencySign(for code: String) -> String {
         let known: [String: String] = [
@@ -151,9 +164,7 @@ final class WalletStore {
         let cleaned = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !cleaned.isEmpty, !suppliers.contains(where: { $0.name.localizedCaseInsensitiveCompare(cleaned) == .orderedSame }) else { return nil }
         let supplier = SupplierRecord(name: cleaned, phone: phone.trimmed, notes: notes.trimmed)
-        suppliers.append(supplier)
-        save()
-        return supplier
+        return commit({ suppliers.append(supplier) }) ? supplier : nil
     }
 
     @discardableResult
@@ -163,7 +174,7 @@ final class WalletStore {
 
     func canManageCylinder(_ id: UUID, isEntitled: Bool) -> Bool {
         guard let cylinder = cylinders.first(where: { $0.id == id }) else { return false }
-        return isEntitled || cylinder.lifecycle != .active || activeCylinders.count <= Self.freeActiveCylinderLimit || freeManagedCylinderIDs.contains(id)
+        return cylinder.lifecycle == .active && (isEntitled || activeCylinders.count <= Self.freeActiveCylinderLimit || freeManagedCylinderIDs.contains(id))
     }
 
     func requiresFreeCylinderSelection(isEntitled: Bool) -> Bool {
@@ -185,7 +196,7 @@ final class WalletStore {
                 freeManagedCylinderIDs = Set(activeCylinders.lazy.map(\.id).filter(freeManagedCylinderIDs.contains).prefix(Self.freeActiveCylinderLimit))
             }
         }
-        if previous != freeManagedCylinderIDs { save() }
+        if previous != freeManagedCylinderIDs, !persistCurrentState() { freeManagedCylinderIDs = previous }
     }
 
     @discardableResult
@@ -196,9 +207,7 @@ final class WalletStore {
         guard ids.count == requiredCount,
               ids.isSubset(of: activeIDs),
               freeManagedCylinderIDs.isSubset(of: ids) else { return false }
-        freeManagedCylinderIDs = ids
-        save()
-        return true
+        return commit { freeManagedCylinderIDs = ids }
     }
 
     @discardableResult
@@ -206,14 +215,14 @@ final class WalletStore {
         guard canAddCylinder(isEntitled: isEntitled) else { return nil }
         let cleanGas = gas.trimmed
         let cleanSerial = serial.trimmed
-        guard !cleanGas.isEmpty, capacity > 0 else { return nil }
+        guard !cleanGas.isEmpty, capacity.isFinite, capacity > 0, Self.validUnit(unit), supplierID == nil || suppliers.contains(where: { $0.id == supplierID }) else { return nil }
         guard cleanSerial.isEmpty || !cylinders.contains(where: { $0.serial.localizedCaseInsensitiveCompare(cleanSerial) == .orderedSame }) else { return nil }
         let cylinder = CylinderRecord(gas: cleanGas, capacityValue: capacity, capacityUnit: unit, supplierID: supplierID, relationship: relationship, serial: cleanSerial, notes: notes.trimmed)
-        cylinders.append(cylinder)
-        defaults = CylinderDefaults(supplierID: supplierID, relationship: relationship, capacityUnit: unit)
-        activity.insert(ActivityRecord(cylinderID: cylinder.id, kind: .created, title: "\(cleanGas) added", detail: "\(supplierName(supplierID)) · \(cylinder.capacityLabel)"), at: 0)
-        save()
-        return cylinder
+        return commit({
+            cylinders.append(cylinder)
+            defaults = CylinderDefaults(supplierID: supplierID, relationship: relationship, capacityUnit: unit)
+            activity.insert(ActivityRecord(cylinderID: cylinder.id, kind: .created, title: "\(cleanGas) added", detail: "\(supplierName(supplierID)) · \(cylinder.capacityLabel)"), at: 0)
+        }) ? cylinder : nil
     }
 
     func duplicate(_ source: CylinderRecord, serial: String = "", isEntitled: Bool) -> CylinderRecord? {
@@ -225,12 +234,21 @@ final class WalletStore {
         guard let index = cylinders.firstIndex(where: { $0.id == cylinder.id }) else { return false }
         guard canManageCylinder(cylinder.id, isEntitled: isEntitled),
               cylinder.lifecycle == cylinders[index].lifecycle else { return false }
+        guard !cylinder.gas.trimmed.isEmpty, cylinder.capacityValue.isFinite, cylinder.capacityValue > 0,
+              Self.validUnit(cylinder.capacityUnit), cylinder.supplierID == nil || suppliers.contains(where: { $0.id == cylinder.supplierID }) else { return false }
         let serial = cylinder.serial.trimmed
         guard serial.isEmpty || !cylinders.contains(where: { $0.id != cylinder.id && $0.serial.localizedCaseInsensitiveCompare(serial) == .orderedSame }) else { return false }
-        cylinders[index] = cylinder
-        cylinders[index].serial = serial
-        save()
-        return true
+        let updated = cylinder
+        let saved = commit {
+            cylinders[index] = updated
+            cylinders[index].gas = updated.gas.trimmed
+            cylinders[index].serial = serial
+        }
+        if saved, cylinders[index].reminderAt != nil {
+            let refreshed = cylinders[index]
+            Task { await LocalReminderScheduler.schedule(cylinder: refreshed, at: refreshed.reminderAt, locale: Self.selectedLocale) }
+        }
+        return saved
     }
 
     @discardableResult
@@ -238,98 +256,112 @@ final class WalletStore {
         guard canManageCylinder(id, isEntitled: isEntitled),
               let index = cylinders.firstIndex(where: { $0.id == id }),
               cylinders[index].status != status else { return false }
-        cylinders[index].status = status
         let cylinder = cylinders[index]
-        activity.insert(ActivityRecord(cylinderID: id, kind: .status, title: "\(cylinder.gas) marked \(status.rawValue)", detail: "\(supplierName(cylinder.supplierID)) · \(cylinder.capacityLabel)"), at: 0)
-        save()
-        return true
+        return commit {
+            cylinders[index].status = status
+            activity.insert(ActivityRecord(cylinderID: id, kind: .status, title: "\(cylinder.gas) marked \(status.rawValue)", detail: "\(supplierName(cylinder.supplierID)) · \(cylinder.capacityLabel)"), at: 0)
+        }
     }
 
     func recordService(for id: UUID, kind: ActivityKind, amount: Decimal?, currency: String, date: Date, replacementSerial: String? = nil, replacementCapacity: Double? = nil, replacementUnit: String? = nil, isEntitled: Bool) -> Bool {
         guard canManageCylinder(id, isEntitled: isEntitled),
               let index = cylinders.firstIndex(where: { $0.id == id }) else { return false }
         if let amount, amount <= 0 { return false }
+        let minor: Int64?
+        if let amount {
+            guard let converted = Self.minorUnits(amount) else { return false }
+            guard Locale.Currency.isoCurrencies.contains(where: { $0.identifier == currency }) else { return false }
+            minor = converted
+        } else { minor = nil }
+        if let replacementCapacity, (!replacementCapacity.isFinite || replacementCapacity <= 0) { return false }
+        if replacementCapacity == nil, replacementUnit != nil { return false }
+        if let replacementUnit, !Self.validUnit(replacementUnit) { return false }
         if let serial = replacementSerial?.trimmed, !serial.isEmpty {
             guard !cylinders.contains(where: { $0.id != id && $0.serial.localizedCaseInsensitiveCompare(serial) == .orderedSame }) else { return false }
-            cylinders[index].serial = serial
         }
-        if let replacementCapacity, replacementCapacity > 0 { cylinders[index].capacityValue = replacementCapacity }
-        if let replacementUnit { cylinders[index].capacityUnit = replacementUnit }
-        if kind == .refill || kind == .exchange { cylinders[index].status = .ready }
-        let cylinder = cylinders[index]
-        let minor = amount.map { NSDecimalNumber(decimal: $0 * 100).int64Value }
-        activity.insert(ActivityRecord(
-            cylinderID: id,
-            kind: kind,
-            occurredAt: date,
-            title: "\(cylinder.gas) \(kind.rawValue)",
-            detail: replacementSerial?.trimmed.isEmpty == false ? "Replacement \(replacementSerial!.trimmed)" : supplierName(cylinder.supplierID),
-            amountMinor: minor,
-            currencyCode: minor == nil ? nil : currency
-        ), at: 0)
-        save()
-        return true
+        return commit {
+            if let serial = replacementSerial?.trimmed, !serial.isEmpty { cylinders[index].serial = serial }
+            if let replacementCapacity { cylinders[index].capacityValue = replacementCapacity }
+            if let replacementUnit { cylinders[index].capacityUnit = replacementUnit }
+            if kind == .refill || kind == .exchange { cylinders[index].status = .ready }
+            let cylinder = cylinders[index]
+            activity.insert(ActivityRecord(
+                cylinderID: id, kind: kind, occurredAt: date,
+                title: "\(cylinder.gas) \(kind.rawValue)",
+                detail: replacementSerial?.trimmed.isEmpty == false ? "Replacement \(replacementSerial!.trimmed)" : supplierName(cylinder.supplierID),
+                amountMinor: minor, currencyCode: minor == nil ? nil : currency
+            ), at: 0)
+        }
     }
 
-    func archive(_ id: UUID, as lifecycle: CylinderLifecycle) {
-        guard lifecycle != .active, let index = cylinders.firstIndex(where: { $0.id == id }) else { return }
-        cylinders[index].lifecycle = lifecycle
+    @discardableResult func archive(_ id: UUID, as lifecycle: CylinderLifecycle) -> Bool {
+        guard lifecycle != .active, let index = cylinders.firstIndex(where: { $0.id == id }), cylinders[index].lifecycle == .active else { return false }
         let cylinder = cylinders[index]
         let kind: ActivityKind = lifecycle == .returned ? .returned : .archived
-        activity.insert(ActivityRecord(cylinderID: id, kind: kind, title: "\(cylinder.gas) \(lifecycle.rawValue)", detail: "History retained"), at: 0)
-        Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: nil) }
-        freeManagedCylinderIDs.remove(id)
-        save()
+        let saved = commit {
+            cylinders[index].lifecycle = lifecycle
+            cylinders[index].reminderAt = nil
+            activity.insert(ActivityRecord(cylinderID: id, kind: kind, title: "\(cylinder.gas) \(lifecycle.rawValue)", detail: "History retained"), at: 0)
+            freeManagedCylinderIDs.remove(id)
+        }
+        if saved { Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: nil) } }
+        return saved
     }
 
-    func delete(_ id: UUID) {
-        guard let index = cylinders.firstIndex(where: { $0.id == id }) else { return }
+    @discardableResult func delete(_ id: UUID) -> Bool {
+        guard let index = cylinders.firstIndex(where: { $0.id == id }) else { return false }
         let linked = activity.filter { $0.cylinderID == id }
-        lastDeleted = DeletedCylinderSnapshot(cylinder: cylinders.remove(at: index), activity: linked)
-        Task { await LocalReminderScheduler.schedule(cylinder: lastDeleted!.cylinder, at: nil) }
-        activity.removeAll { $0.cylinderID == id }
-        freeManagedCylinderIDs.remove(id)
-        save()
+        let removed = cylinders[index]
+        guard commit({
+            lastDeleted = DeletedCylinderSnapshot(cylinder: cylinders.remove(at: index), activity: linked)
+            activity.removeAll { $0.cylinderID == id }
+            freeManagedCylinderIDs.remove(id)
+        }) else { return false }
+        Task { await LocalReminderScheduler.schedule(cylinder: removed, at: nil) }
         undoTask?.cancel()
         undoTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(15))
             guard !Task.isCancelled else { return }
             self?.lastDeleted = nil
         }
+        return true
     }
 
-    func undoDelete() {
-        guard let deleted = lastDeleted else { return }
-        cylinders.append(deleted.cylinder)
-        activity.append(contentsOf: deleted.activity)
-        activity.sort { $0.occurredAt > $1.occurredAt }
-        lastDeleted = nil
+    @discardableResult func undoDelete() -> Bool {
+        guard let deleted = lastDeleted else { return false }
+        guard commit({
+            cylinders.append(deleted.cylinder)
+            activity.append(contentsOf: deleted.activity)
+            activity.sort { $0.occurredAt > $1.occurredAt }
+            lastDeleted = nil
+        }) else { return false }
         undoTask?.cancel()
-        save()
         Task { await LocalReminderScheduler.schedule(cylinder: deleted.cylinder, at: deleted.cylinder.reminderAt) }
+        return true
     }
 
     @discardableResult
     func setReminder(_ date: Date?, for id: UUID, isEntitled: Bool) -> Bool {
         guard canManageCylinder(id, isEntitled: isEntitled),
               let index = cylinders.firstIndex(where: { $0.id == id }) else { return false }
-        cylinders[index].reminderAt = date
-        save()
-        return true
+        guard date == nil || date! > Date() else { return false }
+        return commit { cylinders[index].reminderAt = date }
     }
 
-    func setCurrency(_ code: String?) {
-        currencyOverride = code
-        save()
+    @discardableResult func setCurrency(_ code: String?) -> Bool {
+        guard code == nil || Locale.Currency.isoCurrencies.contains(where: { $0.identifier == code }) else { return false }
+        return commit { currencyOverride = code }
     }
 
-    func deleteAllData() {
+    @discardableResult func deleteAllData() -> Bool {
         let removed = cylinders
-        cylinders = []; suppliers = []; activity = []; lastDeleted = nil; freeManagedCylinderIDs = []; currencyOverride = nil
-        defaults = CylinderDefaults(capacityUnit: Locale.current.region?.identifier == "US" ? "ft3" : "L")
+        guard commit({
+            cylinders = []; suppliers = []; activity = []; lastDeleted = nil; freeManagedCylinderIDs = []; currencyOverride = nil
+            defaults = CylinderDefaults(capacityUnit: Locale.current.region?.identifier == "US" ? "ft3" : "L")
+        }) else { return false }
         undoTask?.cancel()
-        save()
         for cylinder in removed { Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: nil) } }
+        return true
     }
 
     func exportData() throws -> Data {
@@ -343,13 +375,18 @@ final class WalletStore {
         let decoded = try decoder.decode(WalletSnapshot.self, from: data)
         guard decoded.format == "welding-gas-wallet", decoded.version == 2 else { throw WalletError.unsupportedBackup }
         guard Self.isValid(decoded) else { throw WalletError.invalidBackup }
-        cylinders = decoded.cylinders; suppliers = decoded.suppliers; activity = decoded.activity
-        currencyOverride = decoded.currencyOverride; defaults = decoded.defaults
-        freeManagedCylinderIDs = []
-        reconcileAccess(isEntitled: isEntitled)
-        save()
+        let previous = captureState()
+        let removed = cylinders
+        cylinders = decoded.cylinders; suppliers = decoded.suppliers; activity = decoded.activity.sorted { $0.occurredAt > $1.occurredAt }
+        currencyOverride = decoded.currencyOverride; defaults = decoded.defaults; lastDeleted = nil
+        freeManagedCylinderIDs = reconciledManagedIDs(isEntitled: isEntitled, proposed: [])
+        guard persistCurrentState() else { apply(previous); throw WalletError.persistenceFailure }
         let reminderLocale = locale ?? Self.selectedLocale
-        for cylinder in activeCylinders { Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: cylinder.reminderAt, locale: reminderLocale) } }
+        let restoredActive = activeCylinders
+        Task {
+            for cylinder in removed { await LocalReminderScheduler.schedule(cylinder: cylinder, at: nil) }
+            for cylinder in restoredActive { await LocalReminderScheduler.schedule(cylinder: cylinder, at: cylinder.reminderAt, locale: reminderLocale) }
+        }
     }
 
     func totals(for cylinderID: UUID? = nil) -> [(String, Decimal)] {
@@ -377,11 +414,20 @@ final class WalletStore {
     }
 
     private func save() {
+        _ = persistCurrentState()
+    }
+
+    @discardableResult private func persistCurrentState() -> Bool {
         do {
             let data = try exportData()
             try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
             try data.write(to: fileURL, options: .atomic)
-        } catch { assertionFailure("Wallet save failed: \(error)") }
+            persistenceError = nil
+            return true
+        } catch {
+            persistenceError = error.localizedDescription
+            return false
+        }
     }
 
     private func load() {
@@ -389,15 +435,20 @@ final class WalletStore {
         let decoder = JSONDecoder(); decoder.dateDecodingStrategy = .iso8601
         guard let decoded = try? decoder.decode(WalletSnapshot.self, from: data),
               decoded.format == "welding-gas-wallet", decoded.version == 2,
-              Self.isValid(decoded) else { return }
-        cylinders = decoded.cylinders; suppliers = decoded.suppliers; activity = decoded.activity
+              Self.isValid(decoded) else {
+            let recovery = fileURL.deletingPathExtension().appendingPathExtension("corrupt-\(Int(Date().timeIntervalSince1970)).json")
+            try? FileManager.default.copyItem(at: fileURL, to: recovery)
+            persistenceError = WalletError.corruptStoreRecovered.localizedDescription
+            return
+        }
+        cylinders = decoded.cylinders; suppliers = decoded.suppliers; activity = decoded.activity.sorted { $0.occurredAt > $1.occurredAt }
         currencyOverride = decoded.currencyOverride; defaults = decoded.defaults
         let activeIDs = Set(activeCylinders.map(\.id))
         let restoredManagedIDs = decoded.freeManagedCylinderIDs ?? []
         freeManagedCylinderIDs = Set(activeCylinders.lazy.map(\.id).filter { activeIDs.contains($0) && restoredManagedIDs.contains($0) }.prefix(Self.freeActiveCylinderLimit))
         let reminderLocale = Self.selectedLocale
-        for cylinder in activeCylinders {
-            Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: cylinder.reminderAt, locale: reminderLocale) }
+        for cylinder in cylinders {
+            Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: cylinder.lifecycle == .active ? cylinder.reminderAt : nil, locale: reminderLocale) }
         }
     }
 
@@ -415,18 +466,56 @@ final class WalletStore {
 
         let knownCylinders = Set(cylinderIDs)
         let knownSuppliers = Set(supplierIDs)
+        let supplierNames = snapshot.suppliers.map { $0.name.trimmed.lowercased() }
+        guard supplierNames.allSatisfy({ !$0.isEmpty }), Set(supplierNames).count == supplierNames.count else { return false }
         let serials = snapshot.cylinders.map { $0.serial.trimmed.lowercased() }.filter { !$0.isEmpty }
         guard Set(serials).count == serials.count else { return false }
         guard snapshot.cylinders.allSatisfy({ cylinder in
-            !cylinder.gas.trimmed.isEmpty && cylinder.capacityValue.isFinite && cylinder.capacityValue > 0 &&
+            !cylinder.gas.trimmed.isEmpty && cylinder.capacityValue.isFinite && cylinder.capacityValue > 0 && validUnit(cylinder.capacityUnit) &&
             (cylinder.supplierID == nil || knownSuppliers.contains(cylinder.supplierID!))
         }) else { return false }
         guard snapshot.activity.allSatisfy({ event in
-            knownCylinders.contains(event.cylinderID) && (event.amountMinor == nil || event.amountMinor! >= 0)
+            guard knownCylinders.contains(event.cylinderID), event.amountMinor == nil || event.amountMinor! >= 0 else { return false }
+            if let code = event.currencyCode { return event.amountMinor != nil && Locale.Currency.isoCurrencies.contains(where: { $0.identifier == code }) }
+            return event.amountMinor == nil
         }) else { return false }
         if let currency = snapshot.currencyOverride,
            !Locale.Currency.isoCurrencies.contains(where: { $0.identifier == currency }) { return false }
+        guard validUnit(snapshot.defaults.capacityUnit), snapshot.defaults.supplierID == nil || knownSuppliers.contains(snapshot.defaults.supplierID!) else { return false }
         return true
+    }
+
+    private func captureState() -> StoreState {
+        StoreState(cylinders: cylinders, suppliers: suppliers, activity: activity, lastDeleted: lastDeleted, freeManagedCylinderIDs: freeManagedCylinderIDs, currencyOverride: currencyOverride, defaults: defaults)
+    }
+
+    private func apply(_ state: StoreState) {
+        cylinders = state.cylinders; suppliers = state.suppliers; activity = state.activity
+        lastDeleted = state.lastDeleted; freeManagedCylinderIDs = state.freeManagedCylinderIDs
+        currencyOverride = state.currencyOverride; defaults = state.defaults
+    }
+
+    @discardableResult private func commit(_ mutation: () -> Void) -> Bool {
+        let previous = captureState()
+        mutation()
+        guard persistCurrentState() else { apply(previous); return false }
+        return true
+    }
+
+    private func reconciledManagedIDs(isEntitled: Bool, proposed: Set<UUID>) -> Set<UUID> {
+        guard !isEntitled else { return [] }
+        let activeIDs = Set(activeCylinders.map(\.id))
+        if activeIDs.count <= Self.freeActiveCylinderLimit { return activeIDs }
+        return Set(activeCylinders.lazy.map(\.id).filter(proposed.contains).prefix(Self.freeActiveCylinderLimit))
+    }
+
+    private static func validUnit(_ unit: String) -> Bool { ["L", "ft3", "m3", "kg", "lb"].contains(unit) }
+
+    private static func minorUnits(_ amount: Decimal) -> Int64? {
+        let number = NSDecimalNumber(decimal: amount * 100)
+        guard number != .notANumber,
+              number.compare(NSDecimalNumber(value: Int64.max)) != .orderedDescending else { return nil }
+        return number.rounding(accordingToBehavior: NSDecimalNumberHandler(roundingMode: .plain, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)).int64Value
     }
 
     private static var defaultFileURL: URL {
@@ -509,12 +598,14 @@ final class WalletStore {
 }
 
 enum WalletError: LocalizedError {
-    case backupTooLarge, unsupportedBackup, invalidBackup, activeCylinderLimit(Int)
+    case backupTooLarge, unsupportedBackup, invalidBackup, persistenceFailure, corruptStoreRecovered, activeCylinderLimit(Int)
     var errorDescription: String? {
         switch self {
         case .backupTooLarge: "The backup is larger than 5 MB."
         case .unsupportedBackup: "This backup format is not supported."
         case .invalidBackup: "The backup contains invalid or inconsistent records."
+        case .persistenceFailure: "The wallet could not be saved. No changes were applied."
+        case .corruptStoreRecovered: "The saved wallet was damaged. A recovery copy was preserved."
         case .activeCylinderLimit(let limit): "This backup contains more than \(limit) active cylinders."
         }
     }

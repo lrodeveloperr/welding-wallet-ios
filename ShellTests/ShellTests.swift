@@ -232,6 +232,41 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertNil(store.addCylinder(gas: "Helium", capacity: 20, unit: "ft3", supplierID: nil, relationship: .owned, serial: "UNDO-5", isEntitled: false))
     }
 
+    func testInvalidBackupCannotReplaceExistingWallet() throws {
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        XCTAssertNotNil(store.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "SAFE", isEntitled: true))
+        let malformed = Data("{\"format\":\"welding-gas-wallet\",\"version\":2,\"cylinders\":[".utf8)
+        XCTAssertThrowsError(try store.restore(from: malformed, isEntitled: true))
+        XCTAssertEqual(store.cylinders.map(\.serial), ["SAFE"])
+    }
+
+    func testInvalidAndOverflowingMutationsAreRejected() {
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        XCTAssertNil(store.addCylinder(gas: "Argon", capacity: .infinity, unit: "ft3", supplierID: nil, relationship: .owned, serial: "INF", isEntitled: true))
+        let cylinder = store.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "VALID", isEntitled: true)!
+        XCTAssertFalse(store.recordService(for: cylinder.id, kind: .cost, amount: Decimal(string: "99999999999999999999999999999999999999")!, currency: "USD", date: .now, isEntitled: true))
+        XCTAssertFalse(store.recordService(for: cylinder.id, kind: .exchange, amount: 10, currency: "USD", date: .now, replacementUnit: "L", isEntitled: true))
+        XCTAssertFalse(store.setReminder(.distantPast, for: cylinder.id, isEntitled: true))
+    }
+
+    func testInactiveCylinderIsHistoryOnlyButCanStillBeDeleted() {
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        let cylinder = store.addCylinder(gas: "Argon", capacity: 80, unit: "ft3", supplierID: nil, relationship: .owned, serial: "OLD", isEntitled: true)!
+        XCTAssertTrue(store.archive(cylinder.id, as: .archived))
+        XCTAssertFalse(store.canManageCylinder(cylinder.id, isEntitled: true))
+        XCTAssertFalse(store.setStatus(.low, for: cylinder.id, isEntitled: true))
+        XCTAssertTrue(store.delete(cylinder.id))
+    }
+
+    func testPersistenceFailureRollsBackMutation() {
+        let directory = FileManager.default.temporaryDirectory.appending(path: "wallet-unwritable-\(UUID().uuidString)")
+        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        let store = WalletStore(fileURL: directory, loadExisting: false)
+        XCTAssertNil(store.addSupplier(name: "Must not appear"))
+        XCTAssertTrue(store.suppliers.isEmpty)
+        XCTAssertNotNil(store.persistenceError)
+    }
+
     private func resolve(_ mode: MonetizationMode, entitled: Bool, checking: Bool, free: Bool) -> AccessDecision {
         AccessController.resolveDecision(mode: mode, isEntitled: entitled, isChecking: checking, hasFreeActionRemaining: free)
     }

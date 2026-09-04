@@ -174,14 +174,14 @@ struct SubscriptionSettingsPresentation: Equatable {
 private struct SettingsLabel: View {
     let title: LocalizedStringKey; let subtitle: LocalizedStringKey?; let verbatimSubtitle: String?; let symbol: String
     init(_ title: LocalizedStringKey, subtitle: LocalizedStringKey? = nil, verbatimSubtitle: String? = nil, symbol: String) { self.title = title; self.subtitle = subtitle; self.verbatimSubtitle = verbatimSubtitle; self.symbol = symbol }
-    var body: some View { Label { VStack(alignment: .leading, spacing: 2) { Text(title).foregroundStyle(Color.primary); if let subtitle { Text(subtitle).font(.caption).foregroundStyle(Color.secondary) }; if let verbatimSubtitle { Text(verbatimSubtitle).font(.caption).foregroundStyle(Color.secondary) } } } icon: { Image(systemName: symbol).foregroundStyle(.tint).frame(width: 28) } }
+    var body: some View { Label { VStack(alignment: .leading, spacing: 2) { Text(title).foregroundStyle(Color.primary); if let subtitle { Text(subtitle).font(.caption).foregroundStyle(Color.secondary) }; if let verbatimSubtitle { Text(verbatimSubtitle).font(.caption).foregroundStyle(Color.secondary) } } } icon: { Image(systemName: symbol).foregroundStyle(.tint).frame(width: 28) }.frame(maxWidth: .infinity, minHeight: 44, alignment: .leading).contentShape(Rectangle()) }
 }
 
 private struct LanguageView: View {
     @Environment(LanguageController.self) private var language
     var body: some View {
         @Bindable var language = language
-        List(ShellConfiguration.supportedLanguages) { option in Button { language.selection = option.id } label: { HStack { Image(systemName: "globe").foregroundStyle(.tint); Text(option.displayName).foregroundStyle(.primary); Spacer(); if language.selection == option.id { Image(systemName: "checkmark.circle.fill").foregroundStyle(.tint) } } }.accessibilityAddTraits(language.selection == option.id ? .isSelected : []) }
+        List(ShellConfiguration.supportedLanguages) { option in Button { language.selection = option.id } label: { HStack { Image(systemName: "globe").foregroundStyle(.tint); Text(option.displayName).foregroundStyle(.primary); Spacer(); if language.selection == option.id { Image(systemName: "checkmark.circle.fill").foregroundStyle(.tint) } }.frame(maxWidth: .infinity, minHeight: 44).contentShape(Rectangle()) }.accessibilityAddTraits(language.selection == option.id ? .isSelected : []) }
             .navigationTitle("Language").navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -221,6 +221,7 @@ private struct BackupView: View {
         case .unsupportedBackup: AppLocalization.string("backup.error.unsupported", locale: locale)
         case .invalidBackup: AppLocalization.string("backup.error.invalid", locale: locale)
         case .activeCylinderLimit(let limit): AppLocalization.string("backup.activeLimit", locale: locale, limit)
+        case .persistenceFailure, .corruptStoreRecovered: error.localizedDescription
         }
     }
     private static var dateStamp: String { String(ISO8601DateFormatter().string(from: .now).prefix(10)) }

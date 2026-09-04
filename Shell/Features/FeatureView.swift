@@ -117,9 +117,9 @@ struct CylinderHome: View {
             Spacer()
             if !context.isEntitled() {
                 if store.requiresFreeCylinderSelection(isEntitled: false) {
-                    Button("freeSelection.choose") { showingFreeSelection = true }
+                    Button("freeSelection.choose") { showingFreeSelection = true }.frame(minHeight: 44)
                 } else {
-                    Button("Upgrade", action: context.requestUpgrade)
+                    Button("Upgrade", action: context.requestUpgrade).frame(minHeight: 44)
                 }
             }
         }
@@ -128,10 +128,10 @@ struct CylinderHome: View {
 
     private var searchAndFilters: some View {
         VStack(spacing: 10) {
-            HStack { Image(systemName: "magnifyingglass").foregroundStyle(.secondary); TextField("Search cylinders", text: $query).textInputAutocapitalization(.never); if !query.isEmpty { Button { query = "" } label: { Image(systemName: "xmark.circle.fill") }.buttonStyle(.plain) } }
+            HStack { Image(systemName: "magnifyingglass").foregroundStyle(.secondary); TextField("Search cylinders", text: $query).textInputAutocapitalization(.never); if !query.isEmpty { Button { query = "" } label: { Image(systemName: "xmark.circle.fill").frame(width: 44, height: 44) }.buttonStyle(.plain).accessibilityLabel("Cancel") } }
                 .padding(.horizontal, 12).frame(minHeight: 44).background(Color.secondary.opacity(0.09), in: RoundedRectangle(cornerRadius: 12))
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack { ForEach(StatusFilter.allCases) { item in Button { filter = item } label: { Text(LocalizedStringKey(item.localizationKey)) }.buttonStyle(.bordered).buttonBorderShape(.capsule).tint(filter == item ? .accentColor : .secondary) } }
+                HStack { ForEach(StatusFilter.allCases) { item in Button { filter = item } label: { Text(LocalizedStringKey(item.localizationKey)).frame(minHeight: 44) }.buttonStyle(.bordered).buttonBorderShape(.capsule).tint(filter == item ? .accentColor : .secondary) } }
             }
         }
     }
@@ -308,21 +308,24 @@ struct CylinderDetail: View {
                             Fact(titleKey: "Supplier", value: AppLocalization.supplier(store.supplierName(cylinder.supplierID), locale: locale)); Fact(titleKey: "Relationship", value: AppLocalization.string(cylinder.relationship.localizationKey, locale: locale)); Fact(titleKey: "Serial", value: cylinder.serial.isEmpty ? AppLocalization.string("common.notSet", locale: locale) : cylinder.serial); Fact(titleKey: "Acquired", value: cylinder.acquiredAt.formatted(.dateTime.locale(locale).day().month(.abbreviated).year()))
                         }
                         if canManage {
-                            HStack { Button("Refill") { sheet = .service(.refill) }.buttonStyle(.borderedProminent); Button("Exchange") { sheet = .service(.exchange) }.buttonStyle(.bordered); Button("Add cost") { sheet = .service(.cost) }.buttonStyle(.bordered) }
-                            Button { sheet = .reminder } label: { Label(cylinder.reminderAt.map { AppLocalization.string("reminder.label %@", locale: locale, $0.formatted(.dateTime.locale(locale).day().month(.abbreviated).hour().minute())) } ?? AppLocalization.string("Add reminder", locale: locale), systemImage: "bell") }.buttonStyle(.bordered).frame(maxWidth: .infinity)
-                        } else {
+                            HStack { Button("Refill") { sheet = .service(.refill) }.buttonStyle(.borderedProminent).controlSize(.large); Button("Exchange") { sheet = .service(.exchange) }.buttonStyle(.bordered).controlSize(.large); Button("Add cost") { sheet = .service(.cost) }.buttonStyle(.bordered).controlSize(.large) }
+                            Button { sheet = .reminder } label: { Label(cylinder.reminderAt.map { AppLocalization.string("reminder.label %@", locale: locale, $0.formatted(.dateTime.locale(locale).day().month(.abbreviated).hour().minute())) } ?? AppLocalization.string("Add reminder", locale: locale), systemImage: "bell").frame(maxWidth: .infinity, minHeight: 44) }.buttonStyle(.bordered)
+                        } else if cylinder.lifecycle == .active {
                             VStack(alignment: .leading, spacing: 10) {
                                 Label("cylinder.readOnly", systemImage: "lock.fill").font(.headline)
                                 Text("cylinder.readOnly.message").foregroundStyle(.secondary)
                                 Button("cylinder.unlock", action: requestUpgrade).buttonStyle(.borderedProminent)
                             }.frame(maxWidth: .infinity, alignment: .leading).padding(16).background(Color.secondary.opacity(0.07), in: RoundedRectangle(cornerRadius: 14))
+                        } else {
+                            Label("activity.historyRetained", systemImage: "archivebox.fill")
+                                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                         }
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Recent activity").font(.headline)
                             ForEach(store.activity.filter { $0.cylinderID == cylinderID }.prefix(5)) { ActivityRow(store: store, item: $0) }
                         }.frame(maxWidth: .infinity, alignment: .leading)
-                        Menu("Return or archive") { Button("Return cylinder") { confirmLifecycle = .returned }; Button("Archive cylinder") { confirmLifecycle = .archived } }.buttonStyle(.bordered).frame(maxWidth: .infinity)
-                        if !canManage { Button("Delete cylinder", role: .destructive) { showDelete = true }.buttonStyle(.bordered).frame(maxWidth: .infinity) }
+                        if cylinder.lifecycle == .active { Menu("Return or archive") { Button("Return cylinder") { confirmLifecycle = .returned }; Button("Archive cylinder") { confirmLifecycle = .archived } }.buttonStyle(.bordered).controlSize(.large).frame(maxWidth: .infinity) }
+                        if !canManage { Button("Delete cylinder", role: .destructive) { showDelete = true }.buttonStyle(.bordered).controlSize(.large).frame(maxWidth: .infinity) }
                     }.frame(maxWidth: 720).padding(16).frame(maxWidth: .infinity)
                 }
                 .toolbar { if canManage { ToolbarItem(placement: .topBarTrailing) { Button("Edit") { sheet = .edit } } } }
@@ -473,7 +476,7 @@ private struct ServiceForm: View {
             }
         }
         .navigationTitle(LocalizedStringKey(kind.localizationKey)).navigationBarTitleDisplayMode(.inline)
-        .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save", action: save).disabled((AppLocalization.decimal(from: amount, locale: locale) ?? 0) <= 0) } }
+        .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save", action: save).disabled((AppLocalization.decimal(from: amount, locale: locale) ?? 0) <= 0 || (!sameCapacity && (AppLocalization.double(from: capacity, locale: locale) ?? 0) <= 0)) } }
         .onAppear { unit = cylinder.capacityUnit }
     }
     private func save() {
@@ -490,6 +493,7 @@ private struct ReminderForm: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.locale) private var locale
     @State private var enabled = true; @State private var days = 7; @State private var custom = false; @State private var date = Calendar.current.date(byAdding: .day, value: 7, to: .now)!
+    @State private var errorMessage = ""
     var body: some View {
         Form {
             Toggle("Refill reminder", isOn: $enabled)
@@ -500,33 +504,53 @@ private struct ReminderForm: View {
                             Button(AppLocalization.duration(value, unit: .day, locale: locale) ?? "\(value)") {
                                 days = value; custom = false
                                 date = Calendar.current.date(byAdding: .day, value: value, to: .now)!
-                            }.buttonStyle(.bordered).tint(days == value && !custom ? .accentColor : .secondary)
+                            }.buttonStyle(.bordered).controlSize(.large).tint(days == value && !custom ? .accentColor : .secondary)
                         }
-                        Button("Custom") { custom = true }.buttonStyle(.bordered)
+                        Button("Custom") { custom = true }.buttonStyle(.bordered).controlSize(.large)
                     }
                     if custom { DatePicker("Date and time", selection: $date, in: Date.now...) }
                     else { Text(AppLocalization.string("reminder.scheduled %@", locale: locale, date.formatted(.dateTime.locale(locale).day().month(.abbreviated).hour().minute()))) }
                 }
             }
             Section { Text("The reminder is scheduled locally on this device.").font(.footnote).foregroundStyle(.secondary) }
+            if !errorMessage.isEmpty { Section { Text(errorMessage).foregroundStyle(.red) } }
         }
         .navigationTitle("Reminder")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
-            ToolbarItem(placement: .confirmationAction) { Button("Save") { if store.setReminder(enabled ? date : nil, for: cylinder.id, isEntitled: isEntitled()) { Task { await LocalReminderScheduler.schedule(cylinder: cylinder, at: enabled ? date : nil, locale: locale) }; dismiss() } } }
+            ToolbarItem(placement: .confirmationAction) { Button("Save") { save() }.disabled(enabled && date <= Date()) }
         }
         .onAppear { if let existing = cylinder.reminderAt { date = existing; enabled = true } }
+    }
+
+    private func save() {
+        Task {
+            guard await LocalReminderScheduler.schedule(cylinder: cylinder, at: enabled ? date : nil, locale: locale) else {
+                errorMessage = AppLocalization.string("backup.error", locale: locale)
+                return
+            }
+            guard store.setReminder(enabled ? date : nil, for: cylinder.id, isEntitled: isEntitled()) else {
+                _ = await LocalReminderScheduler.schedule(cylinder: cylinder, at: cylinder.reminderAt, locale: locale)
+                errorMessage = store.persistenceError ?? AppLocalization.string("error.readOnly", locale: locale)
+                return
+            }
+            dismiss()
+        }
     }
 }
 
 enum LocalReminderScheduler {
-    static func schedule(cylinder: CylinderRecord, at date: Date?, locale: Locale = .current) async {
-        let center = UNUserNotificationCenter.current(); center.removePendingNotificationRequests(withIdentifiers: ["cylinder-\(cylinder.id.uuidString)"])
-        guard let date else { return }
-        let granted = try? await center.requestAuthorization(options: [.alert, .sound]); guard granted == true else { return }
+    @discardableResult static func schedule(cylinder: CylinderRecord, at date: Date?, locale: Locale = .current) async -> Bool {
+        let center = UNUserNotificationCenter.current()
+        guard let date else { center.removePendingNotificationRequests(withIdentifiers: ["cylinder-\(cylinder.id.uuidString)"]); return true }
+        guard date > Date() else { return false }
+        let granted = try? await center.requestAuthorization(options: [.alert, .sound]); guard granted == true else { return false }
         let content = UNMutableNotificationContent(); content.title = AppLocalization.string("notification.check %@", locale: locale, AppLocalization.gas(cylinder.gas, locale: locale)); content.body = AppLocalization.string("notification.review", locale: locale); content.sound = .default
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-        try? await center.add(UNNotificationRequest(identifier: "cylinder-\(cylinder.id.uuidString)", content: content, trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false)))
+        do {
+            try await center.add(UNNotificationRequest(identifier: "cylinder-\(cylinder.id.uuidString)", content: content, trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false)))
+            return true
+        } catch { return false }
     }
 }
 
@@ -535,7 +559,7 @@ struct ActivityHome: View {
     @Environment(\.locale) private var locale
     @State private var filter: ActivityKind?
     var filtered: [ActivityRecord] { filter.map { selected in store.activity.filter { $0.kind == selected } } ?? store.activity }
-    var body: some View { GeometryReader { geometry in ScrollView { VStack(spacing: 14) { LazyVGrid(columns: geometry.size.width >= 700 ? [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())] : [GridItem(.flexible())], spacing: 10) { Metric(titleKey: "Total spent", value: store.totals().map { "\(store.currencySign(for: $0.0))\(AppLocalization.number($0.1, locale: locale))" }.joined(separator: " · ").nilIfEmpty ?? "—", noteKey: "Currencies stay separate"); Metric(titleKey: "Refill count", value: "\(store.refillCount)", noteKey: "Recorded refills"); Metric(titleKey: "Average refill interval", value: store.averageRefillIntervalDays.flatMap { AppLocalization.duration($0, unit: .day, locale: locale) } ?? "—", noteKey: "Across repeat refills") }; ScrollView(.horizontal, showsIndicators: false) { HStack { Button("All") { filter = nil }.buttonStyle(.bordered); Button("Refills") { filter = .refill }.buttonStyle(.bordered); Button("Status") { filter = .status }.buttonStyle(.bordered) } }; LazyVGrid(columns: geometry.size.width >= 700 ? [GridItem(.flexible()), GridItem(.flexible())] : [GridItem(.flexible())], spacing: 10) { ForEach(filtered) { ActivityRow(store: store, item: $0) } } }.frame(maxWidth: 980).padding(16).frame(maxWidth: .infinity) } } }
+    var body: some View { GeometryReader { geometry in ScrollView { VStack(spacing: 14) { LazyVGrid(columns: geometry.size.width >= 700 ? [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())] : [GridItem(.flexible())], spacing: 10) { Metric(titleKey: "Total spent", value: store.totals().map { "\(store.currencySign(for: $0.0))\(AppLocalization.number($0.1, locale: locale))" }.joined(separator: " · ").nilIfEmpty ?? "—", noteKey: "Currencies stay separate"); Metric(titleKey: "Refill count", value: "\(store.refillCount)", noteKey: "Recorded refills"); Metric(titleKey: "Average refill interval", value: store.averageRefillIntervalDays.flatMap { AppLocalization.duration($0, unit: .day, locale: locale) } ?? "—", noteKey: "Across repeat refills") }; ScrollView(.horizontal, showsIndicators: false) { HStack { Button("All") { filter = nil }.buttonStyle(.bordered).controlSize(.large); Button("Refills") { filter = .refill }.buttonStyle(.bordered).controlSize(.large); Button("Status") { filter = .status }.buttonStyle(.bordered).controlSize(.large) } }; LazyVGrid(columns: geometry.size.width >= 700 ? [GridItem(.flexible()), GridItem(.flexible())] : [GridItem(.flexible())], spacing: 10) { ForEach(filtered) { ActivityRow(store: store, item: $0) } } }.frame(maxWidth: 980).padding(16).frame(maxWidth: .infinity) } } }
 }
 
 private struct Metric: View { let titleKey: LocalizedStringKey; let value: String; let noteKey: LocalizedStringKey; var body: some View { VStack(alignment: .leading, spacing: 5) { Text(titleKey).font(.caption).foregroundStyle(.secondary); Text(value).font(.title3.bold()); Text(noteKey).font(.caption2).foregroundStyle(.secondary) }.frame(maxWidth: .infinity, minHeight: 82, alignment: .leading).padding(14).background(.background, in: RoundedRectangle(cornerRadius: 14)).overlay(RoundedRectangle(cornerRadius: 14).stroke(.separator)) } }

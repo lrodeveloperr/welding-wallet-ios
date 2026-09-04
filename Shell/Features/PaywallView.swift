@@ -33,8 +33,11 @@ struct PaywallView: View {
                         Label("paywall.billingRetry.title", systemImage: "creditcard.trianglebadge.exclamationmark")
                             .font(.headline)
                         Text("paywall.billingRetry.message").foregroundStyle(.secondary)
-                        Button("subscription.manage") { showingManageSubscriptions = true }
+                        Button { showingManageSubscriptions = true } label: {
+                            Text("subscription.manage").frame(maxWidth: .infinity, minHeight: 44)
+                        }
                             .buttonStyle(.borderedProminent)
+                            .controlSize(.large)
                             .frame(maxWidth: .infinity)
                     }
                 } else if let product = model.access.purchases.primaryProduct {
@@ -60,16 +63,20 @@ struct PaywallView: View {
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
                     .accessibilityIdentifier("shell.paywall.purchase")
+                    .disabled(model.access.purchases.isWorking || model.access.purchases.isEntitled)
                 } else if model.access.purchases.isLoadingProducts {
                     ProgressView("paywall.loadingProduct").frame(maxWidth: .infinity)
                 } else {
-                    Button("paywall.retryProduct") {
+                    Button {
                         Task { await model.access.purchases.start() }
+                    } label: {
+                        Text("paywall.retryProduct").frame(maxWidth: .infinity, minHeight: 44)
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.large)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("shell.paywall.retryProduct")
+                    .disabled(model.access.purchases.isWorking)
                 }
 
                 if model.access.purchases.primaryProduct?.subscription != nil {
@@ -78,14 +85,16 @@ struct PaywallView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Button("paywall.restore") { Task { await model.access.purchases.restore() } }
-                    .frame(maxWidth: .infinity)
+                Button { Task { await model.access.purchases.restore() } } label: {
+                    Text("paywall.restore").frame(maxWidth: .infinity, minHeight: 44)
+                }
                     .accessibilityIdentifier("shell.paywall.restore")
+                    .disabled(model.access.purchases.isWorking)
 
                 HStack {
-                    Button("privacy") { legalDocument = .privacy }
+                    Button("privacy") { legalDocument = .privacy }.frame(minHeight: 44)
                     Spacer()
-                    Button("terms") { legalDocument = .terms }
+                    Button("terms") { legalDocument = .terms }.frame(minHeight: 44)
                 }
                 .font(.footnote)
             }

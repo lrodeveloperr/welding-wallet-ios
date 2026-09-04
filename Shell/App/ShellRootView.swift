@@ -61,6 +61,14 @@ struct ShellRootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { Task { await model.access.purchases.refreshEntitlements() } }
         }
+        .alert("backup.error", isPresented: Binding(
+            get: { wallet.persistenceError != nil },
+            set: { if !$0 { wallet.clearPersistenceError() } }
+        )) {
+            Button("ok") { wallet.clearPersistenceError() }
+        } message: {
+            Text(wallet.persistenceError ?? "")
+        }
     }
 
     @ViewBuilder
