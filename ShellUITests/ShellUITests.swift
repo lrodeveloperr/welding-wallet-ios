@@ -82,6 +82,14 @@ final class WeldingGasWalletUITests: XCTestCase {
         waitForNavigationTitle(app, "Language")
     }
 
+    func testCaptureIPadHomeScreen() throws {
+        let app = launch()
+        waitForHome(app)
+        RunLoop.current.run(until: Date().addingTimeInterval(0.75))
+        try saveScreenshot(number: 1, label: "Cylinders-Home-iPad-13-inch")
+        app.terminate()
+    }
+
     func testCaptureAllScreens() throws {
         try scenario(2, "Cylinders-Home") { app in waitForHome(app) }
         try scenario(3, "Cylinder-Status-Controls") { app in
