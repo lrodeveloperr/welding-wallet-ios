@@ -52,12 +52,12 @@ final class WeldingGasWalletTests: XCTestCase {
     func testSubscriptionCacheExpiresButLifetimeCacheDoesNot() {
         let now = Date(timeIntervalSince1970: 1_000)
         let snapshot = EntitlementSnapshot(
-            entitledProductIDs: ["lifetime", "monthly"],
-            subscriptionExpiryByProductID: ["monthly": now.addingTimeInterval(60)],
+            entitledProductIDs: ["lifetime", "subscription"],
+            subscriptionExpiryByProductID: ["subscription": now.addingTimeInterval(60)],
             verifiedAt: now
         )
-        XCTAssertTrue(snapshot.isEntitled(to: ["monthly"], at: now))
-        XCTAssertFalse(snapshot.isEntitled(to: ["monthly"], at: now.addingTimeInterval(61)))
+        XCTAssertTrue(snapshot.isEntitled(to: ["subscription"], at: now))
+        XCTAssertFalse(snapshot.isEntitled(to: ["subscription"], at: now.addingTimeInterval(61)))
         XCTAssertTrue(snapshot.isEntitled(to: ["lifetime"], at: now.addingTimeInterval(1_000_000)))
         XCTAssertFalse(snapshot.isEntitled(to: ["unknown"], at: now))
     }
@@ -103,11 +103,11 @@ final class WeldingGasWalletTests: XCTestCase {
 
     func testProductIdentifiersAreSelectedByProfile() {
         XCTAssertEqual(configuration(.free).productIDs, [])
-        XCTAssertEqual(configuration(.freemiumWithSubscription).productIDs, ["monthly"])
+        XCTAssertEqual(configuration(.freemiumWithSubscription).productIDs, ["subscription"])
         XCTAssertEqual(configuration(.oneTimeUnlock).productIDs, ["lifetime"])
-        XCTAssertEqual(configuration(.subscription).productIDs, ["monthly"])
+        XCTAssertEqual(configuration(.subscription).productIDs, ["subscription"])
         XCTAssertEqual(configuration(.usageCapWithOneTimeUnlock).productIDs, ["lifetime"])
-        XCTAssertEqual(configuration(.usageCapWithSubscription).productIDs, ["monthly"])
+        XCTAssertEqual(configuration(.usageCapWithSubscription).productIDs, ["subscription"])
     }
 
     func testTemplateNavigationAndLanguagesAreBounded() {
@@ -157,6 +157,11 @@ final class WeldingGasWalletTests: XCTestCase {
 
     func testSafeTemplateDefaultsAndSharedLocalizationContract() {
         XCTAssertTrue(ShellConfiguration.backup.enabled)
+#if SCREENSHOT_BUILD
+        XCTAssertEqual(ShellConfiguration.monetization.subscriptionProductID, "unused")
+#else
+        XCTAssertEqual(ShellConfiguration.monetization.subscriptionProductID, "com.gooduse.weldinggaswallet.pro.yearly")
+#endif
         XCTAssertEqual(LocalizationBaseline.localeIdentifiers.count, 31)
         XCTAssertEqual(LocalizationBaseline.sharedKeys.count, 18)
         XCTAssertEqual(ShellContract.currentVersion.split(separator: ".").count, 3)
@@ -272,7 +277,7 @@ final class WeldingGasWalletTests: XCTestCase {
     }
 
     private func configuration(_ mode: MonetizationMode) -> MonetizationConfiguration {
-        MonetizationConfiguration(mode: mode, freeSuccessfulActions: 3, lifetimeProductID: "lifetime", subscriptionProductID: "monthly")
+        MonetizationConfiguration(mode: mode, freeSuccessfulActions: 3, lifetimeProductID: "lifetime", subscriptionProductID: "subscription")
     }
 
     private func makeDefaults() -> UserDefaults {

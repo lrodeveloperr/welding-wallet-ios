@@ -47,7 +47,7 @@ The five configured HTTPS pages are live and product-specific, but the published
 
 - [ ] Digital features/content use StoreKit In-App Purchase unless a current guideline exception applies and is documented.
 - [ ] Before confirmation, the commerce surface clearly states the exact benefit, StoreKit-fetched localized price and billing period. Do not hard-code a storefront price.
-- [ ] The configured monthly product uses the approved US$1.99 base price in App Store Connect. Repository code has no location-based pricing rules and displays StoreKit’s storefront-localized price and currency.
+- [ ] `com.gooduse.weldinggaswallet.pro.yearly` is configured for one year at a US$19.99 United States base price. App Store Connect supplies reviewed geographic storefront prices; repository code has no device-location pricing rules and displays StoreKit's localized price, currency, and period.
 - [ ] Auto-renewal is disclosed; privacy and Terms of Use are visible; subscription grouping prevents accidental duplicate subscriptions.
 - [ ] Restore is visible for restorable purchases. Pending, cancelled, unverified, expired, refunded or revoked transactions never unlock access.
 - [ ] Cancelling auto-renewal retains access through verified paid expiration. Verified Billing Grace Period remains entitled; billing retry after grace, expiry and revocation do not.
@@ -63,7 +63,7 @@ The five configured HTTPS pages are live and product-specific, but the published
 ## Subscription-only profile
 
 - [ ] Archive `WeldingGasWallet` and confirm it has no GoogleMobileAds/UMP framework, GAD/SKAdNetwork metadata, ad unit IDs, consent controls, or reserved banner spacing.
-- [ ] Free users can use the complete wallet with no more than three active cylinders; a verified monthly entitlement removes only that cylinder limit.
+- [ ] Free users can use the complete wallet with no more than three active cylinders; a verified annual entitlement removes only that cylinder limit.
 - [ ] Settings, backup restore, duplicate/add actions, and the paywall all apply the same three-active-cylinder rule.
 
 ## Full App Review Guidelines applicability sweep

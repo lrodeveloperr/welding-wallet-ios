@@ -13,8 +13,8 @@ enum ShellConfiguration {
         safetyURL: URL(string: "https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/disclaimer/")!
     )
     /// Free users keep the complete wallet with a three-active-cylinder limit.
-    /// A verified monthly subscription unlocks unlimited active cylinders.
-    /// App Store Connect owns the US$1.99 monthly price configuration;
+    /// A verified annual subscription unlocks unlimited active cylinders.
+    /// App Store Connect owns the US$19.99 annual base price and storefront pricing;
     /// customer-facing UI must use StoreKit's storefront-localized price.
 #if SCREENSHOT_BUILD
     static let monetization = MonetizationConfiguration(
@@ -28,7 +28,7 @@ enum ShellConfiguration {
         mode: .freemiumWithSubscription,
         freeSuccessfulActions: .max,
         lifetimeProductID: "unused",
-        subscriptionProductID: "com.gooduse.weldinggaswallet.pro.monthly"
+        subscriptionProductID: "com.gooduse.weldinggaswallet.pro.yearly"
     )
 #endif
     static let backup = BackupConfiguration(enabled: true)

@@ -29,7 +29,7 @@ Welding Gas Wallet gives you one clear place to:
 
 Your core records stay on your device unless you export a backup. The app does not display ads, scan cylinders, use the camera, read tank pressure or make safety or compliance decisions.
 
-Free includes up to three active cylinders. An auto-renewing monthly Pro subscription unlocks unlimited active cylinders. The approved commercial base price is US$1.99 per month. The App Store purchase sheet shows the authoritative displayed price, currency, taxes, renewal date and any eligible offer before confirmation. Cancel in App Store subscription settings.
+Free includes up to three active cylinders. An auto-renewing annual Pro subscription unlocks unlimited active cylinders. The United States base price is US$19.99 per year. The App Store purchase sheet shows the authoritative geographic storefront price, currency, taxes, renewal date and any eligible offer before confirmation. Cancel in App Store subscription settings.
 
 Terms: https://lrodeveloperr.github.io/privacy-policy/welding-gas-wallet/terms/
 
@@ -54,7 +54,7 @@ Welding Gas Wallet is a local-first inventory for the cylinders you own, rent, l
 
 Your core records stay on your device unless you export a backup. The app does not display ads, scan cylinders, use the camera, read tank pressure or make safety or compliance decisions.
 
-Free includes up to three active cylinders. An auto-renewing monthly Pro subscription unlocks unlimited active cylinders. The approved commercial base price is US$1.99 per month. Google Play shows the authoritative displayed price, currency, taxes, renewal date and any eligible offer before purchase. Manage or cancel the subscription in Google Play.
+Free includes up to three active cylinders. An auto-renewing annual Pro subscription unlocks unlimited active cylinders. The United States base price is US$19.99 per year. Google Play shows the authoritative geographic price, currency, taxes, renewal date and any eligible offer before purchase. Manage or cancel the subscription in Google Play.
 
 ## Reviewer notes
 
@@ -63,7 +63,7 @@ Free includes up to three active cylinders. An auto-renewing monthly Pro subscri
 1. **Function and audience:** Welding Gas Wallet is a local-first cylinder inventory for adult welders, fabricators, workshop operators and people who own, rent or exchange welding-gas cylinders. It replaces scattered notes with status, supplier, cost, history and reminder records. It does not measure gas, scan a cylinder or provide safety or compliance decisions.
 2. **Access:** No login, mandatory legal onboarding, demo account, external hardware or sample file is required. The app opens directly to its core functions. Add a cylinder manually, use the status buttons, record a refill or exchange, then open Settings for reminders, backup and restore, deletion, legal links and purchases.
 3. **Free limit:** A free user may keep up to three active cylinders. Attempting to add or duplicate a fourth active cylinder opens the upgrade screen. The app contains no advertising.
-4. **Subscription:** Settings → Upgrade, or the fourth-cylinder gate, presents the monthly product `com.gooduse.weldinggaswallet.pro.monthly`. Configure it as a one-month subscription with the approved US$1.99 base price. The app applies no geographic-pricing rules; the customer-facing price, currency and period are supplied by StoreKit. An active subscription unlocks unlimited active cylinders. Restore purchases and subscription management are visible, and Privacy Policy and Terms links are available in the app.
+4. **Subscription:** Settings → Upgrade, or the fourth-cylinder gate, presents `com.gooduse.weldinggaswallet.pro.yearly`. Configure it as a one-year subscription with a US$19.99 United States base price and reviewed geographic storefront prices. The app does not derive price from device location; the customer-facing price, currency and period are supplied by StoreKit or Google Play. An active subscription unlocks unlimited active cylinders. Restore purchases and subscription management are visible, and Privacy Policy and Terms links are available in the app.
 5. **External services:** StoreKit provides iOS purchases; Google Play Billing provides Android purchases; operating-system notifications provide local reminders; and user-selected file providers receive backup files. The final model has no advertising, advertising-consent, analytics, attribution, tracking, backend, AI or third-party crash-reporting service.
 6. **Release target:** Submit the normal production target. The Android and iOS releases contain no advertising SDK, consent SDK, advertising identifier declaration, ad-network attribution entry, banner UI, test-ad configuration or placeholder advertising identifier. Do not submit a debug, screenshot or test monetization build.
 7. **Regions:** Enable every App Store and Google Play country or region the store permits GoodUse Studios to enable. There are no voluntary country exclusions. Store availability, prices, taxes, eligible offers, default currency and measurement-unit suggestions can still vary under store and device rules.
@@ -74,8 +74,8 @@ Free includes up to three active cylinders. An auto-renewing monthly Pro subscri
 ## Store declarations
 
 - **Contains ads:** No on Android and iOS.
-- **Subscription:** One auto-renewing monthly Pro product on each platform; product identifier `com.gooduse.weldinggaswallet.pro.monthly`.
-- **Pricing:** One month; approved US$1.99 commercial base price. The app contains no geographic-pricing logic and must display the applicable store's localized price and currency.
+- **Subscription:** One auto-renewing annual Pro product on each platform; product identifier `com.gooduse.weldinggaswallet.pro.yearly`.
+- **Pricing:** One year; US$19.99 United States base price. Apple and Google own geographic storefront prices, taxes, currency conversion, and local price conventions; the app must display the applicable store's localized price, currency, and period.
 - **Pro benefit:** Unlimited active cylinders while entitlement is active.
 - **Advertising identifiers and tracking:** No advertising ID access, no IDFA use, no App Tracking Transparency prompt and no cross-app tracking in the final signed binaries.
 - **Account creation:** No.
@@ -91,7 +91,9 @@ Free includes up to three active cylinders. An auto-renewing monthly Pro subscri
 - Select every available country or region in App Store Connect and Google Play Console, subject to any store-specific eligibility or local-compliance prompts.
 - Complete and verify the App Store Connect Digital Services Act trader assessment and required public contact details for European Union distribution.
 - Complete any local compliance, licensing or business-information fields requested by a store for particular countries or regions. Do not claim availability where the store blocks distribution until a required field is satisfied.
-- Reconcile subscription availability and the localized store price in every enabled storefront.
+- Set the United States annual base price to US$19.99, let each store generate initial regional prices, then review every enabled storefront for currency, tax treatment, local price conventions, and unintended outliers before release.
+- Keep storefront prices in App Store Connect and Google Play Console. Never infer country from GPS, IP address, locale, account data, or device settings, and never convert US$19.99 inside the app.
+- Reconcile subscription availability and the localized annual price in every enabled storefront before each release and after any store-wide price update.
 
 ### Google Play Data safety baseline
 
