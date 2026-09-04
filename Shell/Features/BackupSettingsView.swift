@@ -30,7 +30,7 @@ struct BackupSettingsView: View {
                 }
             }
         }
-        .navigationTitle("backup")
+        .appNavigationTitle("backup")
         .task { await model.backup.refresh() }
         .alert("backup.error", isPresented: errorBinding) {
             Button("ok") {}
@@ -61,6 +61,6 @@ private struct BackupRestoreView: View {
                 Text("backup.conflictNotice")
             }
         }
-        .navigationTitle("backup.restore")
+        .appNavigationTitle("backup.restore")
     }
 }

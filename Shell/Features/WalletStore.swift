@@ -138,20 +138,55 @@ final class WalletStore {
     var automaticCurrency: String { Locale.current.currency?.identifier ?? "USD" }
     var defaultCurrency: String { currencyOverride ?? automaticCurrency }
 
+    /// Currencies that are both commonly used and the current default for at
+    /// least one system locale. This excludes obsolete ISO entries and special
+    /// accounting units from the customer picker.
+    static let selectableCurrencyCodes: [String] = {
+        let common = Set(Locale.commonISOCurrencyCodes)
+        let currentRegional = Set(Locale.availableIdentifiers.compactMap {
+            Locale(identifier: $0).currency?.identifier
+        })
+        return common.intersection(currentRegional).subtracting(["XXX"]).sorted()
+    }()
+
+    private static let preferredCurrencySigns: [String: String] = [
+        "USD": "$", "CAD": "$", "AUD": "$", "NZD": "$", "SGD": "$", "HKD": "$",
+        "EUR": "€", "GBP": "£", "JPY": "¥", "CNY": "¥", "KRW": "₩", "INR": "₹",
+        "NGN": "₦", "RUB": "₽", "TRY": "₺", "UAH": "₴", "THB": "฿", "PHP": "₱",
+        "VND": "₫", "ILS": "₪", "BDT": "৳", "PKR": "₨", "IDR": "Rp", "MYR": "RM",
+        "BRL": "R$", "MXN": "$", "ARS": "$", "CLP": "$", "COP": "$", "PEN": "S/",
+        "ZAR": "R", "GHS": "₵", "KES": "KSh", "AED": "د.إ", "SAR": "﷼", "IRR": "﷼",
+        "CHF": "Fr.", "SEK": "kr", "NOK": "kr", "DKK": "kr", "ISK": "kr",
+        "PLN": "zł", "CZK": "Kč", "HUF": "Ft", "RON": "lei", "BGN": "лв",
+        "GEL": "₾", "AMD": "֏", "AZN": "₼", "KZT": "₸", "AFN": "؋",
+    ]
+
+    private static let currencyLocales: [String: Locale] = {
+        var result: [String: Locale] = [:]
+        for identifier in Locale.availableIdentifiers {
+            let locale = Locale(identifier: identifier)
+            guard let code = locale.currency?.identifier, result[code] == nil else { continue }
+            result[code] = locale
+        }
+        return result
+    }()
+
     func clearPersistenceError() { persistenceError = nil }
 
     func currencySign(for code: String) -> String {
-        let known: [String: String] = [
-            "USD": "$", "CAD": "$", "AUD": "$", "NZD": "$", "SGD": "$", "HKD": "$",
-            "EUR": "€", "GBP": "£", "JPY": "¥", "CNY": "¥", "KRW": "₩", "INR": "₹",
-            "NGN": "₦", "RUB": "₽", "TRY": "₺", "UAH": "₴", "THB": "฿", "PHP": "₱",
-            "VND": "₫", "ILS": "₪", "BDT": "৳", "PKR": "₨", "IDR": "Rp", "MYR": "RM",
-            "BRL": "R$", "MXN": "$", "ARS": "$", "CLP": "$", "COP": "$", "PEN": "S/",
-            "ZAR": "R", "GHS": "₵", "KES": "KSh", "AED": "د.إ", "SAR": "﷼", "IRR": "﷼",
-        ]
-        if let sign = known[code] { return sign }
-        let formatter = NumberFormatter(); formatter.numberStyle = .currency; formatter.currencyCode = code; formatter.locale = .current
-        return formatter.currencySymbol ?? "¤"
+        let normalized = code.uppercased()
+        if let sign = Self.preferredCurrencySigns[normalized] { return sign }
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = normalized
+        formatter.locale = Self.currencyLocales[normalized] ?? .current
+        guard let sign = formatter.currencySymbol?.trimmed,
+              !sign.isEmpty,
+              sign.localizedCaseInsensitiveCompare(normalized) != .orderedSame else {
+            return "¤"
+        }
+        return sign
     }
 
     func supplierName(_ id: UUID?) -> String {

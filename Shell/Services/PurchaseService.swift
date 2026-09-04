@@ -42,6 +42,7 @@ final class PurchaseService {
     private let configuration: MonetizationConfiguration
     private let cache: any EntitlementCaching
     private let now: @Sendable () -> Date
+    private let productLoader: @Sendable (Set<String>) async throws -> [Product]
     @ObservationIgnored
     nonisolated(unsafe) private var updatesTask: Task<Void, Never>?
     @ObservationIgnored
@@ -59,11 +60,15 @@ final class PurchaseService {
     init(
         configuration: MonetizationConfiguration = ShellConfiguration.monetization,
         cache: any EntitlementCaching = KeychainEntitlementCache(),
-        now: @escaping @Sendable () -> Date = Date.init
+        now: @escaping @Sendable () -> Date = Date.init,
+        productLoader: @escaping @Sendable (Set<String>) async throws -> [Product] = {
+            try await Product.products(for: $0)
+        }
     ) {
         self.configuration = configuration
         self.cache = cache
         self.now = now
+        self.productLoader = productLoader
         subscriptionCondition = configuration.includesSubscription ? .checking : .notApplicable
 
         if let snapshot = cache.load(), snapshot.isEntitled(to: configuration.productIDs, at: now()) {
@@ -118,7 +123,7 @@ final class PurchaseService {
     }
 
     func start() async {
-        guard !isLoadingProducts else { return }
+        guard !isWorking else { return }
         guard configuration.includesPurchase else {
             entitlementState = .notEntitled
             return
@@ -127,20 +132,25 @@ final class PurchaseService {
         isLoadingProducts = true
         defer { isLoadingProducts = false }
         do {
-            products = try await Product.products(for: configuration.productIDs)
+            products = try await productLoader(configuration.productIDs)
         } catch {
             present(error)
         }
         await refreshEntitlements()
     }
 
+    func retryProducts() async {
+        await start()
+        guard primaryProduct == nil, !showingError else { return }
+        presentProductUnavailable()
+    }
+
     func purchasePrimary() async {
-        guard !isPurchasing, !isEntitled else { return }
+        guard !isWorking, !isEntitled else { return }
         isPurchasing = true
         defer { isPurchasing = false }
         guard let product = primaryProduct else {
-            message = AppLocalization.string("purchase.productUnavailable", locale: AppLocalization.selectedLocale)
-            showingError = true
+            presentProductUnavailable()
             return
         }
         do {
@@ -163,7 +173,7 @@ final class PurchaseService {
     }
 
     func restore() async {
-        guard !isRestoring else { return }
+        guard !isWorking else { return }
         isRestoring = true
         defer { isRestoring = false }
         do {
@@ -274,6 +284,11 @@ final class PurchaseService {
         case let .verified(value): value
         case .unverified: throw PurchaseError.failedVerification
         }
+    }
+
+    private func presentProductUnavailable() {
+        message = AppLocalization.string("purchase.productUnavailable", locale: AppLocalization.selectedLocale)
+        showingError = true
     }
 
     private struct VerifiedSubscriptionEvaluation {

@@ -67,16 +67,23 @@ struct PaywallView: View {
                 } else if model.access.purchases.isLoadingProducts {
                     ProgressView("paywall.loadingProduct").frame(maxWidth: .infinity)
                 } else {
-                    Button {
-                        Task { await model.access.purchases.start() }
-                    } label: {
-                        Text("paywall.retryProduct").frame(maxWidth: .infinity, minHeight: 44)
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("purchase.productUnavailable")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Button {
+                            Task { await model.access.purchases.retryProducts() }
+                        } label: {
+                            Text("tryAgain")
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+                        .frame(maxWidth: .infinity)
+                        .accessibilityIdentifier("shell.paywall.retryProduct")
+                        .disabled(model.access.purchases.isWorking)
                     }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .frame(maxWidth: .infinity)
-                    .accessibilityIdentifier("shell.paywall.retryProduct")
-                    .disabled(model.access.purchases.isWorking)
                 }
 
                 if model.access.purchases.primaryProduct?.subscription != nil {
@@ -102,7 +109,7 @@ struct PaywallView: View {
             .padding(24)
             .frame(maxWidth: .infinity)
         }
-        .navigationTitle("upgrade")
+        .appNavigationTitle("upgrade")
         .navigationBarTitleDisplayMode(.inline)
         .accessibilityIdentifier("shell.paywall")
         .toolbar {
@@ -118,7 +125,7 @@ struct PaywallView: View {
         .onChange(of: model.access.purchases.isEntitled) { _, entitled in
             if entitled { dismiss() }
         }
-        .alert("store", isPresented: purchaseErrorBinding) {
+        .alert(Text(verbatim: "App Store"), isPresented: purchaseErrorBinding) {
             Button("ok") {}
         } message: {
             Text(model.access.purchases.message)

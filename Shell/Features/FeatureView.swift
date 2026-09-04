@@ -210,7 +210,7 @@ private struct FreeCylinderSelectionView: View {
             }
             Section { Text("freeSelection.dataNotice").font(.footnote).foregroundStyle(.secondary) }
         }
-        .navigationTitle("freeSelection.title")
+        .appNavigationTitle("freeSelection.title")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Not now") { dismiss() } }
@@ -405,7 +405,7 @@ private struct CylinderForm: View {
                 Section { Button("Duplicate cylinder") { let entitled = isEntitled(); if !store.canAddCylinder(isEntitled: entitled) { errorKey = "error.upgradeRequired" } else if store.duplicate(cylinder, isEntitled: entitled) != nil { dismiss() } }.foregroundStyle(.tint); Button("Delete cylinder", role: .destructive) { showDelete = true } }
             }
         }
-        .navigationTitle(LocalizedStringKey(titleKey)).navigationBarTitleDisplayMode(.inline)
+        .appNavigationTitle(titleKey).navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save", action: save).disabled(resolvedGas.isEmpty || (AppLocalization.double(from: capacity, locale: locale) ?? 0) <= 0) } }
         .sheet(isPresented: $showSupplier) { NavigationStack { SupplierForm(store: store) { supplier in supplierID = supplier.id } } }
         .confirmationDialog("Delete \(gas)?", isPresented: $showDelete, titleVisibility: .visible) { Button("Delete cylinder and history", role: .destructive) { if case .edit(let cylinder) = mode { store.delete(cylinder.id); dismiss() } }; Button("Cancel", role: .cancel) {} } message: { Text("You can undo for 15 seconds.") }
@@ -475,7 +475,7 @@ private struct ServiceForm: View {
                 }
             }
         }
-        .navigationTitle(LocalizedStringKey(kind.localizationKey)).navigationBarTitleDisplayMode(.inline)
+        .appNavigationTitle(kind.localizationKey).navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save", action: save).disabled((AppLocalization.decimal(from: amount, locale: locale) ?? 0) <= 0 || (!sameCapacity && (AppLocalization.double(from: capacity, locale: locale) ?? 0) <= 0)) } }
         .onAppear { unit = cylinder.capacityUnit }
     }
@@ -515,7 +515,7 @@ private struct ReminderForm: View {
             Section { Text("The reminder is scheduled locally on this device.").font(.footnote).foregroundStyle(.secondary) }
             if !errorMessage.isEmpty { Section { Text(errorMessage).foregroundStyle(.red) } }
         }
-        .navigationTitle("Reminder")
+        .appNavigationTitle("Reminder")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
             ToolbarItem(placement: .confirmationAction) { Button("Save") { save() }.disabled(enabled && date <= Date()) }
@@ -624,8 +624,22 @@ private struct SupplierDetail: View {
     var body: some View { List { Section { HStack { Text(supplier.name.split(separator: " ").prefix(2).compactMap(\.first).map(String.init).joined().uppercased()).font(.title2.bold()).foregroundStyle(.tint).frame(width: 60, height: 60).background(Color.blue.opacity(0.08), in: Circle()); VStack(alignment: .leading) { Text(supplier.name).font(.title2.bold()); let count = store.activeCylinders.filter { $0.supplierID == supplier.id }.count; Text(AppLocalization.labeledCount("cylinders.current.label", count: count, locale: locale)).foregroundStyle(.secondary) } } }; if !supplier.phone.isEmpty || !supplier.notes.isEmpty { Section { if !supplier.phone.isEmpty { LabeledContent("Phone", value: supplier.phone) }; if !supplier.notes.isEmpty { LabeledContent("Notes", value: supplier.notes) } } }; Section("Cylinders") { let linked = store.cylinders.filter { $0.supplierID == supplier.id }; if linked.isEmpty { Text("No linked cylinders").foregroundStyle(.secondary) } else { ForEach(linked) { cylinder in NavigationLink { CylinderDetail(store: store, cylinderID: cylinder.id, isEntitled: isEntitled, requestUpgrade: requestUpgrade) } label: { VStack(alignment: .leading) { Text(AppLocalization.gas(cylinder.gas, locale: locale)); Text("\(cylinder.capacityLabel(locale: locale)) · \(AppLocalization.string(cylinder.lifecycle.localizationKey, locale: locale))").font(.caption).foregroundStyle(.secondary) } } } } } }.navigationTitle(supplier.name).navigationBarTitleDisplayMode(.inline) }
 }
 
-private struct SupplierForm: View { @Bindable var store: WalletStore; let onSave: (SupplierRecord) -> Void; @Environment(\.dismiss) private var dismiss; @State private var name = ""; @State private var phone = ""; @State private var notes = ""; @State private var errorKey = ""; var body: some View { Form { if !errorKey.isEmpty { Text(LocalizedStringKey(errorKey)).foregroundStyle(.red) }; Section { TextField("Supplier name", text: $name); TextField("Phone (optional)", text: $phone).keyboardType(.phonePad); TextField("Notes (optional)", text: $notes) } }.navigationTitle("Add supplier").navigationBarTitleDisplayMode(.inline).toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save") { if let supplier = store.addSupplier(name: name, phone: phone, notes: notes) { onSave(supplier); dismiss() } else { errorKey = name.trimmed.isEmpty ? "error.supplierName" : "error.supplierDuplicate" } }.disabled(name.trimmed.isEmpty) } } } }
+private struct SupplierForm: View { @Bindable var store: WalletStore; let onSave: (SupplierRecord) -> Void; @Environment(\.dismiss) private var dismiss; @State private var name = ""; @State private var phone = ""; @State private var notes = ""; @State private var errorKey = ""; var body: some View { Form { if !errorKey.isEmpty { Text(LocalizedStringKey(errorKey)).foregroundStyle(.red) }; Section { TextField("Supplier name", text: $name); TextField("Phone (optional)", text: $phone).keyboardType(.phonePad); TextField("Notes (optional)", text: $notes) } }.appNavigationTitle("Add supplier").navigationBarTitleDisplayMode(.inline).toolbar { ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }; ToolbarItem(placement: .confirmationAction) { Button("Save") { if let supplier = store.addSupplier(name: name, phone: phone, notes: notes) { onSave(supplier); dismiss() } else { errorKey = name.trimmed.isEmpty ? "error.supplierName" : "error.supplierDuplicate" } }.disabled(name.trimmed.isEmpty) } } } }
 
 private extension String { var trimmed: String { trimmingCharacters(in: .whitespacesAndNewlines) }; var nilIfEmpty: String? { isEmpty ? nil : self } }
 
-#Preview("Phone") { NavigationStack { CylinderHome(store: .preview(), context: FeatureCanvasContext(remainingFreeActions: { nil }, isEntitled: { false }, recordSuccessfulAction: { _ in .notMetered }, requestUpgrade: {})) }.tint(ShellConfiguration.tint) }
+#Preview("Phone") {
+    NavigationStack {
+        CylinderHome(
+            store: .preview(),
+            context: FeatureCanvasContext(
+                remainingFreeActions: { nil },
+                isEntitled: { false },
+                recordSuccessfulAction: { _ in .notMetered },
+                requestUpgrade: {}
+            )
+        )
+    }
+    .environment(LanguageController())
+    .tint(ShellConfiguration.tint)
+}

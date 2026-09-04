@@ -60,6 +60,28 @@ final class WeldingGasWalletUITests: XCTestCase {
         }
     }
 
+    func testNavigationHeadersFollowInAppLanguageImmediately() {
+        let app = launch(screenshotData: false)
+        openSettings(app)
+        tap(app, label: "Language")
+        tap(app, label: "Svenska")
+        waitForNavigationTitle(app, "Språk")
+
+        app.navigationBars["Språk"].buttons.firstMatch.tap()
+        waitForNavigationTitle(app, "Inställningar")
+        tap(app, label: "Gjort")
+        openTab(app, "Leverantörer")
+        waitForNavigationTitle(app, "Leverantörer")
+
+        let settings = app.buttons["shell.settings"]
+        XCTAssertTrue(settings.waitForExistence(timeout: 8))
+        settings.tap()
+        waitForNavigationTitle(app, "Inställningar")
+        tap(app, label: "Språk")
+        tap(app, label: "English")
+        waitForNavigationTitle(app, "Language")
+    }
+
     func testCaptureAllScreens() throws {
         try scenario(2, "Cylinders-Home") { app in waitForHome(app) }
         try scenario(3, "Cylinder-Status-Controls") { app in

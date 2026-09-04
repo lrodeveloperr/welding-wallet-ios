@@ -82,9 +82,17 @@ struct ShellRootView: View {
                     .tag(destination.id)
                     .tabItem {
                         if destination.id == "cylinders" {
-                            Label("Cylinders", image: "CylinderTabIcon")
+                            Label {
+                                Text(verbatim: localizedDestinationTitle(destination))
+                            } icon: {
+                                Image("CylinderTabIcon")
+                            }
                         } else {
-                            Label { Text(LocalizedStringKey(destination.titleKey)) } icon: { Image(systemName: destination.symbol) }
+                            Label {
+                                Text(verbatim: localizedDestinationTitle(destination))
+                            } icon: {
+                                Image(systemName: destination.symbol)
+                            }
                         }
                     }
                 }
@@ -96,9 +104,13 @@ struct ShellRootView: View {
     private func destinationStack(_ destination: ShellDestination) -> some View {
         NavigationStack {
             FeatureCanvasHost(destination: destination, provider: featureProvider)
-                .navigationTitle(LocalizedStringKey(destination.titleKey))
+                .appNavigationTitle(destination.titleKey)
                 .shellSettingsToolbar()
         }
+    }
+
+    private func localizedDestinationTitle(_ destination: ShellDestination) -> String {
+        AppLocalization.string(destination.titleKey, locale: model.language.locale)
     }
 }
 

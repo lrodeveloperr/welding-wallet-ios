@@ -10,7 +10,14 @@ esac
 fail() { echo "VALIDATION FAILED: $*" >&2; exit 1; }
 require_file() { [[ -f "$1" ]] || fail "Missing $1"; }
 require_text() { grep -Fq "$2" "$1" || fail "$1 must contain: $2"; }
-reject_tree_text() { ! rg -n "$1" "$2" || fail "Forbidden implementation detected: $1"; }
+search_tree() {
+  if command -v rg >/dev/null 2>&1; then
+    rg -n -- "$1" "$2"
+  else
+    grep -REn -- "$1" "$2"
+  fi
+}
+reject_tree_text() { ! search_tree "$1" "$2" || fail "Forbidden implementation detected: $1"; }
 
 [[ "$(git ls-files -s scripts/validate-shell.sh | awk '{print $1}')" == "100755" ]] || fail "scripts/validate-shell.sh must retain its executable bit"
 
@@ -25,7 +32,8 @@ require_text project.yml 'INFOPLIST_FILE: Shell/Resources/Info.plist'
 require_text Shell/App/ShellConfiguration.swift 'mode: .freemiumWithSubscription'
 require_text Shell/App/ShellConfiguration.swift 'com.gooduse.weldinggaswallet.pro.yearly'
 require_text Shell/App/ShellConfiguration.swift 'BackupConfiguration(enabled: true)'
-require_text Shell/App/ShellRootView.swift 'Label("Cylinders", image: "CylinderTabIcon")'
+require_text Shell/App/ShellRootView.swift 'Image("CylinderTabIcon")'
+require_text Shell/App/ShellRootView.swift 'localizedDestinationTitle(destination)'
 require_text Shell/App/ShellRootView.swift 'SettingsView(model: model, wallet: wallet)'
 require_text Shell/App/ShellRootView.swift '.environment(model)'
 ! grep -Fq 'OnboardingView(' Shell/App/ShellRootView.swift || fail 'Production launch must not gate the wallet behind onboarding'
@@ -42,6 +50,8 @@ require_text Shell/Features/WalletStore.swift 'func selectFreeManagedCylinders(_
 require_text Shell/Features/FeatureView.swift 'Duplicate cylinder'
 require_text Shell/Features/FeatureView.swift 'Search cylinders'
 require_text Shell/Features/WalletStore.swift 'func currencySign(for code: String)'
+require_text Shell/Features/WalletStore.swift 'Locale.commonISOCurrencyCodes'
+require_text Shell/Features/WalletStore.swift 'selectableCurrencyCodes'
 require_text Shell/Features/WalletStore.swift 'func deleteAllData()'
 require_text Shell/Features/WalletStore.swift 'try? await Task.sleep(for: .seconds(15))'
 require_text Shell/Features/SettingsView.swift 'delete.confirmationWord'
@@ -50,11 +60,14 @@ require_text Shell/Services/PurchaseService.swift 'Transaction.currentEntitlemen
 require_text Shell/Resources/Info.plist 'ITSAppUsesNonExemptEncryption'
 require_text Shell/Features/PaywallView.swift 'paywall.benefit.readiness'
 require_text Shell/Features/PaywallView.swift 'paywall.benefit.history'
+require_text Shell/Features/PaywallView.swift 'purchases.retryProducts()'
+require_text Shell/Features/PaywallView.swift 'purchase.productUnavailable'
 require_text Shell/Features/SettingsView.swift 'settings.upgrade.price.period %@ %@'
 require_text Shell/Features/SettingsView.swift 'BackupView(wallet: wallet, isEntitled:'
 require_text Shell/Features/SettingsView.swift 'SubscriptionSettingsPresentation.resolve'
 require_text Shell/Features/SettingsView.swift 'shell.settings.subscription.manage'
-require_text Shell/Features/SettingsView.swift '.navigationTitle(AppLocalization.string("settings", locale: locale))'
+require_text Shell/Features/SettingsView.swift '.appNavigationTitle("settings")'
+require_text Shell/App/AppLocalizedNavigationTitle.swift 'Text(verbatim: AppLocalization.string(key, locale: language.locale))'
 require_text Shell/Features/SettingsView.swift '.buttonStyle(.plain)'
 require_text Shell/Services/PurchaseService.swift 'case subscribed(willAutoRenew: Bool, expirationDate: Date)'
 require_text Shell/Services/PurchaseService.swift 'case gracePeriod(expirationDate: Date)'
@@ -84,7 +97,7 @@ python3 scripts/validate-localizations.py
 
 for workflow in .github/workflows/*.yml; do
   require_text "$workflow" 'workflow_dispatch:'
-  if rg -n '^\s+(push|pull_request|schedule):' "$workflow"; then fail "$workflow must remain manual-only"; fi
+  if search_tree '^[[:space:]]+(push|pull_request|schedule):' "$workflow"; then fail "$workflow must remain manual-only"; fi
 done
 
 if command -v plutil >/dev/null 2>&1; then

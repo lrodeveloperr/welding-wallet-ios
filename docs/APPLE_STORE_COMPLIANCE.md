@@ -45,6 +45,10 @@ The five configured HTTPS pages are live and product-specific, but the published
 
 ## Purchases and subscriptions
 
+### StoreKit catalog review metadata verified 2026-09-04
+
+App Store Connect was verified directly: `com.gooduse.weldinggaswallet.pro.yearly` has a one-year duration, a US$19.99 United States starting price, Apple-generated prices for all 175 selected storefronts, sale availability, an active Paid Apps Agreement, active banking and active tax forms. A 750×1334 physical-phone capture showing the localized annual StoreKit confirmation was uploaded to the private **Review Information → Screenshot** field. The public **Image (Optional)** field remains empty. Do not place the app icon or an app screenshot in that promotional-image field; Apple's StoreKit/TestFlight confirmation sheet may render the app icon itself as system UI. Add the subscription and its group to the same draft as the final app version, but do not click Submit for Review until the final build and release evidence are approved.
+
 - [ ] Digital features/content use StoreKit In-App Purchase unless a current guideline exception applies and is documented.
 - [ ] Before confirmation, the commerce surface clearly states the exact benefit, StoreKit-fetched localized price and billing period. Do not hard-code a storefront price.
 - [ ] `com.gooduse.weldinggaswallet.pro.yearly` is configured for one year at a US$19.99 United States base price. App Store Connect supplies reviewed geographic storefront prices; repository code has no device-location pricing rules and displays StoreKit's localized price, currency, and period.
@@ -57,6 +61,7 @@ The five configured HTTPS pages are live and product-specific, but the published
 - [ ] App description and screenshots identify paid features when required by Guideline 2.3.2.
 - [ ] Product display name, description, review screenshot and localization in App Store Connect are accurate and appropriate for all audiences.
 - [ ] If promoting an IAP or win-back offer, its promotional image is **not the app icon and not an app screenshot**, per Apple’s win-back guidance.
+- [x] The private subscription Review Information screenshot is present; the separate public optional promotional-image field is empty.
 - [ ] House rule: in-app paywall, purchase, restore, subscription and win-back surfaces contain no app logo, AppIcon, custom brand mark or app-name hero. Run `scripts/check-commerce-branding.sh`. This is intentionally stricter than Apple’s published in-app UI rule and prevents recurrence of the prior rejection pattern.
 - [ ] Standard Apple EULA link appears in the description when used, or the custom EULA is configured in App Store Connect.
 

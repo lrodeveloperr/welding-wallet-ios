@@ -39,6 +39,8 @@ This is the source-level acceptance gate for Settings. Device and StoreKit check
 - [ ] A fluent regional reviewer validates every added catalog in screen context; generated coverage is not represented as native approval.
 - [x] Latin American welding terminology uses `cilindro`, `recarga`, `proveedor`, `poco gas` and `fuera del taller` in the relevant product states.
 - [x] StoreKit owns customer-facing currency and price localization; Settings contains no hard-coded US-dollar price.
+- [x] The currency picker is limited to common currencies that are current for at least one system region; obsolete, test, metal and accounting-only ISO entries are excluded.
+- [x] Currency rows display conventional signs rather than ISO abbreviations; canonical ISO codes remain internal to records and backups.
 - [x] Persisted record values remain canonical while user-facing statuses, lifecycle states, gases, errors and actions resolve through localized display keys.
 - [x] Locale infrastructure explicitly changes SwiftUI layout direction for Arabic, Urdu and Hebrew at selection time, including presented sheets.
 - [ ] On-device pass: switch every enabled language while Settings is open and confirm the title and every visible row change with no stray English.

@@ -167,6 +167,46 @@ final class WeldingGasWalletTests: XCTestCase {
         XCTAssertEqual(ShellContract.currentVersion.split(separator: ".").count, 3)
     }
 
+    func testCurrencyPickerContainsCurrentCurrenciesOnlyAndDisplaysSigns() {
+        let codes = WalletStore.selectableCurrencyCodes
+        XCTAssertTrue(codes.contains("USD"))
+        XCTAssertTrue(codes.contains("EUR"))
+        XCTAssertFalse(codes.contains("XXX"))
+        XCTAssertFalse(codes.contains("DEM"))
+        XCTAssertFalse(codes.contains("FRF"))
+        XCTAssertFalse(codes.contains("ITL"))
+        XCTAssertFalse(codes.contains("XAU"))
+        XCTAssertFalse(codes.contains("XDR"))
+
+        let store = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
+        for code in codes {
+            let sign = store.currencySign(for: code)
+            XCTAssertFalse(sign.isEmpty, "Missing sign for \(code)")
+            XCTAssertNotEqual(sign.uppercased(), code, "Displayed ISO code instead of sign for \(code)")
+        }
+        XCTAssertEqual(store.currencySign(for: "USD"), "$")
+        XCTAssertEqual(store.currencySign(for: "EUR"), "€")
+        XCTAssertEqual(store.currencySign(for: "SEK"), "kr")
+        XCTAssertEqual(store.currencySign(for: "CHF"), "Fr.")
+    }
+
+    func testRetryReportsAnEmptyAppStoreProductCatalog() async {
+        let service = PurchaseService(
+            configuration: configuration(.subscription),
+            cache: EmptyEntitlementCache(),
+            productLoader: { _ in [] }
+        )
+
+        await service.start()
+        XCTAssertFalse(service.showingError)
+
+        await service.retryProducts()
+        XCTAssertFalse(service.isWorking)
+        XCTAssertTrue(service.products.isEmpty)
+        XCTAssertTrue(service.showingError)
+        XCTAssertFalse(service.message.isEmpty)
+    }
+
     func testFreeBackupRestorePreservesDataButLocksExcessCylinders() throws {
         let source = WalletStore(fileURL: temporaryWalletURL(), loadExisting: false)
         for index in 1...4 {
@@ -287,4 +327,10 @@ final class WeldingGasWalletTests: XCTestCase {
     private func temporaryWalletURL() -> URL {
         FileManager.default.temporaryDirectory.appending(path: "wallet-test-\(UUID().uuidString).json")
     }
+}
+
+private struct EmptyEntitlementCache: EntitlementCaching {
+    func load() -> EntitlementSnapshot? { nil }
+    func save(_ snapshot: EntitlementSnapshot) throws {}
+    func clear() throws {}
 }
