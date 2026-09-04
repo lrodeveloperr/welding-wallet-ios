@@ -61,7 +61,7 @@ jobs:
         with:
           name: WeldingGasWallet-iPad-Home
           path: |
-            WeldingGasWallet-iPhone-All-Screens.zip
+            WeldingGasWallet-iPad-Home.zip
             ScreenshotResults.xcresult
           if-no-files-found: warn
           retention-days: 14
