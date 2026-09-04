@@ -2,6 +2,11 @@ name: iOS screenshot capture
 
 on:
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type CAPTURE ONE IPAD SCREENSHOT
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -11,6 +16,8 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 45
     steps:
+      - name: Confirm one-shot capture
+        run: test "${{ inputs.confirmation }}" = "CAPTURE ONE IPAD SCREENSHOT"
       - uses: actions/checkout@v7
       - name: Select Xcode and install XcodeGen
         run: |
@@ -25,20 +32,19 @@ jobs:
         run: |
           DEVICE_ID="$(xcrun simctl list devices available -j | ruby -rjson -e '
             devices = JSON.parse(STDIN.read).fetch("devices").values.flatten
-            preferred = ["iPhone 17 Pro Max", "iPhone 17 Pro", "iPhone 16 Pro Max", "iPhone 16 Pro"]
-            phone = preferred.lazy.map { |name| devices.find { |d| d["isAvailable"] && d["name"] == name } }.find(&:itself)
-            phone ||= devices.find { |d| d["isAvailable"] && d["name"].start_with?("iPhone") }
-            abort "No available iPhone simulator" unless phone
-            puts phone.fetch("udid")
+            preferred = ["iPad Pro 13-inch (M5)", "iPad Pro 13-inch (M4)", "iPad Air 13-inch (M4)", "iPad Air 13-inch (M3)", "iPad Air 13-inch (M2)"]
+            tablet = preferred.lazy.map { |name| devices.find { |d| d["isAvailable"] && d["name"] == name } }.find(&:itself)
+            abort "No available 13-inch iPad simulator" unless tablet
+            puts tablet.fetch("udid")
           ')"
           echo "DEVICE_ID=$DEVICE_ID" >> "$GITHUB_ENV"
           xcrun simctl boot "$DEVICE_ID" 2>/dev/null || true
           xcrun simctl bootstatus "$DEVICE_ID" -b
-      - name: Capture every app screen
+      - name: Capture populated iPad cylinder overview
         id: capture
         continue-on-error: true
         run: |
-          xcodebuild -project WeldingGasWallet.xcodeproj -scheme WeldingGasWallet -configuration Debug -destination "platform=iOS Simulator,id=$DEVICE_ID" -resultBundlePath ScreenshotResults.xcresult CODE_SIGNING_ALLOWED=NO -only-testing:WeldingGasWalletUITests/WeldingGasWalletUITests/testCaptureAllScreens test
+          xcodebuild -project WeldingGasWallet.xcodeproj -scheme WeldingGasWallet -configuration Debug -destination "platform=iOS Simulator,id=$DEVICE_ID" -resultBundlePath ScreenshotResults.xcresult CODE_SIGNING_ALLOWED=NO -only-testing:WeldingGasWalletUITests/WeldingGasWalletUITests/testCaptureIPadHomeScreen test
       - name: Package screenshots
         if: always()
         run: |
@@ -46,14 +52,14 @@ jobs:
           mkdir -p screenshots
           xcrun xcresulttool export attachments --path ScreenshotResults.xcresult --output-path screenshots
           COUNT="$(find screenshots -type f -name '*.png' | wc -l | tr -d ' ')"
-          echo "Captured $COUNT of 24 screenshots"
-          ditto -c -k --sequesterRsrc --keepParent screenshots WeldingGasWallet-iPhone-All-Screens.zip
-          test "$COUNT" = "24"
+          echo "Captured $COUNT of 1 screenshot"
+          ditto -c -k --sequesterRsrc --keepParent screenshots WeldingGasWallet-iPad-Home.zip
+          test "$COUNT" = "1"
       - name: Upload numbered screenshots
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: WeldingGasWallet-iPhone-All-Screens
+          name: WeldingGasWallet-iPad-Home
           path: |
             WeldingGasWallet-iPhone-All-Screens.zip
             ScreenshotResults.xcresult
